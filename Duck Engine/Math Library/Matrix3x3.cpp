@@ -1,17 +1,3 @@
-/******************************************************************************/
-/*!
-\file		Matrix3x3.cpp
-\author 	Kristy Lee Yu Xuan
-\par    	email: kristyyuxuan.lee@digipen.edu
-\date   	Mar 13, 2023
-\brief		This source file defines the functions related to Matrix3x3.
-
-Copyright (C) 2023 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents without the
-prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
-
 #include "Matrix3x3.h"
 #include "Vector2D.h"
 #include <math.h>
