@@ -1,6 +1,6 @@
 #include "Application.h"
 
-namespace Dark {
+namespace Duck {
 	Application::Application() {
 
 	}

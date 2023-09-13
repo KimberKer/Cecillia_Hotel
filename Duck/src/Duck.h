@@ -2,8 +2,8 @@
 
 // For use by Dark applications
 
-#include "Dark/Application.h"
+#include "Duck/Application.h"
 
 // -- Entry Point --
-#include "Dark/EntryPoint.h"
+#include "Duck/EntryPoint.h"
 // -- -- -- -- --

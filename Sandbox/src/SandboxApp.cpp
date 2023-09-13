@@ -1,6 +1,6 @@
-#include <Dark.h>
+#include <Duck.h>
 
-class Sandbox : public Dark::Application {
+class Sandbox : public Duck::Application {
 public:
 	Sandbox() {
 
@@ -11,6 +11,6 @@ public:
 	}
 };
 
-Dark::Application* Dark::CreateApplication() {
+Duck::Application* Duck::CreateApplication() {
 	return new Sandbox();
 }

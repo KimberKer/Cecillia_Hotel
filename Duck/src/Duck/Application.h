@@ -2,8 +2,8 @@
 
 #include "Core.h"
 
-namespace Dark {
-	class DARK_API Application
+namespace Duck {
+	class DUCK_API Application
 	{
 	public:
 		Application();

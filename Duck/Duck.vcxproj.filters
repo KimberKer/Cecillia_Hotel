@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Dark\Core.h">
+    <ClInclude Include="src\Duck\Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Application.h">
+    <ClInclude Include="src\Duck\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark.h">
+    <ClInclude Include="src\Duck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\EntryPoint.h">
+    <ClInclude Include="src\Duck\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Dark\Application.cpp">
+    <ClCompile Include="src\Duck\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
