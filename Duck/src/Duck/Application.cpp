@@ -1,19 +1,15 @@
+
 #include "Application.h"
-
-
+#include "Debug.h"
 
 // Function to handle errors
 void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
 
-
-
 namespace Duck {
 
-
-
-	Application::Application() {
+    Application::Application() {
 
         // Initialize GLFW
         if (!glfwInit()) {
@@ -35,18 +31,22 @@ namespace Duck {
         // Make the window's context current
         glfwMakeContextCurrent(window);
 
-	}
+        // Initialize debugging utilities
+        InitializeDebug(window);
+    }
 
-	Application::~Application() {
+    Application::~Application() {
+        CleanupDebug(); // Cleanup debugging utilities
+    }
 
-	}
-
-	void Application::Run() {
-
-
+    void Application::Run() {
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
+
+            // Update debugging utilities
+            UpdateDebug();
+
             // Render here (you can put your OpenGL drawing code here)
 
             // Swap front and back buffers
@@ -59,7 +59,6 @@ namespace Duck {
         // Terminate GLFW
         glfwTerminate();
         return;
-
-
-	}
+    }
 }
+

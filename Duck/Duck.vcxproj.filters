@@ -16,9 +16,15 @@
     <ClInclude Include="src\Duck\EntryPoint.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Debug.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Debug.cpp">
       <Filter>Duck</Filter>
     </ClCompile>
   </ItemGroup>
