@@ -110,10 +110,12 @@
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\Debug.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\Physics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\Debug.cpp" />
+    <ClCompile Include="src\Duck\Physics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,9 +4,9 @@
 // Initialize the debugging utilities
 void InitializeDebug(GLFWwindow* window);
 
-// Update the debugging utilities (to be called in the main loop)
-void UpdateDebug();
+// Update the debugging utilities
+void UpdateDebug(double);
 
-// Cleanup the debugging utilities (to be called on application termination)
+// Cleanup the debugging utilities
 void CleanupDebug();
 

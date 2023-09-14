@@ -40,12 +40,16 @@ namespace Duck {
     }
 
     void Application::Run() {
+        double lastFrameTime = glfwGetTime();
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
+            double currentFrameTime = glfwGetTime();
+            double deltaTime = currentFrameTime - lastFrameTime;
+            lastFrameTime = currentFrameTime;
 
             // Update debugging utilities
-            UpdateDebug();
+            UpdateDebug(deltaTime);
 
             // Render here (you can put your OpenGL drawing code here)
 
