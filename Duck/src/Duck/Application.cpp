@@ -35,6 +35,15 @@ namespace Duck {
         // Make the window's context current
         glfwMakeContextCurrent(window);
 
+        // Setup ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+
+        // Setup Platform/Renderer bindings
+        //ImGui_ImplGlfw_InitForOpenGL(window, true); 
+        //ImGui_ImplOpenGL3_Init("#version 330");
+
 	}
 
 	Application::~Application() {
@@ -48,6 +57,10 @@ namespace Duck {
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
             // Render here (you can put your OpenGL drawing code here)
+            // Start new ImGui frame
+            //ImGui_ImplOpenGL3_NewFrame();
+            //ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
             // Swap front and back buffers
             glfwSwapBuffers(window);
