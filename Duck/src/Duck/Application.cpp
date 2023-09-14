@@ -4,6 +4,9 @@
 #include <stdlib.h>  
 #include <crtdbg.h>
 
+#include <fstream>
+#include <exception>
+#include <ctime>
 #include "Application.h"
 #include "Debug.h"
 
@@ -49,28 +52,37 @@ namespace Duck {
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
         double lastFrameTime = glfwGetTime();
 
-        // Loop until the user closes the window
-        while (!glfwWindowShouldClose(window)) {
-            // Calculate delta time
-            double currentFrameTime = glfwGetTime();
-            double deltaTime = currentFrameTime - lastFrameTime;
-            lastFrameTime = currentFrameTime;
+        // Surround the game loop with try-catch for crash logging
+        try {
+            // Loop until the user closes the window
+            while (!glfwWindowShouldClose(window)) {
+                // Calculate delta time
+                double currentFrameTime = glfwGetTime();
+                double deltaTime = currentFrameTime - lastFrameTime;
+                lastFrameTime = currentFrameTime;
 
-            // Update debugging utilities
-            UpdateDebug(deltaTime);
+                // Update debugging utilities
+                UpdateDebug(deltaTime);
 
-            // Render here (you can put your OpenGL drawing code here)
+                // Render here (you can put your OpenGL drawing code here)
 
-            // Swap front and back buffers
-            glfwSwapBuffers(window);
+                // Swap front and back buffers
+                glfwSwapBuffers(window);
 
-            // Poll for and process events
-            glfwPollEvents();
+                // Poll for and process events
+                glfwPollEvents();
+            }
         }
+        catch (const std::exception& e) {
+            std::ofstream crashLog("CrashLog.txt", std::ios::app);
+            crashLog << "Crash with message: " << e.what() << std::endl;
+            crashLog.close();
+            throw; // Re-throw the exception to allow for external handling
 
-        // Terminate GLFW
-        glfwTerminate();
-        return;
+            // Terminate GLFW
+            glfwTerminate();
+            return;
+        }
     }
 }
 

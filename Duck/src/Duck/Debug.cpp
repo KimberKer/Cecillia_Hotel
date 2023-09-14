@@ -3,6 +3,7 @@
 #include "Physics.h"  // Include the physics header to access PhysicsSystemSimulation
 #include <windows.h>  // For Win32 console
 #include <iostream>   // For console output
+#include <string>
 
 // Global variable for FPS calculation
 int frameCount = 0;
@@ -26,6 +27,9 @@ void UpdateDebug(double deltaTime) {
     frameCount++;
     accumulatedTime += deltaTime;
 
+    // This is to test the exception handling 
+    //throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
+    
     // Simulate the physics system
     double physicsStartTime = glfwGetTime();
     PhysicsSystemSimulation();  // Call the physics simulation
