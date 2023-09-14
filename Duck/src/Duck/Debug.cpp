@@ -22,6 +22,7 @@ void InitializeDebug(GLFWwindow* window) {
 }
 
 void UpdateDebug(double deltaTime) {
+    // Calculate the FPS
     frameCount++;
     accumulatedTime += deltaTime;
 

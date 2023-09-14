@@ -1,4 +1,9 @@
 
+// Headers for memory leak detection
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>
+
 #include "Application.h"
 #include "Debug.h"
 
@@ -40,10 +45,13 @@ namespace Duck {
     }
 
     void Application::Run() {
+        // Enable memory leak detection
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
         double lastFrameTime = glfwGetTime();
 
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
+            // Calculate delta time
             double currentFrameTime = glfwGetTime();
             double deltaTime = currentFrameTime - lastFrameTime;
             lastFrameTime = currentFrameTime;
