@@ -16,6 +16,9 @@
     <ClInclude Include="src\Duck\EntryPoint.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Time.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">

@@ -109,6 +109,7 @@
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />

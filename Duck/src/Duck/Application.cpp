@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Time.h"
 
 
 
@@ -48,6 +49,9 @@ namespace Duck {
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
             // Render here (you can put your OpenGL drawing code here)
+            Time run_time;
+            double delta_time = run_time.get_elapsed_time();
+            std::cout << "Elapsed Time: " << delta_time << std::endl;
 
             // Swap front and back buffers
             glfwSwapBuffers(window);
