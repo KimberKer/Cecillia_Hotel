@@ -50,6 +50,7 @@ namespace Duck {
     void Application::Run() {
         // Enable memory leak detection
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
         double lastFrameTime = glfwGetTime();
 
         // Surround the game loop with try-catch for crash logging

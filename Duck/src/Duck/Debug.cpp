@@ -47,7 +47,7 @@ void UpdateDebug(double deltaTime) {
 
 
     //Debug info
-    if (accumulatedTime >= 1.0) {
+    if (accumulatedTime >= 1.0f) {
         std::cout << "FPS: " << frameCount << std::endl;
         std::cout << "Physics system used " << physicsPercentage << "% of total game loop time" << std::endl;
         frameCount = 0;
