@@ -6,6 +6,9 @@
 
 #include <fstream>
 #include <exception>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 #include "Application.h"
 #include "Physics.h"
 #include "Debug.h"
@@ -81,15 +84,27 @@ namespace Duck {
         }
         catch (const std::exception& e) 
         {
-            std::ofstream crashLog("CrashLog.txt", std::ios::app);
+            // Create a folder for crash logs if it doesn't exist
+            std::string crashLogsDir = "CrashLogs";
+
+            // Generate the filename based on current timestamp
+            auto timeNow = std::time(nullptr);
+            std::ostringstream oss;
+            oss << std::put_time(std::localtime(&timeNow), "/CrashLog %d-%m-%y.txt");
+            std::string crashLogFileName = crashLogsDir + oss.str();
+
+            // Write the exception message to crash log
+            std::ofstream crashLog(crashLogFileName, std::ios::out);
             crashLog << "Crash with message: " << e.what() << std::endl;
             crashLog.close();
-            throw; // Re-throw the exception to allow for external handling
 
-            // Terminate GLFW
-            glfwTerminate();
-            return;
+            // Re-throw the exception to allow for external handling or just terminate the program
+            throw;
         }
+
+        // Terminate GLFW
+        glfwTerminate();
+        return;
     }
 }
 

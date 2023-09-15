@@ -44,7 +44,7 @@ void UpdateDebug(double deltaTime)
     accumulatedTime += deltaTime;
 
     // This is to test the exception handling 
-    //throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
+    throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
 
     // Calculate the percentage of frame time by the physics system
     double physicsPercentage = (profileStartTimes["Physics"] / deltaTime) * 100;
