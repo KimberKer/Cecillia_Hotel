@@ -1,12 +1,17 @@
 
 #include "Debug.h"
-#include "Physics.h"  // Include the physics header to access PhysicsSystemSimulation
+#include "Physics.h"  
 #include <iostream>   // For console output
 #include <string>
+#include <map>
 
 // Global variable for FPS calculation
 int frameCount = 0;
 double accumulatedTime = 0.0;
+
+// Map to store the start times of profiled regions
+std::map<std::string, double> profileStartTimes;
+
 
 // Function to handle mouse movement
 void mouse_position_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -19,6 +24,16 @@ void InitializeDebug(GLFWwindow* window) {
     glfwSetCursorPosCallback(window, mouse_position_callback);
 }
 
+void BeginProfile(const std::string& regionName) {
+    profileStartTimes[regionName] = glfwGetTime();
+}
+
+void EndProfile(const std::string& regionName) {
+    double endTime = glfwGetTime();
+    double duration = endTime - profileStartTimes[regionName];
+    profileStartTimes[regionName] = duration;
+}
+
 void UpdateDebug(double deltaTime) {
     // Calculate the FPS
     frameCount++;
@@ -26,15 +41,10 @@ void UpdateDebug(double deltaTime) {
 
     // This is to test the exception handling 
     //throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
-    
-    // Simulate the physics system
-    double physicsStartTime = glfwGetTime();
-    PhysicsSystemSimulation();  // Call the physics simulation
-    double physicsEndTime = glfwGetTime();
-    double physicsDuration = physicsEndTime - physicsStartTime;
 
     // Calculate the percentage of frame time by the physics system
-    double physicsPercentage = (physicsDuration / deltaTime) * 100;
+    double physicsPercentage = (profileStartTimes["Physics"] / deltaTime) * 100;
+
 
     //Debug info
     if (accumulatedTime >= 1.0) {

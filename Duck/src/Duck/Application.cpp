@@ -7,6 +7,7 @@
 #include <fstream>
 #include <exception>
 #include "Application.h"
+#include "Physics.h"
 #include "Debug.h"
 
 // Function to handle errors
@@ -59,6 +60,11 @@ namespace Duck {
                 double currentFrameTime = glfwGetTime();
                 double deltaTime = currentFrameTime - lastFrameTime;
                 lastFrameTime = currentFrameTime;
+
+                BeginProfile("Physics");
+                // Call the physics simulation
+                PhysicsSystemSimulation();
+                EndProfile("Physics");
 
                 // Update debugging utilities
                 UpdateDebug(deltaTime);
