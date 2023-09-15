@@ -6,7 +6,6 @@
 
 #include <fstream>
 #include <exception>
-#include <ctime>
 #include "Application.h"
 #include "Debug.h"
 

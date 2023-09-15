@@ -1,5 +1,1 @@
-Crash on: 1694729524 with message: Test crash!
-Crash on: 1694730550 with message: Test crash!
-Crash on: 1694730591 with message: Test crash!
-Crash with message: Error in file C:\GitHub\Digipen\Cecillia_Hotel\Duck\src\Duck\Debug.cpp on line 29
-Crash with message: Error in file C:\GitHub\Digipen\Cecillia_Hotel\Duck\src\Duck\Debug.cpp on line 29
+Crash with message: Error in file C:\Users\user\Desktop\Digipen\repos\Cecillia_Hotel\Duck\src\Duck\Debug.cpp on line 31

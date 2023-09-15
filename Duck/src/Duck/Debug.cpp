@@ -1,7 +1,6 @@
 
 #include "Debug.h"
 #include "Physics.h"  // Include the physics header to access PhysicsSystemSimulation
-#include <windows.h>  // For Win32 console
 #include <iostream>   // For console output
 #include <string>
 
@@ -15,8 +14,6 @@ void mouse_position_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 void InitializeDebug(GLFWwindow* window) {
-    // Initialize Win32 console
-    AllocConsole();
 
     // Set the mouse position callback
     glfwSetCursorPosCallback(window, mouse_position_callback);
@@ -49,5 +46,4 @@ void UpdateDebug(double deltaTime) {
 }
 
 void CleanupDebug() {
-    FreeConsole(); // Release the Win32 console
 }
