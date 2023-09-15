@@ -1,19 +1,23 @@
+
+// Headers for memory leak detection
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>
+
+#include <fstream>
+#include <exception>
+#include <ctime>
 #include "Application.h"
-
-
+#include "Debug.h"
 
 // Function to handle errors
 void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
 
-
-
 namespace Duck {
 
-
-
-	Application::Application() {
+    Application::Application() {
 
         // Initialize GLFW
         if (!glfwInit()) {
@@ -35,44 +39,50 @@ namespace Duck {
         // Make the window's context current
         glfwMakeContextCurrent(window);
 
-        // Setup ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
+        // Initialize debugging utilities
+        InitializeDebug(window);
+    }
 
-        // Setup Platform/Renderer bindings
-        //ImGui_ImplGlfw_InitForOpenGL(window, true); 
-        //ImGui_ImplOpenGL3_Init("#version 330");
+    Application::~Application() {
+        CleanupDebug(); // Cleanup debugging utilities
+    }
 
-	}
+    void Application::Run() {
+        // Enable memory leak detection
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+        double lastFrameTime = glfwGetTime();
 
-	Application::~Application() {
+        // Surround the game loop with try-catch for crash logging
+        try {
+            // Loop until the user closes the window
+            while (!glfwWindowShouldClose(window)) {
+                // Calculate delta time
+                double currentFrameTime = glfwGetTime();
+                double deltaTime = currentFrameTime - lastFrameTime;
+                lastFrameTime = currentFrameTime;
 
-	}
+                // Update debugging utilities
+                UpdateDebug(deltaTime);
 
-	void Application::Run() {
+                // Render here (you can put your OpenGL drawing code here)
 
+                // Swap front and back buffers
+                glfwSwapBuffers(window);
 
-
-        // Loop until the user closes the window
-        while (!glfwWindowShouldClose(window)) {
-            // Render here (you can put your OpenGL drawing code here)
-            // Start new ImGui frame
-            //ImGui_ImplOpenGL3_NewFrame();
-            //ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            // Swap front and back buffers
-            glfwSwapBuffers(window);
-
-            // Poll for and process events
-            glfwPollEvents();
+                // Poll for and process events
+                glfwPollEvents();
+            }
         }
+        catch (const std::exception& e) {
+            std::ofstream crashLog("CrashLog.txt", std::ios::app);
+            crashLog << "Crash with message: " << e.what() << std::endl;
+            crashLog.close();
+            throw; // Re-throw the exception to allow for external handling
 
-        // Terminate GLFW
-        glfwTerminate();
-        return;
-
-
-	}
+            // Terminate GLFW
+            glfwTerminate();
+            return;
+        }
+    }
 }
+
