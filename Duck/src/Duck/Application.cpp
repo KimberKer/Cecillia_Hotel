@@ -79,7 +79,8 @@ namespace Duck {
                 glfwPollEvents();
             }
         }
-        catch (const std::exception& e) {
+        catch (const std::exception& e) 
+        {
             std::ofstream crashLog("CrashLog.txt", std::ios::app);
             crashLog << "Crash with message: " << e.what() << std::endl;
             crashLog.close();

@@ -14,27 +14,31 @@ std::map<std::string, double> profileStartTimes;
 
 
 // Function to handle mouse movement
-void mouse_position_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_position_callback(GLFWwindow* window, double xpos, double ypos) 
+{
     std::cout << "Mouse X: " << xpos << ", Mouse Y: " << ypos << std::endl;
 }
 
-void InitializeDebug(GLFWwindow* window) {
-
+void InitializeDebug(GLFWwindow* window) 
+{
     // Set the mouse position callback
     glfwSetCursorPosCallback(window, mouse_position_callback);
 }
 
-void BeginProfile(const std::string& regionName) {
+void BeginProfile(const std::string& regionName) 
+{
     profileStartTimes[regionName] = glfwGetTime();
 }
 
-void EndProfile(const std::string& regionName) {
+void EndProfile(const std::string& regionName) 
+{
     double endTime = glfwGetTime();
     double duration = endTime - profileStartTimes[regionName];
     profileStartTimes[regionName] = duration;
 }
 
-void UpdateDebug(double deltaTime) {
+void UpdateDebug(double deltaTime) 
+{
     // Calculate the FPS
     frameCount++;
     accumulatedTime += deltaTime;
@@ -45,9 +49,9 @@ void UpdateDebug(double deltaTime) {
     // Calculate the percentage of frame time by the physics system
     double physicsPercentage = (profileStartTimes["Physics"] / deltaTime) * 100;
 
-
     //Debug info
-    if (accumulatedTime >= 1.0f) {
+    if (accumulatedTime >= 1.0f) 
+    {
         std::cout << "FPS: " << frameCount << std::endl;
         std::cout << "Physics system used " << physicsPercentage << "% of total game loop time" << std::endl;
         frameCount = 0;
@@ -55,5 +59,6 @@ void UpdateDebug(double deltaTime) {
     }
 }
 
-void CleanupDebug() {
+void CleanupDebug() 
+{
 }
