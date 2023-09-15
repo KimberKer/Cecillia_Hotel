@@ -88,9 +88,11 @@ namespace Duck {
             std::string crashLogsDir = "CrashLogs";
 
             // Generate the filename based on current timestamp
-            auto timeNow = std::time(nullptr);
+            struct tm newtime;
+            time_t now = time(0);
+            localtime_s(&newtime, &now);    // fills in the newtime struct with the date if not error
             std::ostringstream oss;
-            oss << std::put_time(std::localtime(&timeNow), "/CrashLog %d-%m-%y.txt");
+            oss << std::put_time(&newtime, "/CrashLog %d-%m-%y.txt");
             std::string crashLogFileName = crashLogsDir + oss.str();
 
             // Write the exception message to crash log
