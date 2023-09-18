@@ -1,10 +1,23 @@
 #include "collision.h"
 #include <iostream>
+#include <chrono>
 
 bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 	const AABB& aabb2, const MathLib::Vector2D& vel2)
 {
+	std::chrono::high_resolution_clock::time_point startTime;
+	std::chrono::high_resolution_clock::time_point currentTime;
+	startTime = std::chrono::high_resolution_clock::now();
+	currentTime = std::chrono::high_resolution_clock::now();
 
+	// Calculate delta time in seconds (s)
+	std::chrono::duration<float> deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime - startTime);
+
+	// Update the start time for the next frame
+	startTime = currentTime;
+
+	// Access delta time in seconds as a floating-point value
+	float dt = deltaTime.count();
 
 	//No intersection
 	if (aabb1.max.x < aabb2.min.x || aabb1.min.x > aabb2.max.x ||
@@ -17,7 +30,7 @@ bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& 
 
 
 	MathLib::Vector2D tFirst{ 0.f, 0.f };
-	MathLib::Vector2D tLast{ g_dt, g_dt };
+	MathLib::Vector2D tLast{ dt, dt };
 
 	// Initialize and calculate the new velocity of Vb
 
@@ -112,3 +125,7 @@ bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& 
 	return 1;
 
 }
+
+/*
+* create an enum
+*/

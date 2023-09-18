@@ -11,17 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header.h" />
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\collision.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\Map.h" />
     <ClInclude Include="src\Duck\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\collision.cpp" />
+    <ClCompile Include="src\Duck\Map.cpp" />
     <ClCompile Include="src\Duck\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Vector2D.cpp" />
   </ItemGroup>
@@ -99,22 +102,6 @@
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-<<<<<<< Updated upstream
-  <ItemGroup>
-    <ClInclude Include="src\Duck.h" />
-    <ClInclude Include="src\Duck\Application.h" />
-    <ClInclude Include="src\Duck\Core.h" />
-    <ClInclude Include="src\Duck\EntryPoint.h" />
-    <ClInclude Include="src\Duck\Input.h" />
-    <ClInclude Include="src\Duck\Time.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Duck\Application.cpp" />
-    <ClCompile Include="src\Duck\Input.cpp" />
-    <ClCompile Include="src\Duck\Time.cpp" />
-  </ItemGroup>
-=======
->>>>>>> Stashed changes
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

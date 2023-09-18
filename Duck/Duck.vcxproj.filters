@@ -36,11 +36,11 @@
     <ClInclude Include="src\Duck\collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Time.h">
-      <Filter>Duck</Filter>
+    <ClInclude Include="Header.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Input.h">
-      <Filter>Duck</Filter>
+    <ClInclude Include="src\Duck\Map.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +56,8 @@
     <ClCompile Include="src\Duck\collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Input.cpp">
-      <Filter>Duck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Time.cpp">
-      <Filter>Duck</Filter>
+    <ClCompile Include="src\Duck\Map.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
