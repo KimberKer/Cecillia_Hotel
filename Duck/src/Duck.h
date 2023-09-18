@@ -3,6 +3,7 @@
 // For use by Duck applications
 
 #include "Duck/Application.h"
+#include "Duck/Layer.h"
 #include "Duck/Log.h"
 
 // -- Entry Point --

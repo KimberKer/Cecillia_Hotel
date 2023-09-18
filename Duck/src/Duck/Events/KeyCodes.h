@@ -2,11 +2,14 @@
 #include <stdint.h>
 
 namespace Duck {
+	// Define an alias for the key code
 	using KeyCode = uint16_t;
 
 	namespace Key {
 		enum : KeyCode {
 			// From glfw3.h
+
+			// Printable keys
 			Space = 32,
 			Apostrophe = 39,	/* ' */
 			Comma = 44,			/* , */
@@ -28,6 +31,7 @@ namespace Duck {
 			Semicolon = 59, /* ; */
 			Equal = 61,		/* = */
 
+			// Alphabet keys
 			A = 65,
 			B = 66,
 			C = 67,
@@ -63,7 +67,7 @@ namespace Duck {
 			World1 = 161, /* non-US #1 */
 			World2 = 162, /* non-US #2 */
 
-			/* Function keys */
+			// Function keys
 			Escape = 256,
 			Enter = 257,
 			Tab = 258,

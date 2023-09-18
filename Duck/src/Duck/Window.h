@@ -9,7 +9,7 @@ namespace Duck {
 		uint32_t Width;
 		uint32_t Height;
 
-		WindowProps(const std::string& title = "Duck Engine",
+		WindowProps(const std::string& title = "Cecillia Hotel",
 			uint32_t width = 800,
 			uint32_t height = 800)
 			: Title(title), Width(width), Height(height)

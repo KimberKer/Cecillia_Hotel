@@ -75,10 +75,12 @@ project "Duck"
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 project "Sandbox"
@@ -127,8 +129,10 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
