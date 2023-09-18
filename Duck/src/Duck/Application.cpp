@@ -91,8 +91,8 @@ namespace Duck {
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
             // Render here (you can put your OpenGL drawing code here)
-            testTime();
-            //testInput(window);
+            //testTime();
+            testInput(window);
 
             // Swap front and back buffers
             glfwSwapBuffers(window);

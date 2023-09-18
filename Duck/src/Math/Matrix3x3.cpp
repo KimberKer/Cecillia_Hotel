@@ -5,9 +5,9 @@
 
 constexpr float PI = 3.14159265358f;
 
-namespace CSD1130
+namespace MathLib
 {
-	Matrix3x3::Matrix3x3(const float *pArr)
+	Matrix3x3::Matrix3x3(const float* pArr)
 	{
 		m00 = *pArr++;
 		m01 = *pArr++;
@@ -23,13 +23,13 @@ namespace CSD1130
 	};
 
 	Matrix3x3::Matrix3x3(float _00, float _01, float _02,
-						 float _10, float _11, float _12,
-						 float _20, float _21, float _22) :	m00(_00), m01(_01), m02(_02),
-															m10(_10), m11(_11), m12(_12),
-															m20(_20), m21(_21), m22(_22) {};
+		float _10, float _11, float _12,
+		float _20, float _21, float _22) : m00(_00), m01(_01), m02(_02),
+		m10(_10), m11(_11), m12(_12),
+		m20(_20), m21(_21), m22(_22) {};
 
-	Matrix3x3& Matrix3x3::operator = (const Matrix3x3 &rhs)
-	{	
+	Matrix3x3& Matrix3x3::operator = (const Matrix3x3& rhs)
+	{
 		m00 = rhs.m00;
 		m01 = rhs.m01;
 		m02 = rhs.m02;
@@ -84,7 +84,7 @@ namespace CSD1130
 		return *this;
 	}
 
-	Matrix3x3 operator * (const Matrix3x3 &lhs, const Matrix3x3 &rhs)
+	Matrix3x3 operator * (const Matrix3x3& lhs, const Matrix3x3& rhs)
 	{
 		Matrix3x3 result = lhs;
 		result *= rhs;
@@ -184,7 +184,7 @@ namespace CSD1130
 		Mtx33Identity(pResult);
 		pResult.m00 = cosf(angle * PI / 180);
 		pResult.m01 = -sinf(angle * PI / 180);
-		
+
 		pResult.m10 = sinf(angle * PI / 180);
 		pResult.m11 = cosf(angle * PI / 180);
 	}
@@ -220,8 +220,8 @@ namespace CSD1130
 	void Mtx33Inverse(Matrix3x3* pResult, float* determinant, const Matrix3x3& pMtx)
 	{
 		// Calculate the determinant of the matrix
-		*determinant = ((pMtx.m00 * pMtx.m11 * pMtx.m22) + (pMtx.m01 * pMtx.m12 * pMtx.m20) + (pMtx.m02 * pMtx.m10 * pMtx.m21)) 
-					 - ((pMtx.m02 * pMtx.m11 * pMtx.m20) + (pMtx.m01 * pMtx.m10 * pMtx.m22) + (pMtx.m00 * pMtx.m12 * pMtx.m21));
+		*determinant = ((pMtx.m00 * pMtx.m11 * pMtx.m22) + (pMtx.m01 * pMtx.m12 * pMtx.m20) + (pMtx.m02 * pMtx.m10 * pMtx.m21))
+			- ((pMtx.m02 * pMtx.m11 * pMtx.m20) + (pMtx.m01 * pMtx.m10 * pMtx.m22) + (pMtx.m00 * pMtx.m12 * pMtx.m21));
 
 		if (*determinant <= 0)
 		{
@@ -259,4 +259,4 @@ namespace CSD1130
 			pResult->m22 /= *determinant;
 		}
 	}
-} //end namespace CSD1130
+} //end namespace MathLib

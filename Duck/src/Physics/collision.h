@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector2D.h"
+#include "../Math/Vector2D.h"
 
 #ifndef MathLib_COLLISION_H_
 #define MathLib_COLLISION_H_

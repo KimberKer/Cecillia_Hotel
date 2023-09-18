@@ -2,16 +2,16 @@
 #include <math.h>
 #include <iostream>
 
-namespace CSD1130
+namespace MathLib
 {
 	Vector2D::Vector2D(float _x, float _y) : x(_x), y(_y) {};
 
 	/*----------------------------------------------------------
-	* 
+	*
 	* assignment operators
-	* 
+	*
 	----------------------------------------------------------*/
-	Vector2D& Vector2D::operator += (const Vector2D &rhs)
+	Vector2D& Vector2D::operator += (const Vector2D& rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
@@ -19,7 +19,7 @@ namespace CSD1130
 		return *this;
 	}
 
-	Vector2D& Vector2D::operator -= (const Vector2D &rhs)
+	Vector2D& Vector2D::operator -= (const Vector2D& rhs)
 	{
 		x -= rhs.x;
 		y -= rhs.y;
@@ -50,7 +50,7 @@ namespace CSD1130
 	----------------------------------------------------------*/
 	Vector2D Vector2D::operator - () const
 	{
-		return {-x, -y};
+		return { -x, -y };
 	}
 
 	/*----------------------------------------------------------
