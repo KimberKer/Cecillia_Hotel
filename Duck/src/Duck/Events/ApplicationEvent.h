@@ -1,4 +1,5 @@
 #pragma once
+#include "duckpch.h"
 #include "Event.h"
 
 namespace Duck {

@@ -1,12 +1,10 @@
 #pragma once
-
 #include "Event.h"
 #include "MouseCodes.h"
 
 namespace Duck {
 
-	class MouseMovedEvent : public Event
-	{
+	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(const float x, const float y)
 			: m_MouseX(x), m_MouseY(y) {}

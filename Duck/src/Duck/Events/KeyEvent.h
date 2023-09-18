@@ -3,7 +3,6 @@
 #include "KeyCodes.h"
 
 namespace Duck {
-
 	class KeyEvent : public Event {
 	public:
 		KeyCode GetKeyCode() const { return m_KeyCode; }

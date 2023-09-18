@@ -53,10 +53,11 @@ namespace Duck {
 
         /*WindowResizeEvent e(1280, 720);
         if (e.IsInCategory(EventCategoryApplication)) {
-            consoleLogger.Log("Window Created!", LogLevel::INFO);
+            consoleLogger.Log(e.ToString(), LogLevel::INFO);
+
         }
         if (e.IsInCategory(EventCategoryInput)) {
-            consoleLogger.Log("Input Detected!", LogLevel::INFO);
+            consoleLogger.Log(e.ToString(), LogLevel::INFO);
         }
 
         while (true);*/

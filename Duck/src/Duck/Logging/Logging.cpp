@@ -29,7 +29,7 @@ void ConsoleSink::Log(const std::string& message, LogLevel level) {
     std::string resetColor = ANSI_COLOR_RESET;
 
     // Print colored log message
-    std::cout << colorCode << "[" << GetCurrentTime() << "] " << prefix << ": " << message << resetColor << std::endl;
+    std::cout << colorCode << "[" << GetCurrentTimeWindow() << "] " << prefix << ": " << message << resetColor << std::endl;
 }
 
 // File Sink
@@ -46,7 +46,7 @@ FileSink::FileSink() {
 void FileSink::Log(const std::string& message, LogLevel level) {
     if (file_ && file_->is_open()) {
         std::string prefix = GetLogLevelPrefix(level);
-        (*file_) << "[" << GetCurrentTime() << "] " << prefix << ": " << message << std::endl;
+        (*file_) << "[" << GetCurrentTimeWindow() << "] " << prefix << ": " << message << std::endl;
     }
 }
 
