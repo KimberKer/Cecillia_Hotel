@@ -116,7 +116,7 @@
             for (const auto& pair : systemProfileDuration)
             {
                 double systemPercentage = (pair.second / accumulateTime) * 100;
-                std::cout << pair.first << " system used " << pair.second << "% of total game loop time" << std::endl;
+                std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
 
             }
 
