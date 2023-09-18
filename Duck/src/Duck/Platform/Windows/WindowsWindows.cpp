@@ -5,6 +5,7 @@
 #include "Duck/Events/MouseEvent.h"
 #include "Duck/Events/KeyEvent.h"
 #include "Duck/Log.h"
+#include <glad/glad.h>
 
 namespace Duck {
 	static bool s_GLFWInitialized = false;
@@ -68,6 +69,8 @@ namespace Duck {
 		// Create the GLFW window
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		DUCK_CORE_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

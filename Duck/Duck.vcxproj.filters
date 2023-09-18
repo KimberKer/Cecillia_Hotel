@@ -61,6 +61,12 @@
     <ClInclude Include="src\Duck\Events\MouseEvent.h">
       <Filter>Duck\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Layer.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\LayerStack.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Log.h">
       <Filter>Duck</Filter>
     </ClInclude>
@@ -90,6 +96,12 @@
     </ClCompile>
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>Duck\De-serialize</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Layer.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\LayerStack.cpp">
+      <Filter>Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Log.cpp">
       <Filter>Duck</Filter>

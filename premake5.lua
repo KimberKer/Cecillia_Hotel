@@ -14,8 +14,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
+IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 
 include "Duck/vendor/GLFW"
+include "Duck/vendor/Glad"
 
 -- Duck.dll
 project "Duck"
@@ -43,7 +45,8 @@ project "Duck"
 		"%{prj.name}/src",
 		"Duck/vendor/spdlog/include",
         --"lib/glfw-3.3.8.bin.WIN64/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
     }
 
 	-- Libs to Include, ".lib" files
@@ -54,6 +57,7 @@ project "Duck"
 	-- Link Input .dll
 	links {
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
         --"glfw3"
     }
@@ -65,7 +69,8 @@ project "Duck"
 
 		defines {
 			"DUCK_PLATFORM_WINDOWS",
-			"DUCK_BUILD_DLL"
+			"DUCK_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands {
