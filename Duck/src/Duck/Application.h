@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include "gameobjects/GameObject.h"
 #include "Logging.h"
+#include "Events/Event.h"
 
 namespace Duck {
 	class DUCK_API Application

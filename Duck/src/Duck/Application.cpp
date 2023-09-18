@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "Time.h"
-#include "Logging.h"
+#include "Events/ApplicationEvent.h"
 
 GameObject player;
 bool loadFiles = false;
@@ -38,6 +38,28 @@ namespace Duck {
 	}
 
 	void Application::Run() {
+        // Create log sinks
+        ConsoleSink consoleSink;    // For logging to the console
+        FileSink fileSink;          // For logging to a file
+        FileSink::FileSink();
+
+        // Create loggers and configure log levels and sinks
+        Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
+        consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
+
+        Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
+        fileLogger.AddSink(&fileSink);          // Add file sink for log file
+
+        /*WindowResizeEvent e(1280, 720);
+        if (e.IsInCategory(EventCategoryApplication)) {
+            consoleLogger.Log("Window Created!", LogLevel::INFO);
+        }
+        if (e.IsInCategory(EventCategoryInput)) {
+            consoleLogger.Log("Input Detected!", LogLevel::INFO);
+        }
+
+        while (true);*/
+
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
             // Render here (you can put your OpenGL drawing code here)
@@ -53,18 +75,6 @@ namespace Duck {
 
             // Load Game Objects
             if (!loadFiles) {
-                // Create log sinks
-                ConsoleSink consoleSink;    // For logging to the console
-                FileSink fileSink;          // For logging to a file
-                FileSink::FileSink();
-
-                // Create loggers and configure log levels and sinks
-                Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
-                consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
-                
-                Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
-                fileLogger.AddSink(&fileSink);          // Add file sink for log file
-
                 // Load player data
                 player.loadPlayerData();
                 loadFiles = true; // Set the flag to true to indicate data has been loaded
@@ -77,6 +87,5 @@ namespace Duck {
         // Terminate GLFW
         glfwTerminate();
 
-        return;
 	}
 }

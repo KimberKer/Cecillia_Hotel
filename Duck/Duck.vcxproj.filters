@@ -13,6 +13,9 @@
     <Filter Include="Duck\LoggingSystem">
       <UniqueIdentifier>{aa75fdad-5e00-4871-85e0-3379410d9462}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Duck\Events">
+      <UniqueIdentifier>{496d4457-1b1f-41b8-bd43-eee12eec60eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
@@ -41,6 +44,24 @@
     </ClInclude>
     <ClInclude Include="src\Duck\Logging.h">
       <Filter>Duck\LoggingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\KeyEvent.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\MouseEvent.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\MouseCodes.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\Event.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\KeyCodes.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\ApplicationEvent.h">
+      <Filter>Duck\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

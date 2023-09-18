@@ -111,6 +111,12 @@
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Duck\Events\Event.h" />
+    <ClInclude Include="src\Duck\Events\KeyCodes.h" />
+    <ClInclude Include="src\Duck\Events\KeyEvent.h" />
+    <ClInclude Include="src\Duck\Events\MouseCodes.h" />
+    <ClInclude Include="src\Duck\Events\MouseEvent.h" />
     <ClInclude Include="src\Duck\gameobjects\GameObject.h" />
     <ClInclude Include="src\Duck\Logging.h" />
     <ClInclude Include="src\Duck\Time.h" />
