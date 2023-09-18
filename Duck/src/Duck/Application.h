@@ -3,11 +3,10 @@
 #include "Core.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include "gameobjects/GameObject.h"
+#include "Logging.h"
 
 namespace Duck {
-
-	
-
 	class DUCK_API Application
 	{
 	public:
@@ -20,6 +19,5 @@ namespace Duck {
 	// To be defined in CLIENT
 	Application* CreateApplication();
 }
-
 
  GLFWwindow* window;

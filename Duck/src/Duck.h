@@ -1,6 +1,6 @@
 #pragma once
 
-// For use by Dark applications
+// For use by Duck applications
 
 #include "Duck/Application.h"
 

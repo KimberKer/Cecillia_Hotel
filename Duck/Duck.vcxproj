@@ -107,12 +107,22 @@
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
+    <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
+    <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\gameobjects\GameObject.h" />
+    <ClInclude Include="src\Duck\Logging.h" />
     <ClInclude Include="src\Duck\Time.h" />
+    <ClInclude Include="src\Math\Matrix3x3.h" />
+    <ClInclude Include="src\Math\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\gameobjects\GameObject.cpp" />
+    <ClCompile Include="src\Duck\Logging.cpp" />
+    <ClCompile Include="src\Math\Matrix3x3.cpp" />
+    <ClCompile Include="src\Math\Vector2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

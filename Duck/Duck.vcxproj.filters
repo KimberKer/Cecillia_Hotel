@@ -4,6 +4,15 @@
     <Filter Include="Duck">
       <UniqueIdentifier>{2C58847C-188F-850D-C17B-6B10AD91010F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duck\GameObjects">
+      <UniqueIdentifier>{faeda42c-6941-4bd4-b183-3da1da3f19a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duck\LoggingSystem">
+      <UniqueIdentifier>{aa75fdad-5e00-4871-85e0-3379410d9462}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
@@ -19,10 +28,36 @@
     <ClInclude Include="src\Duck\Time.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math\Matrix3x3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector2D.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Components.h" />
+    <ClInclude Include="src\Duck\Entity.h" />
+    <ClInclude Include="src\Duck\gameobjects\GameObject.h">
+      <Filter>Duck\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Logging.h">
+      <Filter>Duck\LoggingSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Math\Matrix3x3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Vector2D.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\gameobjects\GameObject.cpp">
+      <Filter>Duck\GameObjects</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Application.cpp">
       <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Logging.cpp">
+      <Filter>Duck\LoggingSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
