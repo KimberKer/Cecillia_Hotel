@@ -3,6 +3,7 @@
 #include "Core.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include "Debug.h"
 
 namespace Duck {
 
@@ -11,9 +12,9 @@ namespace Duck {
 	class DUCK_API Application
 	{
 	public:
+		Debug debugger;
 		Application();
 		virtual ~Application();
-
 		void Run();
 	};
 
@@ -23,3 +24,4 @@ namespace Duck {
 
 
  GLFWwindow* window;
+ 

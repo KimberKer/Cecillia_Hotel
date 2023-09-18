@@ -1,19 +1,33 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <string>
+#include <map>
 
-// Initialize the debugging utilities
-void InitializeDebug(GLFWwindow* window);
 
-// Beginning wrapper for functions
-void BeginProfile(const std::string& regionName);
+	class Debug
+	{
+	private:
+		int frameCount;
+		double accumulateTime;
 
-// Ending wrapper for functions
-void EndProfile(const std::string& regionName);
+		std::map<std::string, double> systemProfileStartTime;
 
-// Update the debugging utilities
-void UpdateDebug(double);
+		std::map<std::string, double> systemProfileDuration;
 
-// Cleanup the debugging utilities
-void CleanupDebug();
+	public:
+		Debug();
+		~Debug();
+
+		void Initialize(GLFWwindow* window);
+		void CleanDebug();
+
+		void BeginSystemProfile(const std::string& SystemName);
+		double EndSystemProfile(const std::string& SystemName);
+
+		void Update(double deltaTime);
+
+		double GetSystemDuration(const std::string& systemName);
+
+	};
+
 

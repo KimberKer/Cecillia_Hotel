@@ -43,11 +43,11 @@ namespace Duck {
         glfwMakeContextCurrent(window);
 
         // Initialize debugging utilities
-        InitializeDebug(window);
+        debugger.Initialize(window);
     }
 
     Application::~Application() {
-        CleanupDebug(); // Cleanup debugging utilities
+        debugger.CleanDebug();
     }
 
     void Application::Run() {
@@ -65,13 +65,13 @@ namespace Duck {
                 double deltaTime = currentFrameTime - lastFrameTime;
                 lastFrameTime = currentFrameTime;
 
-                BeginProfile("Physics");
+                debugger.BeginSystemProfile("Physics");
                 // Call the physics simulation
                 PhysicsSystemSimulation();
-                EndProfile("Physics");
+                debugger.EndSystemProfile("Physics");
 
                 // Update debugging utilities
-                UpdateDebug(deltaTime);
+                debugger.Update(deltaTime);
 
                 // Render here (you can put your OpenGL drawing code here)
 
