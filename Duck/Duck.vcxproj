@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -83,7 +83,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,6 +118,7 @@
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseCodes.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
+    <ClInclude Include="src\Duck\Log.h" />
     <ClInclude Include="src\Duck\Logging\Logging.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
     <ClInclude Include="src\Duck\Time.h" />
@@ -129,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
+    <ClCompile Include="src\Duck\Log.cpp" />
     <ClCompile Include="src\Duck\Logging\Logging.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
     <ClCompile Include="src\Math\Matrix3x3.cpp" />

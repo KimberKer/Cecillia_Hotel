@@ -7,8 +7,8 @@ namespace Duck {
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height) : m_Width(width), m_Height(height) {}
 
-		unsigned int GetWidth() const { return m_Width; }
-		unsigned int GetHeight() const { return m_Height; }
+		inline unsigned int GetWidth() const { return m_Width; }
+		inline unsigned int GetHeight() const { return m_Height; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -22,7 +22,7 @@ namespace Duck {
 		unsigned int m_Width, m_Height;
 	};
 
-	class WindowCloseEvent : public Event {
+	class DUCK_API WindowCloseEvent : public Event {
 	public:
 		WindowCloseEvent() {};
 

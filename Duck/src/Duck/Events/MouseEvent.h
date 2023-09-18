@@ -4,13 +4,13 @@
 
 namespace Duck {
 
-	class MouseMovedEvent : public Event {
+	class DUCK_API MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(const float x, const float y)
 			: m_MouseX(x), m_MouseY(y) {}
 
-		float GetX() const { return m_MouseX; }
-		float GetY() const { return m_MouseY; }
+		inline float GetX() const { return m_MouseX; }
+		inline float GetY() const { return m_MouseY; }
 
 		std::string ToString() const override
 		{
@@ -25,14 +25,13 @@ namespace Duck {
 		float m_MouseX, m_MouseY;
 	};
 
-	class MouseScrolledEvent : public Event
-	{
+	class DUCK_API MouseScrolledEvent : public Event {
 	public:
 		MouseScrolledEvent(const float xOffset, const float yOffset)
 			: m_XOffset(xOffset), m_YOffset(yOffset) {}
 
-		float GetXOffset() const { return m_XOffset; }
-		float GetYOffset() const { return m_YOffset; }
+		inline float GetXOffset() const { return m_XOffset; }
+		inline float GetYOffset() const { return m_YOffset; }
 
 		std::string ToString() const override
 		{
@@ -47,8 +46,7 @@ namespace Duck {
 		float m_XOffset, m_YOffset;
 	};
 
-	class MouseButtonEvent : public Event
-	{
+	class DUCK_API MouseButtonEvent : public Event {
 	public:
 		MouseCode GetMouseButton() const { return m_Button; }
 
@@ -60,7 +58,7 @@ namespace Duck {
 		MouseCode m_Button;
 	};
 
-	class MouseButtonPressedEvent : public MouseButtonEvent
+	class DUCK_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(const MouseCode button)
@@ -76,10 +74,10 @@ namespace Duck {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class MouseButtonReleasedEvent : public MouseButtonEvent
+	class DUCK_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(const MouseCode button)
+		MouseButtonReleasedEvent(int button)
 			: MouseButtonEvent(button) {}
 
 		std::string ToString() const override

@@ -1,15 +1,16 @@
 #include "duckpch.h"
 #include "Duck/Platform/Windows/WindowsWindows.h"
-#include "Duck/Logging/Logging.h"
+//#include "Duck/Logging/Logging.h"
 #include "Duck/Events/ApplicationEvent.h"
 #include "Duck/Events/MouseEvent.h"
 #include "Duck/Events/KeyEvent.h"
+#include "Duck/Log.h"
 
 namespace Duck {
 	static bool s_GLFWInitialized = false;
 
 	static void GLFWErrorCallback(int error, const char* description) {
-		//HZ_CORE_ERROR("GLFW eRROR ({0}): {1}", error, description);
+		DUCK_CORE_ERROR("GLFW eRROR ({0}): {1}", error, description);
 	}
 
 	Window* Window::Create(const WindowProps& props) {
@@ -29,27 +30,28 @@ namespace Duck {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		// Create log sinks
-		ConsoleSink consoleSink;    // For logging to the console
-		FileSink fileSink;          // For logging to a file
-		FileSink::FileSink();
+		//// Create log sinks
+		//ConsoleSink consoleSink;    // For logging to the console
+		//FileSink fileSink;          // For logging to a file
+		//FileSink::FileSink();
 
-		// Create loggers and configure log levels and sinks
-		Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
-		consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
+		//// Create loggers and configure log levels and sinks
+		//Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
+		//consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
 
-		Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
-		fileLogger.AddSink(&fileSink);          // Add file sink for log file
+		//Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
+		//fileLogger.AddSink(&fileSink);          // Add file sink for log file
 
 		// INSERT CONSOLE MESSAGE
 		//consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);
 		//consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);
 
+		DUCK_CORE_INFO("Creating Window: {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized) {
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			// INSERT CONSOLE MESSAGE
+			DUCK_CORE_ASSERT(success, "Could not initialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 
@@ -89,7 +91,7 @@ namespace Duck {
 					break;
 				}
 				case GLFW_RELEASE: {
-					KeyPressedEvent event(key);
+					KeyPressedEvent event(key, 0);
 					data.EventCallback(event);
 					break;
 				}
@@ -129,7 +131,8 @@ namespace Duck {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseMovedEvent event((float)xPos, (float)yPos);
-		});
+			data.EventCallback(event);
+			});
 	}
 
 	void WindowsWindow::Shutdown() {
