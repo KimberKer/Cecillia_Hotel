@@ -59,5 +59,11 @@
     <ClCompile Include="src\Duck\Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Input.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Time.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
