@@ -1,5 +1,4 @@
 #include "Application.h"
-#include "Time.h"
 
 
 
@@ -12,7 +11,50 @@ void error_callback(int error, const char* description) {
 
 namespace Duck {
 
+    //TESTING - time.h
+    void testTime() {
+        Time time;
 
+        time.startFrame();
+        time.endFrame();
+
+        double elapsed = time.getElapsedTime();
+        double delta = time.getDeltaTime();
+
+        std::cout << "Elapsed time: " << elapsed << std::endl;
+        std::cout << "Delta time: " << delta << std::endl;
+    }
+
+    //TESTING - input.h
+    void testInput(GLFWwindow *_window) {
+        Input::inputInit(_window);
+        
+        //test keyboard
+        if (Input::isKeyPressed(GLFW_KEY_A)) {
+            std::cout << "Key A is pressed!\n";
+        }
+
+        if (Input::isKeyLongPressed(GLFW_KEY_A, 1.0)) {
+            std::cout << "Key A is long pressed (1.0s)\n";
+        }
+
+        if (Input::isKeyLongPressed(GLFW_KEY_A, 3.0)) {
+            std::cout << "Key At is long pressed (3.0s)\n";
+        }
+
+        //test mouse
+        if (Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+            std::cout << "Mouse left is pressed!\n";
+        }
+
+        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 1.0)) {
+            std::cout << "Mouse left is long pressed (1.0s)\n";
+        }
+        
+        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 3.0)) {
+            std::cout << "Mouse left is long pressed (3.0s)\n";
+        }
+    }
 
 	Application::Application() {
 
@@ -49,6 +91,8 @@ namespace Duck {
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
             // Render here (you can put your OpenGL drawing code here)
+            testTime();
+            //testInput(window);
 
             // Swap front and back buffers
             glfwSwapBuffers(window);
