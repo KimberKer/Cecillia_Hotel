@@ -105,10 +105,13 @@
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
+    <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\Input.cpp" />
+    <ClCompile Include="src\Duck\Time.cpp" />
   </ItemGroup>
 =======
 >>>>>>> Stashed changes
