@@ -13,6 +13,12 @@
     <Filter Include="Duck\Logging">
       <UniqueIdentifier>{C2A48ED1-AE07-1E76-578D-562C43CFE9F8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Duck\Platform">
+      <UniqueIdentifier>{008666C0-6C46-E2F6-3581-2B74A10027D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duck\Platform\Windows">
+      <UniqueIdentifier>{3A309A6F-A69C-556A-6F90-EDC7DBBB77D2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
@@ -58,7 +64,13 @@
     <ClInclude Include="src\Duck\Logging\Logging.h">
       <Filter>Duck\Logging</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h">
+      <Filter>Duck\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Time.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Window.h">
       <Filter>Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Matrix3x3.h">
@@ -78,6 +90,9 @@
     </ClCompile>
     <ClCompile Include="src\Duck\Logging\Logging.cpp">
       <Filter>Duck\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp">
+      <Filter>Duck\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Matrix3x3.cpp">
       <Filter>Math</Filter>

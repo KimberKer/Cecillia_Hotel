@@ -48,7 +48,9 @@ class Logging {
 public:
     Logging(LogLevel level);
     void AddSink(LogSink* sink);
-    void Log(const std::string& message, LogLevel msgLevel);
+    //void Log(const std::string& message, LogLevel msgLevel);
+    template <typename... Args>
+    void Log(LogLevel msgLevel, const Args&... args);
 
 private:
     LogLevel level_;

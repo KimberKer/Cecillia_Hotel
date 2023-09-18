@@ -11,6 +11,12 @@ workspace "Duck"
 -- Output Directory Shortcut
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
+
+include "Duck/vendor/GLFW"
+
 -- Duck.dll
 project "Duck"
 	location "Duck"
@@ -29,23 +35,26 @@ project "Duck"
 	-- Files to Generate
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	-- Directories to Include
     includedirs {
 		"%{prj.name}/src",
-        "lib/glfw-3.3.8.bin.WIN64/include"
+        --"lib/glfw-3.3.8.bin.WIN64/include",
+		"%{IncludeDir.GLFW}"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
-        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+        --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
     }
 
 	-- Link Input .dll
 	links {
-        "glfw3"
+		"GLFW",
+		"opengl32.lib"
+        --"glfw3"
     }
 
 	filter "system:windows"
@@ -85,24 +94,24 @@ project "Sandbox"
 	-- Files to Generate
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.cpp"
 	}
 
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
-		"{prj.name}/src",
-		"lib/glfw-3.3.8.bin.WIN64/include"
+		"{prj.name}/src"
+		--"lib/glfw-3.3.8.bin.WIN64/include"
 	}
 
 	-- Libs to Include, ".lib" files
 	libdirs {
-        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+        --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
     }
 
 	links {
-		"Duck",
-		"glfw3"
+		"Duck"
+		--"glfw3"
 	}
 
 	filter "system:windows"

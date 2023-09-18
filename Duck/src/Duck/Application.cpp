@@ -3,6 +3,8 @@
 #include "Time.h"
 #include "Events/ApplicationEvent.h"
 
+#include <GLFW/glfw3.h>
+
 GameObject player;
 bool loadFiles = false;
 
@@ -13,25 +15,27 @@ void error_callback(int error, const char* description) {
 
 namespace Duck {
 	Application::Application() {
-        // Initialize GLFW
-        if (!glfwInit()) {
-            std::cerr << "Failed to initialize GLFW" << std::endl;
-            return;
-        }
+        m_Window = std::unique_ptr<Window>(Window::Create());
 
-        // Set the GLFW error callback
-        glfwSetErrorCallback(error_callback);
+        //// Initialize GLFW
+        //if (!glfwInit()) {
+        //    std::cerr << "Failed to initialize GLFW" << std::endl;
+        //    return;
+        //}
 
-        // Create a GLFW window and OpenGL context
-        window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
-        if (!window) { 
-            std::cerr << "Failed to create GLFW window" << std::endl;
-            glfwTerminate();
-            return;
-        }
+        //// Set the GLFW error callback
+        //glfwSetErrorCallback(error_callback);
 
-        // Make the window's context current
-        glfwMakeContextCurrent(window);
+        //// Create a GLFW window and OpenGL context
+        //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
+        //if (!window) { 
+        //    std::cerr << "Failed to create GLFW window" << std::endl;
+        //    glfwTerminate();
+        //    return;
+        //}
+
+        //// Make the window's context current
+        //glfwMakeContextCurrent(window);
 	}
 
 	Application::~Application() {
@@ -39,55 +43,40 @@ namespace Duck {
 	}
 
 	void Application::Run() {
-        // Create log sinks
-        ConsoleSink consoleSink;    // For logging to the console
-        FileSink fileSink;          // For logging to a file
-        FileSink::FileSink();
+      
 
-        // Create loggers and configure log levels and sinks
-        Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
-        consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
-
-        Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
-        fileLogger.AddSink(&fileSink);          // Add file sink for log file
-
-        /*WindowResizeEvent e(1280, 720);
-        if (e.IsInCategory(EventCategoryApplication)) {
-            consoleLogger.Log(e.ToString(), LogLevel::INFO);
-
+        while (m_Running) {
+            glClearColor(1, 0, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            m_Window->OnUpdate();
         }
-        if (e.IsInCategory(EventCategoryInput)) {
-            consoleLogger.Log(e.ToString(), LogLevel::INFO);
-        }
-
-        while (true);*/
 
         // Loop until the user closes the window
-        while (!glfwWindowShouldClose(window)) {
-            // Render here (you can put your OpenGL drawing code here)
-            Time run_time;
-            double delta_time = run_time.get_elapsed_time();
-            //std::cout << "Elapsed Time: " << delta_time << std::endl;
+        //while (!glfwWindowShouldClose(window)) {
+        //    // Render here (you can put your OpenGL drawing code here)
+        //    Time run_time;
+        //    double delta_time = run_time.get_elapsed_time();
+        //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
 
-            // Swap front and back buffers
-            glfwSwapBuffers(window);
+        //    // Swap front and back buffers
+        //    glfwSwapBuffers(window);
 
-            // Poll for and process events
-            glfwPollEvents();
+        //    // Poll for and process events
+        //    glfwPollEvents();
 
-            // Load Game Objects
-            if (!loadFiles) {
-                // Load player data
-                player.loadPlayerData();
-                loadFiles = true; // Set the flag to true to indicate data has been loaded
+        //    // Load Game Objects
+        //    if (!loadFiles) {
+        //        // Load player data
+        //        player.loadPlayerData();
+        //        loadFiles = true; // Set the flag to true to indicate data has been loaded
 
-                consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
-                fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
-            }
-        }
+        //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
+        //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
+        //    }
+        //}
 
-        // Terminate GLFW
-        glfwTerminate();
+        //// Terminate GLFW
+        //glfwTerminate();
 
 	}
 }

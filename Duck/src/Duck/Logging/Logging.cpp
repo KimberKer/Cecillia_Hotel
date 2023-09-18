@@ -57,8 +57,21 @@ void Logging::AddSink(LogSink* sink) {
     sinks_.push_back(sink);
 }
 
-void Logging::Log(const std::string& message, LogLevel msgLevel) {
+//void Logging::Log(const std::string& message, LogLevel msgLevel) {
+//    if (msgLevel >= level_) {
+//        for (auto sink : sinks_) {
+//            sink->Log(message, msgLevel);
+//        }
+//    }
+//}
+
+template <typename... Args>
+void Logging::Log(LogLevel msgLevel, const Args&... args) {
     if (msgLevel >= level_) {
+        std::ostringstream oss;
+        // Convert each argument to a string and append to the stream
+        ((oss << args), ...);
+        std::string message = oss.str();
         for (auto sink : sinks_) {
             sink->Log(message, msgLevel);
         }
