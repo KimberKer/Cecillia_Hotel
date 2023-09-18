@@ -4,17 +4,17 @@
     <Filter Include="Duck">
       <UniqueIdentifier>{2C58847C-188F-850D-C17B-6B10AD91010F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Duck\GameObjects">
-      <UniqueIdentifier>{faeda42c-6941-4bd4-b183-3da1da3f19a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Duck\LoggingSystem">
-      <UniqueIdentifier>{aa75fdad-5e00-4871-85e0-3379410d9462}</UniqueIdentifier>
+    <Filter Include="Duck\De-serialize">
+      <UniqueIdentifier>{599AB8A9-C5B0-B63F-0E28-42617A7D87C7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Duck\Events">
-      <UniqueIdentifier>{496d4457-1b1f-41b8-bd43-eee12eec60eb}</UniqueIdentifier>
+      <UniqueIdentifier>{909AF7C7-FC4F-70BD-8544-6A94F1F866C1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Duck\Logging">
+      <UniqueIdentifier>{C2A48ED1-AE07-1E76-578D-562C43CFE9F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,11 +22,41 @@
     <ClInclude Include="src\Duck\Application.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Components.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Core.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\De-serialize\GameObject.h">
+      <Filter>Duck\De-serialize</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Entity.h">
       <Filter>Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\EntryPoint.h">
       <Filter>Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\ApplicationEvent.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\Event.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\KeyCodes.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\KeyEvent.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\MouseCodes.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Events\MouseEvent.h">
+      <Filter>Duck\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Logging\Logging.h">
+      <Filter>Duck\Logging</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Time.h">
       <Filter>Duck</Filter>
@@ -37,48 +67,24 @@
     <ClInclude Include="src\Math\Vector2D.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Components.h" />
-    <ClInclude Include="src\Duck\Entity.h" />
-    <ClInclude Include="src\Duck\gameobjects\GameObject.h">
-      <Filter>Duck\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Logging.h">
-      <Filter>Duck\LoggingSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\KeyEvent.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\MouseEvent.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\MouseCodes.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\Event.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\KeyCodes.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Events\ApplicationEvent.h">
-      <Filter>Duck\Events</Filter>
-    </ClInclude>
+    <ClInclude Include="src\duckpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Duck\Application.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
+      <Filter>Duck\De-serialize</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Logging\Logging.cpp">
+      <Filter>Duck\Logging</Filter>
+    </ClCompile>
     <ClCompile Include="src\Math\Matrix3x3.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Vector2D.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\gameobjects\GameObject.cpp">
-      <Filter>Duck\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Application.cpp">
-      <Filter>Duck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Logging.cpp">
-      <Filter>Duck\LoggingSystem</Filter>
-    </ClCompile>
+    <ClCompile Include="src\duckpch.cpp" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,5 @@
 #pragma once
-
-#include "../Core.h"
-#include <string>
-#include <functional>
+#include "Duck/Core.h"
 
 namespace Duck {
 

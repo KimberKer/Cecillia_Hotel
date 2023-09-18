@@ -3,8 +3,8 @@
 #include "Core.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include "gameobjects/GameObject.h"
-#include "Logging.h"
+#include "De-serialize/GameObject.h"
+#include "Logging/Logging.h"
 #include "Events/Event.h"
 
 namespace Duck {

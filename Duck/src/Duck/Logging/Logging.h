@@ -1,9 +1,8 @@
+#include "Duck/Core.h"
+#include <vector>
+
 #ifndef LOGGING_H
 #define LOGGING_H
-
-#include <string>
-#include <vector>
-#include <iosfwd>  // Include this for forward declaration
 
 // ANSI escape code for text color
 // https://talyian.github.io/ansicolors/
@@ -18,7 +17,7 @@ enum class LogLevel {
     DEBUG,      // Blue
     INFO,       // Green
     WARNING,    // Yellow
-    ERROR,      // Red
+    ERRORS,      // Red
     CRITICAL    // Red
 };
 
@@ -57,7 +56,7 @@ private:
 };
 
 // Helper Functions
-std::string GetCurrentTime();
+std::string GetCurrentTimeWindow();
 std::string GetCurrentTimeLog();
 std::string GetLogLevelPrefix(LogLevel level);
 

@@ -1,6 +1,5 @@
+#include "duckpch.h"
 #include "GameObject.h"
-#include <fstream>
-#include <iostream>
 
 GameObject::GameObject() : x(0.0f), y(0.0f), velocityX(0.0f), velocityY(0.0f) {}
 

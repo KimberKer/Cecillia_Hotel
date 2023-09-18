@@ -23,6 +23,9 @@ project "Duck"
 	-- Intermediates Directory
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "duckpch.h"
+	pchsource "Duck/src/duckpch.cpp"
+
 	-- Files to Generate
 	files {
 		"%{prj.name}/src/**.h",
@@ -31,7 +34,7 @@ project "Duck"
 
 	-- Directories to Include
     includedirs {
-		"%{prj.name}/src"
+		"%{prj.name}/src",
         "lib/glfw-3.3.8.bin.WIN64/include"
     }
 
@@ -88,7 +91,7 @@ project "Sandbox"
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
-		"{prj.name}/src"
+		"{prj.name}/src",
 		"lib/glfw-3.3.8.bin.WIN64/include"
 	}
 

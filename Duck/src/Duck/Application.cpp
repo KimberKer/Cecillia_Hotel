@@ -1,3 +1,4 @@
+#include "duckpch.h"
 #include "Application.h"
 #include "Time.h"
 #include "Events/ApplicationEvent.h"

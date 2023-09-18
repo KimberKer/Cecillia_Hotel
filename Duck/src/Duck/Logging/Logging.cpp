@@ -1,9 +1,5 @@
+#include "duckpch.h"
 #include "Logging.h"
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <ctime>
 
 // Console Sink Implementation
 void ConsoleSink::Log(const std::string& message, LogLevel level) {
@@ -21,7 +17,7 @@ void ConsoleSink::Log(const std::string& message, LogLevel level) {
     case LogLevel::WARNING:
         colorCode = ANSI_COLOR_YELLOW;
         break;
-    case LogLevel::ERROR:
+    case LogLevel::ERRORS:
     case LogLevel::CRITICAL:
         colorCode = ANSI_COLOR_RED;
         break;
@@ -75,13 +71,13 @@ std::string GetLogLevelPrefix(LogLevel level) {
     case LogLevel::DEBUG:       return "DEBUG";
     case LogLevel::INFO:        return "INFO";
     case LogLevel::WARNING:     return "WARNING";
-    case LogLevel::ERROR:       return "ERROR";
+    case LogLevel::ERRORS:       return "ERROR";
     case LogLevel::CRITICAL:    return "CRITICAL";
     default:                    return "UNKNOWN";
     }
 }
 
-std::string GetCurrentTime() {
+std::string GetCurrentTimeWindow() {
     time_t now = std::time(nullptr);
     struct tm timeInfo;
     localtime_s(&timeInfo, &now); // Use localtime_s for Windows
