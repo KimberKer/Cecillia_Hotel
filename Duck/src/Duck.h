@@ -7,8 +7,8 @@
 #include "Duck/Log.h"
 
 #include "Duck/Input.h"
-#include "Duck/KeyCodes.h"
-#include "Duck/MouseCodes.h"
+//#include "Duck/KeyCodes.h"
+//#include "Duck/MouseCodes.h"
 
 #include "Duck/Events/KeyEvent.h"
 #include "Duck/Events/MouseEvent.h"

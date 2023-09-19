@@ -15,6 +15,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
 IncludeDir["Glad"] = "Duck/vendor/Glad/include"
+IncludeDir["glm"] = "Duck/vendor/glm"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
@@ -38,7 +39,9 @@ project "Duck"
 	-- Files to Generate
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	-- Directories to Include
@@ -47,7 +50,8 @@ project "Duck"
 		"Duck/vendor/spdlog/include",
         --"lib/glfw-3.3.8.bin.WIN64/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.glm}"
     }
 
 	-- Libs to Include, ".lib" files
@@ -109,7 +113,8 @@ project "Sandbox"
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
-		"Duck/vendor/spdlog/include"
+		"Duck/vendor/spdlog/include",
+		"%{IncludeDir.glm}"
 		--"{prj.name}/src",
 		--"lib/glfw-3.3.8.bin.WIN64/include"
 	}
