@@ -115,7 +115,7 @@
             std::cout << "FPS: " << frameCount << std::endl;
             for (const auto& pair : systemProfileDuration)
             {
-                double systemPercentage = (pair.second / accumulateTime) * 100;
+                double systemPercentage = (pair.second / deltaTime) * 100;
                 std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
 
             }
