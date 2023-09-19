@@ -25,7 +25,7 @@ DUCK_TRACE
 DUCK_INFO
 DUCK_WARN
 DUCK_ERROR
-DUCK_FATAL
+DUCK_CRITICAL
 ```
 To log into console,
 ```cpp
