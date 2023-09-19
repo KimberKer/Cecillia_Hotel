@@ -4,17 +4,14 @@
     <Filter Include="Duck">
       <UniqueIdentifier>{2C58847C-188F-850D-C17B-6B10AD91010F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{6307880B-CF10-887C-588C-9E7CC494937C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Physics">
-      <UniqueIdentifier>{7ff9d468-4eb0-4b43-b9d0-0ee54f678ee2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Duck\Map">
-      <UniqueIdentifier>{341010a3-c52a-44d2-b226-48e7d76f7cc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Map">
-      <UniqueIdentifier>{d5c51a41-143c-445a-bcbd-288afbc447db}</UniqueIdentifier>
+      <UniqueIdentifier>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,20 +31,23 @@
     <ClInclude Include="src\Duck\Input.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Map.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Time.h">
       <Filter>Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Map.h">
+      <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Matrix3x3.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\collision.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\Vector2D.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Map\Map.h">
-      <Filter>Map</Filter>
+    <ClInclude Include="src\Physics\collision.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +60,14 @@
     <ClCompile Include="src\Duck\Input.cpp">
       <Filter>Duck</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Map.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Time.cpp">
       <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Map.cpp">
+      <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Matrix3x3.cpp">
       <Filter>Math</Filter>
@@ -71,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="src\Physics\collision.cpp">
       <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map\Map.cpp">
-      <Filter>Map</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

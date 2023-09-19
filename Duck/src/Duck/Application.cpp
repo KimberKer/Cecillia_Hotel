@@ -50,7 +50,7 @@ namespace Duck {
             std::cout << "Key A is pressed!\n";
         }
 
-        if (Input::isKeyLongPressed(GLFW_KEY_D, 1.0)) {
+        if (Input::isKeyLongPressed(GLFW_KEY_A, 1.0)) {
             std::cout << "Key A is long pressed (1.0s)\n";
         }
 

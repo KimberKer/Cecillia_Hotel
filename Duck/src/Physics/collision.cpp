@@ -14,11 +14,17 @@ PhysicsLib::PhysicsLib() {
 
 float PhysicsLib::GetDeltaTime() {
 	currentTime = std::chrono::high_resolution_clock::now();
+
+	// Calculate delta time in seconds (s)
 	std::chrono::duration<float> deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime - startTime);
+
+	// Update the start time for the next frame
 	startTime = currentTime;
 	return deltaTime.count();
 }
 
+	// Access delta time in seconds as a floating-point value
+	float dt = deltaTime.count();
 
 bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 	const AABB& aabb2, const MathLib::Vector2D& vel2)
@@ -128,45 +134,5 @@ bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib
 
 	return 1;
 
-}
-
-void PhysicsLib::PlayerMovement(bool keyPressed,int longPressedKey, MathLib::Vector2D player_current_position, MathLib::Vector2D player_current_Velocity) {
-	//----------sample data until GameObject has been created---------
-	const float				PLAYER_VELOCITY				{ 4.0f };
-	const float				GRAVITY						{ 0.0f };
-	//-----------------------------------------------------------------
-
-	if (keyPressed) {
-		switch (longPressedKey) {
-			// GLFW_KEY_A -> player moving left
-		case GLFW_KEY_A:
-
-			player_current_Velocity.x = -PLAYER_VELOCITY;
-			break;
-
-			// GLFW_KEY_D -> player moving right
-		case GLFW_KEY_D:
-			player_current_Velocity.x = PLAYER_VELOCITY;
-			break;
-
-			// GLFW_KEY_W -> player moving up
-		case GLFW_KEY_W:
-			player_current_Velocity.y = PLAYER_VELOCITY;
-			break;
-
-			// GLFW_KEY_S -> player moving down
-		case GLFW_KEY_S:
-			player_current_Velocity.y = -PLAYER_VELOCITY;
-			break;
-		}
-
-		//gravity
-		player_current_Velocity.y = player_current_Velocity.y - GRAVITY * dt;
-
-		//movement
-		player_current_position.x = player_current_Velocity.x * dt + player_current_position.x;
-		player_current_position.y = player_current_Velocity.y * dt + player_current_position.y;
-
-	}
 }
 

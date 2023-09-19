@@ -20,8 +20,8 @@ public:
 
     float GetDeltaTime();
 
-    bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
-        const AABB& aabb2, const MathLib::Vector2D& vel2);
+bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
+	const AABB& aabb2, const MathLib::Vector2D& vel2);
 
     void PlayerMovement(bool keyPressed,int longPressedKey, MathLib::Vector2D player_current_position, MathLib::Vector2D player_current_Velocity);
         void testCollison(int longKeyPressed,GLFWwindow* _window, MathLib::Vector2D* player_pos);

@@ -2,7 +2,7 @@
 
 #include "Vector2D.h"
 
-namespace CSD1130
+namespace MathLib
 {
 	#ifdef _MSC_VER
 	// Supress warning: nonstandard extension used : nameless struct/union
