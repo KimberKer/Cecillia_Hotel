@@ -114,9 +114,9 @@
     <ClInclude Include="src\Duck\EntryPoint.h" />
     <ClInclude Include="src\Duck\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Duck\Events\Event.h" />
-    <ClInclude Include="src\Duck\Events\KeyCodes.h" />
+    <ClInclude Include="src\Duck\KeyCodes.h" />
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
-    <ClInclude Include="src\Duck\Events\MouseCodes.h" />
+    <ClInclude Include="src\Duck\MouseCodes.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
     <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\Layer.h" />
