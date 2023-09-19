@@ -1,5 +1,3 @@
-# Cecillia_Hotel
-
 # OpenGL Mathematics
 
 Code Sample:
