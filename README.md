@@ -8,24 +8,24 @@ Code Sample:
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 
 glm::mat4 camera(float Translate, glm::vec2 const & Rotate) {
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.f);
-	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -Translate));
-	View = glm::rotate(View, Rotate.y, glm::vec3(-1.0f, 0.0f, 0.0f));
-	View = glm::rotate(View, Rotate.x, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+    glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.f);
+    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -Translate));
+    View = glm::rotate(View, Rotate.y, glm::vec3(-1.0f, 0.0f, 0.0f));
+    View = glm::rotate(View, Rotate.x, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 
-	return Projection * View * Model;
+    return Projection * View * Model;
 }
 ```
 
 # Logging
 5 types of logging you can use.
 ```cpp
-#define DUCK_TRACE(...) ::Duck::Log::GetClientLogger()->trace(__VA_ARGS__);
-#define DUCK_INFO(...) ::Duck::Log::GetClientLogger()->info(__VA_ARGS__);
-#define DUCK_WARN(...) ::Duck::Log::GetClientLogger()->warn(__VA_ARGS__);
-#define DUCK_ERROR(...) ::Duck::Log::GetClientLogger()->error(__VA_ARGS__);
-#define DUCK_FATAL(...) ::Duck::Log::GetClientLogger()->critical(__VA_ARGS__);
+DUCK_TRACE
+DUCK_INFO
+DUCK_WARN
+DUCK_ERROR
+DUCK_CRITICAL
 ```
 To log into console,
 ```cpp
