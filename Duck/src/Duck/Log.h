@@ -21,6 +21,7 @@ namespace Duck {
 	private:
 		// Static instances of the core and client loggers
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
+
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
 }
@@ -30,10 +31,10 @@ namespace Duck {
 #define DUCK_CORE_INFO(...) ::Duck::Log::GetCoreLogger()->info(__VA_ARGS__);
 #define DUCK_CORE_WARN(...) ::Duck::Log::GetCoreLogger()->warn(__VA_ARGS__);
 #define DUCK_CORE_ERROR(...) ::Duck::Log::GetCoreLogger()->error(__VA_ARGS__);
-#define DUCK_CORE_FATAL(...) ::Duck::Log::GetCoreLogger()->critical(__VA_ARGS__);
+#define DUCK_CORE_CRITICAL(...) ::Duck::Log::GetCoreLogger()->critical(__VA_ARGS__);
 
 #define DUCK_TRACE(...) ::Duck::Log::GetClientLogger()->trace(__VA_ARGS__);
 #define DUCK_INFO(...) ::Duck::Log::GetClientLogger()->info(__VA_ARGS__);
 #define DUCK_WARN(...) ::Duck::Log::GetClientLogger()->warn(__VA_ARGS__);
 #define DUCK_ERROR(...) ::Duck::Log::GetClientLogger()->error(__VA_ARGS__);
-#define DUCK_FATAL(...) ::Duck::Log::GetClientLogger()->critical(__VA_ARGS__);
+#define DUCK_CRITICAL(...) ::Duck::Log::GetClientLogger()->critical(__VA_ARGS__);
