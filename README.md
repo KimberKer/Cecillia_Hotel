@@ -18,6 +18,7 @@ return Projection * View * Model;
 ```
 
 # Logging
+5 types of logging you can use.
 ```cpp
 #define DUCK_TRACE(...) ::Duck::Log::GetClientLogger()->trace(__VA_ARGS__);
 #define DUCK_INFO(...) ::Duck::Log::GetClientLogger()->info(__VA_ARGS__);
