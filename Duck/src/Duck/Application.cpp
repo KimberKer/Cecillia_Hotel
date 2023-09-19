@@ -84,6 +84,10 @@ namespace Duck {
                 layer->OnUpdate();
             }
 
+            // Log Mouse Position to Console
+            auto [x, y] = Input::GetMousePosition();
+            DUCK_CORE_TRACE("{0}, {1}", x, y);
+
             m_Window->OnUpdate();
         }
 
