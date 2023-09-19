@@ -18,7 +18,7 @@ namespace Duck {
 		static bool isMouseButtonPressed(int button);
 		static bool isMouseButtonLongPressed(int button, double minDuration);
 		static void getMousePosition(double& xPos, double& yPos);
-		static int GetKeys();
+	
 
 	private:
 		static GLFWwindow* window;
