@@ -23,9 +23,6 @@ float PhysicsLib::GetDeltaTime() {
 	return deltaTime.count();
 }
 
-	// Access delta time in seconds as a floating-point value
-	float dt = deltaTime.count();
-
 bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 	const AABB& aabb2, const MathLib::Vector2D& vel2)
 {

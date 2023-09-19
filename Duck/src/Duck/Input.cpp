@@ -4,10 +4,6 @@
 namespace Duck {
 	GLFWwindow* Input::window = nullptr;
 
-
-	int Input::GetKeys(GLFWwindow* _window) {
-		int keyPressed;
-	}
 	void Input::inputInit(GLFWwindow *_window) {
 		window = _window;
 	}
