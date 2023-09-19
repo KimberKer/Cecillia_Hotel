@@ -6,6 +6,8 @@
 
 #include <glad/glad.h>
 
+#include "Input.h"
+
 GameObject player;
 bool loadFiles = false;
 
@@ -15,10 +17,14 @@ void error_callback(int error, const char* description) {
 }
 
 namespace Duck {
+    Application* Application::s_Instance = nullptr;
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application::Application() {
+        DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
+        s_Instance = this;
+
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
@@ -77,6 +83,9 @@ namespace Duck {
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate();
             }
+
+            auto [x, y] = Input::GetMousePosition();
+            DUCK_CORE_TRACE("{0}, {1}", x, y);
 
             m_Window->OnUpdate();
         }

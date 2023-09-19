@@ -63,3 +63,20 @@ std::string GetCurrentTimeLog();
 std::string GetLogLevelPrefix(LogLevel level);
 
 #endif
+
+
+//// Create log sinks
+    //ConsoleSink consoleSink;    // For logging to the console
+    //FileSink fileSink;          // For logging to a file
+    //FileSink::FileSink();
+
+    //// Create loggers and configure log levels and sinks
+    //Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
+    //consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
+
+    //Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
+    //fileLogger.AddSink(&fileSink);          // Add file sink for log file
+
+    // INSERT CONSOLE MESSAGE
+    //consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);
+    //consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);

@@ -26,6 +26,8 @@ namespace Duck {
 
 		// Check if vertical sync is enabled
 		bool IsVSync() const override;
+		
+		inline virtual void* GetNativeWindow() const { return m_Window; }
 
 	private:
 		// Initialize the window

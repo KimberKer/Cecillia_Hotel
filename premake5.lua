@@ -5,7 +5,7 @@ workspace "Duck"
 
 	configurations {
 		"Debug",
-		"Release",
+		"Release"
 	}
 
 -- Output Directory Shortcut
@@ -24,6 +24,7 @@ project "Duck"
 	location "Duck"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "Off"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -64,7 +65,6 @@ project "Duck"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines {
@@ -75,23 +75,24 @@ project "Duck"
 
 		postbuildcommands {
 			-- Copy Duck.dll into Sandbox
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "Off"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -125,7 +126,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines {
@@ -134,10 +134,10 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"

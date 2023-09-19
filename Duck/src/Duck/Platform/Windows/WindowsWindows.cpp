@@ -12,7 +12,7 @@ namespace Duck {
 
 	// Callback function for GLFW errors
 	static void GLFWErrorCallback(int error, const char* description) {
-		DUCK_CORE_ERROR("GLFW eRROR ({0}): {1}", error, description);
+		DUCK_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 	
 	// Create a window instance based on platform
@@ -37,22 +37,7 @@ namespace Duck {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		//// Create log sinks
-		//ConsoleSink consoleSink;    // For logging to the console
-		//FileSink fileSink;          // For logging to a file
-		//FileSink::FileSink();
-
-		//// Create loggers and configure log levels and sinks
-		//Logging consoleLogger(LogLevel::INFO);  // Set log level to INFO
-		//consoleLogger.AddSink(&consoleSink);    // Add console sink for real-time output
-
-		//Logging fileLogger(LogLevel::DEBUG);    // Set log level to DEBUG
-		//fileLogger.AddSink(&fileSink);          // Add file sink for log file
-
-		// INSERT CONSOLE MESSAGE
-		//consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);
-		//consoleLogger.Log(LogLevel::INFO, "Creating Window: ", props.Title);
-
+		// Log to Console: Windows Title, Width, Height
 		DUCK_CORE_INFO("Creating Window: {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		// Initialize GLFW if it hasn't been initialized yet
@@ -90,7 +75,6 @@ namespace Duck {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent event;
 			data.EventCallback(event);
-
 		});
 
 		// Key press/release/repeat callback
@@ -104,7 +88,7 @@ namespace Duck {
 					break;
 				}
 				case GLFW_RELEASE: {
-					KeyPressedEvent event(key, 0);
+					KeyReleasedEvent event(key);
 					data.EventCallback(event);
 					break;
 				}

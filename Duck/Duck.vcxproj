@@ -64,7 +64,6 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -75,7 +74,7 @@
       <ImportLibrary>..\bin\Debug-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -91,7 +90,6 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -103,7 +101,7 @@
       <ImportLibrary>..\bin\Release-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -120,10 +118,12 @@
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseCodes.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
+    <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\Layer.h" />
     <ClInclude Include="src\Duck\LayerStack.h" />
     <ClInclude Include="src\Duck\Log.h" />
     <ClInclude Include="src\Duck\Logging\Logging.h" />
+    <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
     <ClInclude Include="src\Duck\Time.h" />
     <ClInclude Include="src\Duck\Window.h" />
@@ -138,6 +138,7 @@
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />
     <ClCompile Include="src\Duck\Logging\Logging.cpp" />
+    <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
     <ClCompile Include="src\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Math\Vector2D.cpp" />
