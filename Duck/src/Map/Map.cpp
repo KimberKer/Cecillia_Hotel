@@ -69,8 +69,8 @@ int MapDataHandler::GetMapData(const char* FileName)
 
 void MapDataHandler::printMapData() {
 	std::cout << "-----------------MAP--------------" << std::endl;
-	std::cout << width << MapWidth;
-	std::cout << width << MapHeight;
+	std::cout << width<<" " << MapWidth << std::endl;
+	std::cout << height<<" " << MapHeight;
 	for (int i{}; i < MapHeight; i++) {
 		for (int j{}; j < MapWidth; j++) {
 			std::cout << MapData[i][j]<< " ";
