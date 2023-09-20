@@ -12,7 +12,6 @@ namespace Duck {
 	class DUCK_API Application
 	{
 	public:
-		Debug debugger;
 		Application();
 		virtual ~Application();
 		void Run();
