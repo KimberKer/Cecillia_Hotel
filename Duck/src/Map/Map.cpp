@@ -69,8 +69,8 @@ int MapDataHandler::GetMapData(const char* FileName)
 
 void MapDataHandler::printMapData() {
 	std::cout << "-----------------MAP--------------" << std::endl;
-	std::cout << width<<" " << MapWidth << std::endl;
-	std::cout << height<<" " << MapHeight;
+	std::cout << width<<" : " << MapWidth << std::endl;
+	std::cout << height<<" : " << MapHeight << std::endl;
 	for (int i{}; i < MapHeight; i++) {
 		for (int j{}; j < MapWidth; j++) {
 			std::cout << MapData[i][j]<< " ";
@@ -205,3 +205,39 @@ int MapDataHandler::CheckInstanceBinaryMapCollision(float PosX, float PosY,
 	return Flag;
 }
 
+
+/*
+void CheckCollision() {
+	pInst->gridCollisionFlag = CheckInstanceBinaryMapCollision(pInst->posCurr.x, pInst->posCurr.y, pInst->scale.x, pInst->scale.y);
+
+	//collision from bottom
+	if (pInst->gridCollisionFlag & COLLISION_BOTTOM) {
+		//snap to cell
+		SnapToCell(&pInst->posCurr.y);
+		//Velocity y=0
+		pInst->velCurr.y = 0;
+	}
+
+	//collsion top
+	if (pInst->gridCollisionFlag & COLLISION_TOP) {
+		//snap to cell
+		SnapToCell(&pInst->posCurr.y);
+		//Velocity y=0
+		pInst->velCurr.y = 0;
+	}
+	//collsion left
+	if (pInst->gridCollisionFlag & COLLISION_LEFT) {
+		//snap to cell
+		SnapToCell(&pInst->posCurr.x);
+		//velocity x =0 
+		pInst->velCurr.x = 0;
+	}
+	//collsion right
+	if (pInst->gridCollisionFlag & COLLISION_RIGHT) {
+		//snap to cell
+		SnapToCell(&pInst->posCurr.x);
+		//velocity x =0 
+		pInst->velCurr.x = 0;
+	}
+}
+*/
