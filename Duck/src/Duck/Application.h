@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Time.h"
 #include "Input.h"
+#include "../Map/Map.h"
 #include "../Math/Vector2D.h"
 #include <iostream>
 #include <GLFW/glfw3.h>

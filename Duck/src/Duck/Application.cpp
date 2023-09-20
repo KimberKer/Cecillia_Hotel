@@ -7,8 +7,12 @@ MathLib::Vector2D		player_current_Velocity{ 0.0f, 0.0f };
 //-----------------------------------------------------------------
 
 PhysicsLib physicLib;
+MapDataHandler mapDataHandler;
 
-// Function to handle errors
+const char* file{ "../Duck/src/Map/test.txt" };
+const char* file2{ "../Duck/src/Map/Updatedtext.txt" };
+
+ //Function to handle errors
 void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
@@ -33,7 +37,6 @@ namespace Duck {
 
     void HandlePlayerCollisionAndMovement(GLFWwindow* _window, MathLib::Vector2D& player_current_position, MathLib::Vector2D& player_current_Velocity) {
         Input::inputInit(_window);
-        //std::cout << "3333333\n";
         if (Input::isKeyLongPressed(GLFW_KEY_A, 4.0)) {
             std::cout << "Player going left " << player_current_position.x << std::endl;
             std::cout << "player x value : " << player_current_position.x << std::endl;
@@ -81,7 +84,7 @@ namespace Duck {
         }
 
         // Set the GLFW error callback
-        glfwSetErrorCallback(error_callback);
+      //  glfwSetErrorCallback(error_callback);
 
         // Create a GLFW window and OpenGL context
         window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
@@ -109,27 +112,31 @@ namespace Duck {
             // Render here (you can put your OpenGL drawing code here)
             //testTime();
             testInput(window);
+            
 
-            int KeyPressed{};
-
-            if (glfwGetKey(window, KeyPressed) == GLFW_PRESS) {
-                physicLib.PlayerMovement(KeyPressed, player_current_position, player_current_Velocity);
          
-                HandlePlayerCollisionAndMovement(window, player_current_position, player_current_Velocity);
-
-                std::cout << "Key At is long pressed (3.0s)\n";
-            }   
-            else {
-                continue;
+            mapDataHandler.GetMapData(file);
+            if (Input::isKeyPressed(GLFW_KEY_A)) {
+                mapDataHandler.printMapData();
             }
-    
-           
+            if (Input::isKeyPressed(GLFW_KEY_B)) {
+                int row, column, value;
+                std::cout << "enter row id: ";
+                std::cin >> row;
+                std::cout << "enter column id: ";
+                std::cin >> column;
+                std::cout << "enter value: ";
+                std::cin >> value;
+                if(mapDataHandler.UpdateCellData(file2, row, column, value))
+                    mapDataHandler.printMapData();
+            }
     
             // Swap front and back buffers
             glfwSwapBuffers(window);
 
             // Poll for and process events
             glfwPollEvents();
+           mapDataHandler.FreeMapData();
         }
 
         // Terminate GLFW

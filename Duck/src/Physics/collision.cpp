@@ -3,20 +3,16 @@
 
 
 PhysicsLib physics;
-float dt = physics.GetDeltaTime();
+//float dt = physics.GetDeltaTime();
 
 PhysicsLib::PhysicsLib() {
-	//obtain current time
-	startTime = std::chrono::high_resolution_clock::now();
-	//stores in current time
-	currentTime = startTime;
 }
 
 float PhysicsLib::GetDeltaTime() {
 	currentTime = std::chrono::high_resolution_clock::now();
 
 	// Calculate delta time in seconds (s)
-	std::chrono::duration<float> deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime - startTime);
+	deltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(currentTime - startTime);
 
 	// Update the start time for the next frame
 	startTime = currentTime;
@@ -37,7 +33,7 @@ bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib
 
 
 	MathLib::Vector2D tFirst{ 0.f, 0.f };
-	MathLib::Vector2D tLast{ dt, dt };
+	MathLib::Vector2D tLast{ deltaTime.count(), deltaTime.count()};
 
 	// Initialize and calculate the new velocity of Vb
 

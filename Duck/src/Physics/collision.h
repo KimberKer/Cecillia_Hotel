@@ -29,6 +29,8 @@ bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& 
 private:
     std::chrono::high_resolution_clock::time_point startTime;
     std::chrono::high_resolution_clock::time_point currentTime;
+
+    std::chrono::duration<float> deltaTime;
 };
 
 #endif // PHYSICSLIB_HPP
