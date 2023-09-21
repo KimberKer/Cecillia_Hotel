@@ -119,7 +119,7 @@ namespace Duck {
             if (Input::isKeyPressed(GLFW_KEY_A)) {
                 mapDataHandler.printMapData();
             }
-            if (Input::isKeyPressed(GLFW_KEY_B)) {
+            while (Input::isKeyPressed(GLFW_KEY_B)) {
                 int row, column, value;
                 std::cout << "enter row id: ";
                 std::cin >> row;

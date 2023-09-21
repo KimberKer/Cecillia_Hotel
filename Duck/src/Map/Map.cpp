@@ -90,18 +90,18 @@ int MapDataHandler::UpdateCellData(const char* filename , int row, int column, i
 		return 0;
 	}
 
-	if (row > MapHeight || row < MapHeight) {
+	if (row > MapHeight-1 && row < MapHeight-1) {
 		std::cerr << "height out of range" << std::endl;
 		return 0;
 	}
-	else if (column > MapWidth || column < MapWidth) {
+	else if (column > MapWidth-1 && column < MapWidth-1) {
 		std::cerr << "width out of range" << std::endl;
 		return 0;
 	}
 
 	for (int i = 0; i < MapHeight; i++) {
 		for (int j = 0; j < MapWidth; j++) {
-			MapData[row-1][column-1] = value;
+			MapData[row][column] = value;
 			file << MapData[i][j] << ' ';
 		}
 		file << std::endl;

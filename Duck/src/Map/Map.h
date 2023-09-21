@@ -23,10 +23,8 @@ private:
 public:
 
     MapDataHandler();
-
     int GetMapData(const char* File);
     int UpdateCellData(const char* filename, int row, int column, int value);
-    int UpdateHeight(const char* filename, int height);
     void FreeMapData();
     void SnapToCell(float* Coordinate);
     int GetCellValue(int X, int Y);
