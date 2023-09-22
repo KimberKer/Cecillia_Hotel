@@ -1,7 +1,6 @@
+#include "duckpch.h"
 #include "Matrix3x3.h"
 #include "Vector2D.h"
-#include <math.h>
-#include <iostream>
 
 constexpr float PI = 3.14159265358f;
 
