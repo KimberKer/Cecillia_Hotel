@@ -1,9 +1,0 @@
-[submodule "Duck/vendor/GLFW"]
-	path = Duck/vendor/GLFW
-	url = https://github.com/TheCherno/GLFW
-[submodule "Duck/vendor/spdlog"]
-	path = Duck/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "Duck/vendor/glm"]
-	path = Duck/vendor/glm
-	url = https://github.com/g-truc/glm
