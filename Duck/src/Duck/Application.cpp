@@ -1,148 +1,127 @@
+#include "duckpch.h"
 #include "Application.h"
+#include "Events/ApplicationEvent.h"
+#include "Duck//Log.h"
+#include "Time.h"
 
-//----------sample data until GameObject has been created---------
-MathLib::Vector2D		player_current_position{ 0.0f, 0.0f };
-MathLib::Vector2D		player_current_Velocity{ 0.0f, 0.0f };
+#include <glad/glad.h>
 
-//-----------------------------------------------------------------
+#include "Input.h"
 
-PhysicsLib physicLib;
-MapDataHandler mapDataHandler;
+GameObject player;
+bool loadFiles = false;
 
-const char* file{ "../Duck/src/Map/test.txt" };
-const char* file2{ "../Duck/src/Map/Updatedtext.txt" };
-
- //Function to handle errors
+// Function to handle errors
 void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
 
-
-
 namespace Duck {
+    Application* Application::s_Instance = nullptr;
 
-    //TESTING - time.h
-    void testTime() {
-        Time time;
-
-        time.startFrame();
-        time.endFrame();
-
-        double elapsed = time.getElapsedTime();
-        double delta = time.getDeltaTime();
-
-        std::cout << "Elapsed time: " << elapsed << std::endl;
-        std::cout << "Delta time: " << delta << std::endl;
-    }
-
-    void HandlePlayerCollisionAndMovement(GLFWwindow* _window, MathLib::Vector2D& player_current_position, MathLib::Vector2D& player_current_Velocity) {
-        Input::inputInit(_window);
-        if (Input::isKeyLongPressed(GLFW_KEY_A, 4.0)) {
-            std::cout << "Player going left " << player_current_position.x << std::endl;
-            std::cout << "player x value : " << player_current_position.x << std::endl;
-        }
-
-    }
-
-    //TESTING - input.h
-    void testInput(GLFWwindow *_window) {
-        Input::inputInit(_window);
-        
-        //test keyboard
-        if (Input::isKeyPressed(GLFW_KEY_A)) {
-            std::cout << "Key A is pressed!\n";
-        }
-
-        if (Input::isKeyLongPressed(GLFW_KEY_A, 1.0)) {
-            std::cout << "Key A is long pressed (1.0s)\n";
-        }
-
-        if (Input::isKeyLongPressed(GLFW_KEY_A, 3.0)) {
-            std::cout << "Key At is long pressed (3.0s)\n";
-        }
-
-        //test mouse
-        if (Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            std::cout << "Mouse left is pressed!\n";
-        }
-
-        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 1.0)) {
-            std::cout << "Mouse left is long pressed (1.0s)\n";
-        }
-        
-        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 3.0)) {
-            std::cout << "Mouse left is long pressed (3.0s)\n";
-        }
-    }
+#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application::Application() {
+        DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
+        s_Instance = this;
 
-        // Initialize GLFW
-        if (!glfwInit()) {
-            std::cerr << "Failed to initialize GLFW" << std::endl;
-            return;
-        }
+        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-        // Set the GLFW error callback
-      //  glfwSetErrorCallback(error_callback);
+        //// Initialize GLFW
+        //if (!glfwInit()) {
+        //    std::cerr << "Failed to initialize GLFW" << std::endl;
+        //    return;
+        //}
 
-        // Create a GLFW window and OpenGL context
-        window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
-        if (!window) {
-            std::cerr << "Failed to create GLFW window" << std::endl;
-            glfwTerminate();
-            return;
-        }
+        //// Set the GLFW error callback
+        //glfwSetErrorCallback(error_callback);
 
-        // Make the window's context current
-        glfwMakeContextCurrent(window);
+        //// Create a GLFW window and OpenGL context
+        //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
+        //if (!window) { 
+        //    std::cerr << "Failed to create GLFW window" << std::endl;
+        //    glfwTerminate();
+        //    return;
+        //}
 
+        //// Make the window's context current
+        //glfwMakeContextCurrent(window);
 	}
 
 	Application::~Application() {
 
 	}
 
+    void Application::PushLayer(Layer* layer) {
+        m_LayerStack.PushLayer(layer);
+    }
+
+    void Application::PushOverlay(Layer* layer) {
+        m_LayerStack.PushOverlay(layer);
+    }
+
+    void Application::OnEvent(Event& e) {
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+        //DUCK_CORE_INFO("{0}", e);
+
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+            (*--it)->OnEvent(e);
+            if (e.Handled) {
+                break;
+            }
+        }
+    }
+
 	void Application::Run() {
+        while (m_Running) {
+            glClearColor(1, 0, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-
-
-        // Loop until the user closes the window
-        while (!glfwWindowShouldClose(window)) {
-            // Render here (you can put your OpenGL drawing code here)
-            //testTime();
-            testInput(window);
-            
-
-         
-            mapDataHandler.GetMapData(file);
-            if (Input::isKeyPressed(GLFW_KEY_A)) {
-                mapDataHandler.printMapData();
+            for (Layer* layer : m_LayerStack) {
+                layer->OnUpdate();
             }
-            while (Input::isKeyPressed(GLFW_KEY_B)) {
-                int row, column, value;
-                std::cout << "enter row id: ";
-                std::cin >> row;
-                std::cout << "enter column id: ";
-                std::cin >> column;
-                std::cout << "enter value: ";
-                std::cin >> value;
-                if(mapDataHandler.UpdateCellData(file2, row, column, value))
-                    mapDataHandler.printMapData();
-            }
-    
-            // Swap front and back buffers
-            glfwSwapBuffers(window);
 
-            // Poll for and process events
-            glfwPollEvents();
-           mapDataHandler.FreeMapData();
+            // Log Mouse Position to Console
+            auto [x, y] = Input::GetMousePosition();
+            DUCK_CORE_TRACE("{0}, {1}", x, y);
+
+            m_Window->OnUpdate();
         }
 
-        // Terminate GLFW
-        glfwTerminate();
-        return;
+        // Loop until the user closes the window
+        //while (!glfwWindowShouldClose(window)) {
+        //    // Render here (you can put your OpenGL drawing code here)
+        //    Time run_time;
+        //    double delta_time = run_time.get_elapsed_time();
+        //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
 
+        //    // Swap front and back buffers
+        //    glfwSwapBuffers(window);
+
+        //    // Poll for and process events
+        //    glfwPollEvents();
+
+        //    // Load Game Objects
+        //    if (!loadFiles) {
+        //        // Load player data
+        //        player.loadPlayerData();
+        //        loadFiles = true; // Set the flag to true to indicate data has been loaded
+
+        //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
+        //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
+        //    }
+        //}
+
+        //// Terminate GLFW
+        //glfwTerminate();
 
 	}
+
+    bool Application::OnWindowClose(WindowCloseEvent& e) {
+        m_Running = false;
+        return true;
+    }
 }
