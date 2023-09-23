@@ -1,7 +1,9 @@
 #include "duckpch.h"
 #include "Vector2D.h"
+#include <math.h>
+#include <iostream>
 
-namespace CSD1130
+namespace MathLib
 {
 	Vector2D::Vector2D(float _x, float _y) : x(_x), y(_y) {};
 

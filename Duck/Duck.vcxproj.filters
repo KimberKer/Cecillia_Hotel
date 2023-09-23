@@ -16,14 +16,20 @@
     <Filter Include="src\Duck\Logging">
       <UniqueIdentifier>{394BAFE4-2544-CE36-4E76-B3BB3ACEAD42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Duck\Map">
+      <UniqueIdentifier>{70ABA18A-5C0E-312F-0594-69E5F1D5FCB1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Duck\Math">
+      <UniqueIdentifier>{5C1AD7DE-C8DA-5215-9115-9C92FD9497F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Duck\Physics">
+      <UniqueIdentifier>{156E9009-0167-AF5B-2A99-94E016F18E67}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Duck\Platform">
       <UniqueIdentifier>{57FB9B37-C311-9ACD-0C89-25EF78DE6A55}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Duck\Platform\Windows">
       <UniqueIdentifier>{910CBFC1-FDCE-F24B-467F-81D8B280CB29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Math">
-      <UniqueIdentifier>{261422CF-12E1-7CDA-3BFA-6A822726B268}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -99,8 +105,20 @@
     <ClInclude Include="src\Duck\Logging\Logging.h">
       <Filter>src\Duck\Logging</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Map\Map.h">
+      <Filter>src\Duck\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Math\Matrix3x3.h">
+      <Filter>src\Duck\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Math\Vector2D.h">
+      <Filter>src\Duck\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Physics\collision.h">
+      <Filter>src\Duck\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h">
       <Filter>src\Duck\Platform\Windows</Filter>
@@ -113,12 +131,6 @@
     </ClInclude>
     <ClInclude Include="src\Duck\Window.h">
       <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Matrix3x3.h">
-      <Filter>src\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Vector2D.h">
-      <Filter>src\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\duckpch.h">
       <Filter>src</Filter>
@@ -1391,17 +1403,23 @@
     <ClCompile Include="src\Duck\Logging\Logging.cpp">
       <Filter>src\Duck\Logging</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Map\Map.cpp">
+      <Filter>src\Duck\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
+      <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Vector2D.cpp">
+      <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\collision.cpp">
+      <Filter>src\Duck\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\Matrix3x3.cpp">
-      <Filter>src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\Vector2D.cpp">
-      <Filter>src\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
