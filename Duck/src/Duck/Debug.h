@@ -3,16 +3,38 @@
 #include <string>
 #include <map>
 
-
 	class Debug
 	{
+	public:
+		// Singleton pattern: Get the instance of the Debug class
+		static Debug* GetInstance();
+
+		// Singleton pattern: Destroy the instance of the Debug class
+		static void DestroyInstance();
+
+		// Handle user input to toggle different debug states
+		static void HandleDebugInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+		// Update function to display debug information based on active debug states
+		void Update(double deltaTime, GLFWwindow* window);
+
+		// Start profiling a system's performance
+		void BeginSystemProfile(const std::string& systemName);
+
+		// End profiling a system's performance and store the duration
+		double EndSystemProfile(const std::string& systemName);
+
+		// Get the duration of the system's profiling
+		double GetSystemDuration(const std::string& systemName);
+
 	private:
 		int frameCount;
 		double accumulateTime;
 
+		// Variables for system profiling
 		std::map<std::string, double> systemProfileStartTime;
 		std::map<std::string, double> systemProfileDuration;
-		
+
 		int debugState = DEBUG_NONE;
 
 		// Debug flags
@@ -24,39 +46,24 @@
 			DEBUG_MOUSE_ACTIVE = 1 << 2,
 			DEBUG_PHYSICS_ACTIVE = 1 << 3,
 		};
-		
-		void ToggleFPSDebug();
-		void ToggleSystemInfoDebug();
-		void ToggleMousePosDebug(GLFWwindow* window);
-		void TogglePhysicsDebug();
 
-		Debug();
-		~Debug();
+		// Toggle the FPS debug state on/off
+		void ToggleFPSDebug();
+
+		// Toggle the system information debug state on/off
+		void ToggleSystemInfoDebug();
+
+		// Toggle the mouse position debug state on/off
+		void ToggleMousePosDebug(GLFWwindow* window);
+
+		// Toggle the physics test debug state on/off
+		void TogglePhysicsDebug();
 
 		// Static instance to access the non-static members from the static function
 		static Debug* debugInstance;
 
-		// Preventing copying and assignment
-		Debug(const Debug& other) = delete; // copy constructor
-		Debug& operator=(const Debug& other) = delete; // copy assignment
-
-		
-	public:
-		void BeginSystemProfile(const std::string& SystemName);
-		double EndSystemProfile(const std::string& SystemName);
-
-		void Update(double deltaTime, GLFWwindow* window);
-
-		double GetSystemDuration(const std::string& systemName);
-
-		// Function to handle Input for debug
-		static void HandleDebugInput(GLFWwindow* window, int key, int scancode, int action, int mods);
-		
-		// Static method to get the instance of the Debug class
-		static Debug* GetInstance();
-
-		// Optional: Method to delete the instance (useful for cleanup)
-		static void DestroyInstance();
+		Debug();
+		~Debug();
 	};
 
 

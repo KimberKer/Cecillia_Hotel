@@ -48,7 +48,9 @@ namespace Duck {
     }
 
     Application::~Application() {
-        Debug::DestroyInstance();   
+
+        Debug::DestroyInstance(); 
+        PhysicsManager::DestroyInstance();  
     }
 
     void Application::Run() {
@@ -74,7 +76,7 @@ namespace Duck {
 
                 // Wraps the physics system to calculate the system time
                 debugger->BeginSystemProfile("Physics");
-                physicsManager->Update(deltaTime);
+                physicsManager->UpdateALL(deltaTime);
                 debugger->EndSystemProfile("Physics");
 
                 // Update debugging utilities

@@ -20,10 +20,14 @@ Debug::~Debug() {}
 // Singleton pattern's method to get or create the instance
 Debug* Debug::GetInstance()
 {
-    // If instance doesn't exist, create one
+    // Create a new instance if one doesn't already exist
     if (!debugInstance)
     {
         debugInstance = new Debug();
+        if (!debugInstance) {
+            // Error handling if memory allocation fails
+            throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
+        }
     }
     return debugInstance;
 }
@@ -38,6 +42,7 @@ void Debug::DestroyInstance()
 // Begin profiling a system
 void Debug::BeginSystemProfile(const std::string& systemName)
 {
+    // Store the start time for the given system
     systemProfileStartTime[systemName] = glfwGetTime();
 }
 
@@ -59,6 +64,7 @@ double Debug::GetSystemDuration(const std::string& systemName)
     }
     else
     {
+        // Handle errors if system duration data is not found
         throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
         return -1;
     }
@@ -99,7 +105,6 @@ void Debug::ToggleMousePosDebug(GLFWwindow* window)
     }
     else
     {
-        glfwSetCursorPosCallback(window, NULL);
         debugState &= ~DEBUG_MOUSE_ACTIVE;
     }
 }
@@ -125,13 +130,8 @@ void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int acti
         // Check for the backtick key, this key clears out the console
         if (key == GLFW_KEY_GRAVE_ACCENT)
         {
-            #ifdef _WIN32
-            system("cls");
+            system("cls");  // Clear command for Windows
             isPromptDisplayed = false;
-            #else
-            system("clear");
-            isPromptDisplayed = false;
-            #endif
         }
 
         // Toggle specific debug states based on key presses
@@ -150,7 +150,8 @@ void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int acti
             debugInstance->ToggleMousePosDebug(window);
             std::cout << "Mouse Position Debug: " << (debugInstance->debugState & DEBUG_MOUSE_ACTIVE ? "On" : "Off") << std::endl;
         }
-        else if (key == GLFW_KEY_F4) {
+        else if (key == GLFW_KEY_F4)   // F4 key for physics debug
+        {
             debugInstance->TogglePhysicsDebug();
             std::cout << "Physics Debug: " << (debugInstance->debugState & DEBUG_PHYSICS_ACTIVE ? "On" : "Off") << std::endl;
         }
@@ -178,6 +179,7 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
         std::cout << "Press F1 to debug FPS" << std::endl;
         std::cout << "Press F2 to debug system" << std::endl;
         std::cout << "Press F3 to debug Mouse position" << std::endl;
+        std::cout << "Press F4 to debug Physics" << std::endl;
         std::cout << "Press ` clear console" << std::endl << std::endl;
         isPromptDisplayed = true;
     }
@@ -210,9 +212,10 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
               std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
             }
         }
-
+        // Flush the output buffer to ensure all debug messages are shown
         std::cout << std::flush;
 
+        // Reset counters
         frameCount = 0;
         accumulateTime = 0.0;
     }
