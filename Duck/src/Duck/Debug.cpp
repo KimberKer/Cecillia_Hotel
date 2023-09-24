@@ -1,8 +1,13 @@
 #include "Debug.h"
 #include "Physics.h"  
 #include <iostream>   // For console output
+#include <sstream>
+#include <iomanip>
 #include <string>
 #include <map>
+
+// This flag is to check whether the user has been informed about the debug commands
+bool isPromptDisplayed = false;
 
 // Static instance initialization
 Debug* Debug::debugInstance = nullptr;
@@ -105,6 +110,17 @@ void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int acti
 {
     if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
+        // Check for the backtick key
+        if (key == GLFW_KEY_GRAVE_ACCENT)
+        {
+            #ifdef _WIN32
+            system("cls");
+            isPromptDisplayed = false;
+            #else
+            system("clear");
+            isPromptDisplayed = false;
+            #endif
+        }
         // Toggle specific debug states based on key presses
         if (key == GLFW_KEY_F1)
         {
@@ -129,29 +145,52 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
 {
     frameCount++;
     accumulateTime += deltaTime;
+    
+    // Limit the frame count to 60
+    if (frameCount > 60)
+    {
+		frameCount = 60;
+	}
+
+    // Test for crash logging
+    //throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
+    
+    // Check if the user has been informed about the debug commands
+    if (!isPromptDisplayed)
+    {
+        std::cout << "Press F1 to debug FPS" << std::endl;
+        std::cout << "Press F2 to debug system" << std::endl;
+        std::cout << "Press F3 to debug Mouse position" << std::endl;
+        std::cout << "Press ` clear console" << std::endl << std::endl;
+        isPromptDisplayed = true;
+    }
+
+    // Create a stringstream for debug information
+    std::ostringstream oss;
 
     // Check if enough time has passed to show debug information
     if (accumulateTime >= 1.0f)
     {
         if (debugState & DEBUG_FPS_ACTIVE)
         {
-            std::cout << "FPS: " << frameCount << std::endl;
+            oss << "FPS: " << std::fixed << std::setprecision(2) << frameCount << std::endl;
         }
         if (debugState & DEBUG_MOUSE_ACTIVE)
         {
-            glfwSetCursorPosCallback(window, [](GLFWwindow* win, double X, double Y)
-                {
-                    std::cout << "Mouse X: " << X << ", Mouse Y: " << Y << std::endl;
-                });
+            double mouseX, mouseY;
+            glfwGetCursorPos(window, &mouseX, &mouseY);
+            oss << "Mouse X: " << mouseX << ", Mouse Y: " << mouseY << std::endl;
         }
         if (debugState & DEBUG_SYS_ACTIVE)
         {
             for (const auto& pair : systemProfileDuration)
             {
                 double systemPercentage = (pair.second / deltaTime) * 100;
-                std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
+                oss << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
             }
         }
+        std::cout << oss.str() << std::flush;
+
         frameCount = 0;
         accumulateTime = 0.0;
     }

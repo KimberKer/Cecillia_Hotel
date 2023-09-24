@@ -9,6 +9,7 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <Windows.h>
 #include "Application.h"
 #include "Physics.h"
 #include "Debug.h"
@@ -87,16 +88,22 @@ namespace Duck {
         }
         catch (const std::exception& e) 
         {
-            // Create a folder for crash logs if it doesn't exist
-            std::string crashLogsDir = "CrashLogs";
+            // Define the directory for crash logs
+            const char* crashLogsDir = "CrashLogs/";
+
+            // Check if the directory exists, if not, create it
+            if (GetFileAttributesA(crashLogsDir) == INVALID_FILE_ATTRIBUTES)
+            {
+                CreateDirectoryA(crashLogsDir, NULL);
+            }
 
             // Generate the filename based on current timestamp
             struct tm newtime;
             time_t now = time(0);
-            localtime_s(&newtime, &now);    // fills in the newtime struct with the date if not error
+            localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
             std::ostringstream oss;
-            oss << std::put_time(&newtime, "/CrashLog %d-%m-%y.txt");
-            std::string crashLogFileName = crashLogsDir + oss.str();
+            oss << std::put_time(&newtime, "/CrashLog %d-%m-%Y.txt");   // format the date and time for the crashlog filename
+            std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
 
             // Write the exception message to crash log
             std::ofstream crashLog(crashLogFileName, std::ios::out);

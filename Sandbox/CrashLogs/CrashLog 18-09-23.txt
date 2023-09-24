@@ -1,1 +1,0 @@
-Crash with message: Error in file C:\Users\muhammadzikry.b\Desktop\Cecillia_Hotel\Duck\src\Duck\Debug.cpp on line 47
