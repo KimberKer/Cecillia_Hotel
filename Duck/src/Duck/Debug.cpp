@@ -187,31 +187,41 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
     // Check if enough time has passed to show debug information
     if (accumulateTime >= 1.0f)
     {
-        if (debugState & DEBUG_FPS_ACTIVE)
+        // FPS debug info
+        if (debugState & DEBUG_FPS_ACTIVE)  
         {
             std::cout << "FPS: " << std::fixed << std::setprecision(2) << frameCount << std::endl;
         }
+
+        // Mouse position debug info
         if (debugState & DEBUG_MOUSE_ACTIVE)
         {
             double mouseX, mouseY;
             glfwGetCursorPos(window, &mouseX, &mouseY);
             std::cout << "Mouse X: " << mouseX << ", Mouse Y: " << mouseY << std::endl;
         }
+
+        // System info debug info
         if (debugState & DEBUG_SYS_ACTIVE)
         {
             for (const auto& pair : systemProfileDuration)
             {
+                // Calculate the percentage of time spent on each system
                 double systemPercentage = (pair.second / deltaTime) * 100;
                 std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
             }
         }
-        if (debugState & DEBUG_PHYSICS_ACTIVE) {
-         PhysicsManager* physicsManager = PhysicsManager::GetInstance();
-            for (const auto& obj : physicsManager->GetObjects()) {
-                  
+
+        // Physics debug info
+        if (debugState & DEBUG_PHYSICS_ACTIVE)
+        {
+            PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+            for (const auto& obj : physicsManager->GetObjects()) 
+            {  
               std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
             }
         }
+
         // Flush the output buffer to ensure all debug messages are shown
         std::cout << std::flush;
 

@@ -2,11 +2,6 @@
 
 // This class represents an individual physics object with basic properties such as position, velocity, and acceleration.
 class PhysicsObject {
-private:
-    float x, y;                             // The current position of the object
-    float xVelocity, yVelocity;             // The current velocity of the object
-    float xAcceleration, yAcceleration;     // The current acceleration of the object
-
 public:
     // Constructor: Initializes the physics object with a starting position.
     PhysicsObject(float x, float y);
@@ -19,4 +14,9 @@ public:
 
     // y position.
     float GetY() const;
+
+private:
+    float x, y;                             // The current position of the object
+    float xVelocity, yVelocity;             // The current velocity of the object
+    float xAcceleration, yAcceleration;     // The current acceleration of the object
 };
