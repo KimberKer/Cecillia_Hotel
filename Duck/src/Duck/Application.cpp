@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <Windows.h>
 #include "Application.h"
-#include "Physics.h"
+#include "PhysicsManager.h"
 #include "Debug.h"
 
 // Function to handle errors
@@ -62,6 +62,11 @@ namespace Duck {
             // Loop until the user closes the window
             while (!glfwWindowShouldClose(window)) {
                 Debug* debugger = Debug::GetInstance();
+
+                // Initialize the physics manager and its test objects
+                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+                physicsManager->InitializeTestObjects();
+
                 // Calculate delta time
                 double currentFrameTime = glfwGetTime();
                 double deltaTime = currentFrameTime - lastFrameTime;
@@ -69,7 +74,7 @@ namespace Duck {
 
                 // Wraps the physics system to calculate the system time
                 debugger->BeginSystemProfile("Physics");
-                PhysicsSystemSimulation();
+                physicsManager->Update(deltaTime);
                 debugger->EndSystemProfile("Physics");
 
                 // Update debugging utilities

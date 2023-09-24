@@ -22,6 +22,9 @@
     <ClInclude Include="src\Duck\Physics.h">
       <Filter>Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\PhysicsManager.h">
+      <Filter>Duck</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -31,6 +34,9 @@
       <Filter>Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics.cpp">
+      <Filter>Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\PhysicsManager.cpp">
       <Filter>Duck</Filter>
     </ClCompile>
   </ItemGroup>

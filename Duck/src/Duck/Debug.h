@@ -22,11 +22,13 @@
 			DEBUG_FPS_ACTIVE = 1 << 0,
 			DEBUG_SYS_ACTIVE = 1 << 1,
 			DEBUG_MOUSE_ACTIVE = 1 << 2,
+			DEBUG_PHYSICS_ACTIVE = 1 << 3,
 		};
 		
 		void ToggleFPSDebug();
 		void ToggleSystemInfoDebug();
 		void ToggleMousePosDebug(GLFWwindow* window);
+		void TogglePhysicsDebug();
 
 		Debug();
 		~Debug();

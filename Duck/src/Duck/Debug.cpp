@@ -1,5 +1,5 @@
 #include "Debug.h"
-#include "Physics.h"  
+#include "PhysicsManager.h"  
 #include <iostream>   // For console output
 #include <iomanip>
 #include <string>
@@ -104,12 +104,25 @@ void Debug::ToggleMousePosDebug(GLFWwindow* window)
     }
 }
 
+// Toggle physics debug state
+void Debug::TogglePhysicsDebug()
+{
+    if (!(debugState & DEBUG_PHYSICS_ACTIVE))
+    {
+        debugState |= DEBUG_PHYSICS_ACTIVE;
+    }
+    else
+    {
+        debugState &= ~DEBUG_PHYSICS_ACTIVE;
+    }
+}
+
 // Handle debug input based on key presses
 void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
-        // Check for the backtick key
+        // Check for the backtick key, this key clears out the console
         if (key == GLFW_KEY_GRAVE_ACCENT)
         {
             #ifdef _WIN32
@@ -120,21 +133,26 @@ void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int acti
             isPromptDisplayed = false;
             #endif
         }
+
         // Toggle specific debug states based on key presses
-        if (key == GLFW_KEY_F1)
+        if (key == GLFW_KEY_F1)     // F1 key for FPS debug
         {
             debugInstance->ToggleFPSDebug();
             std::cout << "FPS Debug: " << (debugInstance->debugState & DEBUG_FPS_ACTIVE ? "On" : "Off") << std::endl;
         }
-        else if (key == GLFW_KEY_F2)
+        else if (key == GLFW_KEY_F2)    // F2 key for system info debug
         {
             debugInstance->ToggleSystemInfoDebug();
             std::cout << "System Info Debug: " << (debugInstance->debugState & DEBUG_SYS_ACTIVE ? "On" : "Off") << std::endl;
         }
-        else if (key == GLFW_KEY_F3)
+        else if (key == GLFW_KEY_F3)	// F3 key for mouse position debug
         {
             debugInstance->ToggleMousePosDebug(window);
             std::cout << "Mouse Position Debug: " << (debugInstance->debugState & DEBUG_MOUSE_ACTIVE ? "On" : "Off") << std::endl;
+        }
+        else if (key == GLFW_KEY_F4) {
+            debugInstance->TogglePhysicsDebug();
+            std::cout << "Physics Debug: " << (debugInstance->debugState & DEBUG_PHYSICS_ACTIVE ? "On" : "Off") << std::endl;
         }
     }
 }
@@ -185,6 +203,14 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
                 std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
             }
         }
+        if (debugState & DEBUG_PHYSICS_ACTIVE) {
+         PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+            for (const auto& obj : physicsManager->GetObjects()) {
+                  
+              std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
+            }
+        }
+
         std::cout << std::flush;
 
         frameCount = 0;
