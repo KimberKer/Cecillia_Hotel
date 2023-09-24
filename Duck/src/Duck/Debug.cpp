@@ -1,7 +1,6 @@
 #include "Debug.h"
 #include "Physics.h"  
 #include <iostream>   // For console output
-#include <sstream>
 #include <iomanip>
 #include <string>
 #include <map>
@@ -165,31 +164,28 @@ void Debug::Update(double deltaTime, GLFWwindow* window)
         isPromptDisplayed = true;
     }
 
-    // Create a stringstream for debug information
-    std::ostringstream oss;
-
     // Check if enough time has passed to show debug information
     if (accumulateTime >= 1.0f)
     {
         if (debugState & DEBUG_FPS_ACTIVE)
         {
-            oss << "FPS: " << std::fixed << std::setprecision(2) << frameCount << std::endl;
+            std::cout << "FPS: " << std::fixed << std::setprecision(2) << frameCount << std::endl;
         }
         if (debugState & DEBUG_MOUSE_ACTIVE)
         {
             double mouseX, mouseY;
             glfwGetCursorPos(window, &mouseX, &mouseY);
-            oss << "Mouse X: " << mouseX << ", Mouse Y: " << mouseY << std::endl;
+            std::cout << "Mouse X: " << mouseX << ", Mouse Y: " << mouseY << std::endl;
         }
         if (debugState & DEBUG_SYS_ACTIVE)
         {
             for (const auto& pair : systemProfileDuration)
             {
                 double systemPercentage = (pair.second / deltaTime) * 100;
-                oss << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
+                std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
             }
         }
-        std::cout << oss.str() << std::flush;
+        std::cout << std::flush;
 
         frameCount = 0;
         accumulateTime = 0.0;
