@@ -13,9 +13,7 @@ public:
 			DUCK_INFO("Tab key is pressed! (Poll)");
 		}
 	}
-	void yomama() {
 
-	}
 	virtual void OnImGuiRender()
 	{
 		ImGui::Begin("test");
