@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -70,7 +70,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmod.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -83,7 +84,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,7 +98,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmod.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -110,8 +112,8 @@
     <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\De-serialize\GameObject.h" />
-    <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\Debug.h" />
+    <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
     <ClInclude Include="src\Duck\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Duck\Events\Event.h" />
@@ -131,6 +133,8 @@
     <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Math\Vector2D.h" />
     <ClInclude Include="src\Duck\MouseCodes.h" />
+    <ClInclude Include="src\Duck\Physics\Physics.h" />
+    <ClInclude Include="src\Duck\Physics\PhysicsManager.h" />
     <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
@@ -553,12 +557,11 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
-    <ClInclude Include="src\Duck\Physics\Physics.h" />
-    <ClInclude Include="src\Duck\Physics\PhysicsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
+    <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
@@ -570,6 +573,8 @@
     <ClCompile Include="src\Duck\Map\Map.cpp" />
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
+    <ClCompile Include="src\Duck\Physics\Physics.cpp" />
+    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
@@ -584,9 +589,6 @@
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
-    <ClCompile Include="src\Duck\Debug.cpp" />
-    <ClCompile Include="src\Duck\Physics\Physics.cpp" />
-    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

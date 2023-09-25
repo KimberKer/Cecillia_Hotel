@@ -13,7 +13,6 @@
 #include "Duck/Graphics/Vertex.h"
 #include "Duck/Graphics/Renderer.h"
 
-
 namespace Duck {
 	class DUCK_API Application {
 	public:

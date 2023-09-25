@@ -72,6 +72,9 @@
     <ClInclude Include="src\Duck\De-serialize\GameObject.h">
       <Filter>src\Duck\De-serialize</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Debug.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Entity.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
@@ -93,7 +96,13 @@
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Renderer.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Shader.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Vertex.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
@@ -125,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Physics\Physics.h">
+      <Filter>src\Duck\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Physics\PhysicsManager.h">
+      <Filter>src\Duck\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Physics\collision.h">
       <Filter>src\Duck\Physics</Filter>
@@ -1392,17 +1407,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Graphics\Renderer.h" />
-    <ClInclude Include="src\Duck\Graphics\Vertex.h" />
-    <ClInclude Include="src\Duck\Debug.h">
-      <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Physics\Physics.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Physics\PhysicsManager.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1411,10 +1415,19 @@
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>src\Duck\De-serialize</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Debug.cpp">
+      <Filter>src\Duck</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Renderer.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Shader.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Vertex.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Layer.cpp">
@@ -1438,6 +1451,12 @@
     <ClCompile Include="src\Duck\Math\Vector2D.cpp">
       <Filter>src\Duck\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Physics\Physics.cpp">
+      <Filter>src\Duck\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp">
+      <Filter>src\Duck\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Physics\collision.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
@@ -1449,17 +1468,6 @@
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
-    <ClCompile Include="src\Duck\Debug.cpp">
-      <Filter>src\Duck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\Physics.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp">
-      <Filter>src\Duck\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
