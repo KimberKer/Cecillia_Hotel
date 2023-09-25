@@ -553,8 +553,8 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
-    <ClInclude Include="src\Duck\Physics.h" />
-    <ClInclude Include="src\Duck\PhysicsManager.h" />
+    <ClInclude Include="src\Duck\Physics\Physics.h" />
+    <ClInclude Include="src\Duck\Physics\PhysicsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
@@ -585,8 +585,8 @@
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
     <ClCompile Include="src\Duck\Debug.cpp" />
-    <ClCompile Include="src\Duck\Physics.cpp" />
-    <ClCompile Include="src\Duck\PhysicsManager.cpp" />
+    <ClCompile Include="src\Duck\Physics\Physics.cpp" />
+    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
