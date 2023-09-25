@@ -17,9 +17,10 @@ void error_callback(int error, const char* description) {
 }
 
 namespace Duck {
-    Application* Application::s_Instance = nullptr;
+      Application* Application::s_Instance = nullptr;
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 
 	Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -55,10 +56,12 @@ namespace Duck {
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
+        layer->OnAttach();
     }
 
     void Application::OnEvent(Event& e) {

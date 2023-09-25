@@ -7,3 +7,6 @@
 [submodule "Duck/vendor/glm"]
 	path = Duck/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Duck/vendor/imgui"]
+	path = Duck/vendor/imgui
+	url = https://github.com/ocornut/imgui

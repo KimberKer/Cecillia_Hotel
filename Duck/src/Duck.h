@@ -5,6 +5,7 @@
 #include "Duck/Application.h"
 #include "Duck/Layer.h"
 #include "Duck/Log.h"
+#include "Duck/ImGui/ImGuiLayer.h"
 
 #include "Duck/Input.h"
 //#include "Duck/KeyCodes.h"

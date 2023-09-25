@@ -32,6 +32,7 @@ class Sandbox : public Duck::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Duck::ImGuiLayer());
 	}
 
 	~Sandbox() {

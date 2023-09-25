@@ -13,11 +13,17 @@
     <Filter Include="src\Duck\Events">
       <UniqueIdentifier>{27CED1DF-9359-3FA4-9C6A-C29808759BA4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Duck\ImGui">
+      <UniqueIdentifier>{0DDB77B9-F9A8-6BBF-E23C-DCE5CEA94724}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Duck\Logging">
       <UniqueIdentifier>{394BAFE4-2544-CE36-4E76-B3BB3ACEAD42}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Duck\Platform">
       <UniqueIdentifier>{57FB9B37-C311-9ACD-0C89-25EF78DE6A55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Duck\Platform\OpenGL">
+      <UniqueIdentifier>{AB9CAFF3-97C1-FE73-C00C-E403AC90FD91}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Duck\Platform\Windows">
       <UniqueIdentifier>{910CBFC1-FDCE-F24B-467F-81D8B280CB29}</UniqueIdentifier>
@@ -81,6 +87,9 @@
     <ClInclude Include="src\Duck\Events\MouseEvent.h">
       <Filter>src\Duck\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
@@ -102,6 +111,15 @@
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="src\Duck\Physics\collision.h">
+      <Filter>src\Duck\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h">
+      <Filter>src\Duck\Platform\OpenGL</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClInclude>
@@ -1379,6 +1397,9 @@
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>src\Duck\De-serialize</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Layer.cpp">
       <Filter>src\Duck</Filter>
     </ClCompile>
@@ -1391,6 +1412,24 @@
     <ClCompile Include="src\Duck\Logging\Logging.cpp">
       <Filter>src\Duck\Logging</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="src\Duck\Map\Map.cpp">
+      <Filter>src\Duck\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
+      <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Vector2D.cpp">
+      <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\collision.cpp">
+      <Filter>src\Duck\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp">
+      <Filter>src\Duck\Platform\OpenGL</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClCompile>

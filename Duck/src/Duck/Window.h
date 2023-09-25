@@ -48,5 +48,8 @@ namespace Duck {
 
         // Create a window with the specified properties
         static Window* Create(const WindowProps& props = WindowProps());
+ 
+    private:
+
     };
 }

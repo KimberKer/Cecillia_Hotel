@@ -16,9 +16,11 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
 IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 IncludeDir["glm"] = "Duck/vendor/glm"
+IncludeDir["ImGui"] = "Duck/vendor/imgui"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
+include "Duck/vendor/imgui"
 
 -- Duck.dll
 project "Duck"
@@ -51,7 +53,8 @@ project "Duck"
         --"lib/glfw-3.3.8.bin.WIN64/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}"
     }
 
 	-- Libs to Include, ".lib" files
@@ -63,6 +66,7 @@ project "Duck"
 	links {
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
         --"glfw3"
     }
