@@ -7,8 +7,21 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtx/matrix_transform_2d.hpp>
+// Headers for memory leak detection
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>
 
 #include "Input.h"
+#include <fstream>
+#include <exception>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
+#include <Windows.h>
+#include "Application.h"
+#include "PhysicsManager.h"
+#include "Debug.h"
 
 
 GameObject player;
@@ -18,8 +31,6 @@ bool loadFiles = false;
 void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
-
-
 
 namespace Duck {
     Application* Application::s_Instance = nullptr;
@@ -55,6 +66,7 @@ namespace Duck {
             0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,
             0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f
         };
+    Application::Application() {
 
         m_VertexBuffer.reset(new VertexBuffer(vertices , sizeof(vertices)));
 
@@ -229,16 +241,23 @@ namespace Duck {
         m_LayerStack.PushLayer(layer);
     }
 
+        glfwSetKeyCallback(window, Debug::HandleDebugInput);
+
+    }
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
     }
 
+    Application::~Application() {
     void Application::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
         //DUCK_CORE_INFO("{0}", e);
 
+        Debug::DestroyInstance(); 
+        PhysicsManager::DestroyInstance();  
+    }
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
             (*--it)->OnEvent(e);
             if (e.Handled) {
@@ -247,6 +266,9 @@ namespace Duck {
         }
     }
 
+    void Application::Run() {
+        // Enable memory leak detection
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	void Application::Run() {
         while (m_Running) {
 
@@ -289,11 +311,38 @@ namespace Duck {
                 layer->OnUpdate();
             }
 
+        double lastFrameTime = glfwGetTime();
             //// Log Mouse Position to Console
             //auto [x, y] = Input::GetMousePosition();
             //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
 
+        // Surround the game loop with try-catch for crash logging
+        try {
+            // Loop until the user closes the window
+            while (!glfwWindowShouldClose(window)) {
+                Debug* debugger = Debug::GetInstance();
+
+                // Initialize the physics manager and its test objects
+                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+                physicsManager->InitializeTestObjects();
+
+                // Calculate delta time
+                double currentFrameTime = glfwGetTime();
+                double deltaTime = currentFrameTime - lastFrameTime;
+                lastFrameTime = currentFrameTime;
+
+                // Wraps the physics system to calculate the system time
+                debugger->BeginSystemProfile("Physics");
+                physicsManager->UpdateALL(deltaTime);
+                debugger->EndSystemProfile("Physics");
+
+                // Update debugging utilities
+                debugger->Update(deltaTime, window);
+
+         
+
+                // Render here (you can put your OpenGL drawing code here)
             m_Window->OnUpdate();
         }
 
@@ -324,7 +373,46 @@ namespace Duck {
         //// Terminate GLFW
         //glfwTerminate();
 
+                // Swap front and back buffers
+                glfwSwapBuffers(window);
 
+                // Poll for and process events
+                glfwPollEvents();
+            }
+        }
+        catch (const std::exception& e) 
+        {
+            // Define the directory for crash logs
+            const char* crashLogsDir = "CrashLogs/";
+
+            // Check if the directory exists, if not, create it
+            if (GetFileAttributesA(crashLogsDir) == INVALID_FILE_ATTRIBUTES)
+            {
+                CreateDirectoryA(crashLogsDir, NULL);
+            }
+
+            // Generate the filename based on current timestamp
+            struct tm newtime;
+            time_t now = time(0);
+            localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
+            std::ostringstream oss;
+            oss << std::put_time(&newtime, "/CrashLog %d-%m-%Y.txt");   // format the date and time for the crashlog filename
+            std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
+
+            // Write the exception message to crash log
+            std::ofstream crashLog(crashLogFileName, std::ios::out);
+            crashLog << "Crash with message: " << e.what() << std::endl;
+            crashLog.close();
+
+            // Re-throw the exception to allow for external handling or just terminate the program
+            throw;
+        }
+
+        // Terminate GLFW
+        glfwTerminate();
+        return;
+    }
+}
 
 
 	}
