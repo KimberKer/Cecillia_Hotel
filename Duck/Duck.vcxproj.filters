@@ -93,9 +93,6 @@
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Graphics\Graphics.h">
-      <Filter>src\Duck\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Shader.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -1395,14 +1392,16 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Renderer.h" />
+    <ClInclude Include="src\Duck\Graphics\Vertex.h" />
     <ClInclude Include="src\Duck\Debug.h">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Physics.h">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\PhysicsManager.h">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1413,9 +1412,6 @@
       <Filter>src\Duck\De-serialize</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
-      <Filter>src\Duck\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Graphics\Graphics.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Shader.cpp">
@@ -1454,14 +1450,16 @@
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
     <ClCompile Include="src\Duck\Debug.cpp">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics.cpp">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\PhysicsManager.cpp">
-      <Filter>Duck</Filter>
+      <Filter>src\Duck</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

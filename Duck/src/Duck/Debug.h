@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 
+namespace Duck {
 	class Debug
 	{
 	public:
@@ -65,5 +66,5 @@
 		Debug();
 		~Debug();
 	};
-
+}
 
