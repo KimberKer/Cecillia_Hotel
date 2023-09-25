@@ -3,7 +3,6 @@
 #include "Core.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include "Debug.h"
 
 namespace Duck {
 
