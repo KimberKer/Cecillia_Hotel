@@ -1398,10 +1398,10 @@
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Physics.h">
-      <Filter>src\Duck</Filter>
+      <Filter>src\Duck\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\PhysicsManager.h">
-      <Filter>src\Duck</Filter>
+      <Filter>src\Duck\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1456,10 +1456,10 @@
       <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics.cpp">
-      <Filter>src\Duck</Filter>
+      <Filter>src\Duck\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\PhysicsManager.cpp">
-      <Filter>src\Duck</Filter>
+      <Filter>src\Duck\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
