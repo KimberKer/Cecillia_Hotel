@@ -123,18 +123,16 @@
     <ClInclude Include="src\Duck\LayerStack.h" />
     <ClInclude Include="src\Duck\Log.h" />
     <ClInclude Include="src\Duck\Logging\Logging.h" />
+    <ClInclude Include="src\Duck\Map\Map.h" />
+    <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
+    <ClInclude Include="src\Duck\Math\Vector2D.h" />
     <ClInclude Include="src\Duck\MouseCodes.h" />
-<<<<<<< Updated upstream
-=======
     <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h" />
->>>>>>> Stashed changes
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
     <ClInclude Include="src\Duck\Time.h" />
     <ClInclude Include="src\Duck\Window.h" />
-    <ClInclude Include="src\Math\Matrix3x3.h" />
-    <ClInclude Include="src\Math\Vector2D.h" />
     <ClInclude Include="src\duckpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -561,18 +559,13 @@
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />
     <ClCompile Include="src\Duck\Logging\Logging.cpp" />
-<<<<<<< Updated upstream
-=======
     <ClCompile Include="src\Duck\Map\Map.cpp" />
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
     <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp" />
->>>>>>> Stashed changes
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
-    <ClCompile Include="src\Math\Matrix3x3.cpp" />
-    <ClCompile Include="src\Math\Vector2D.cpp" />
     <ClCompile Include="src\duckpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

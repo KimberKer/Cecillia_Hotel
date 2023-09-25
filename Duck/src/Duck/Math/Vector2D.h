@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace MathLib
 {
 #ifdef _MSC_VER

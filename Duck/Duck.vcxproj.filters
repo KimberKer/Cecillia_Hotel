@@ -28,8 +28,14 @@
     <Filter Include="src\Duck\Platform\Windows">
       <UniqueIdentifier>{910CBFC1-FDCE-F24B-467F-81D8B280CB29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Map">
+      <UniqueIdentifier>{FA932FA9-6673-AE44-6F8B-391BDBE914A6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Math">
       <UniqueIdentifier>{261422CF-12E1-7CDA-3BFA-6A822726B268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Physics">
+      <UniqueIdentifier>{9F8B9316-0B41-0C0C-9435-06E300EA0210}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -111,15 +117,9 @@
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
-<<<<<<< Updated upstream
-=======
-    <ClInclude Include="src\Duck\Physics\collision.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h">
       <Filter>src\Duck\Platform\OpenGL</Filter>
     </ClInclude>
->>>>>>> Stashed changes
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClInclude>
@@ -131,12 +131,6 @@
     </ClInclude>
     <ClInclude Include="src\Duck\Window.h">
       <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Matrix3x3.h">
-      <Filter>src\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Vector2D.h">
-      <Filter>src\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\duckpch.h">
       <Filter>src</Filter>
@@ -1389,6 +1383,18 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Math\Matrix3x3.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Math\Vector2D.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Physics\collision.h">
+      <Filter>src\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Map\Map.h">
+      <Filter>src\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1412,38 +1418,29 @@
     <ClCompile Include="src\Duck\Logging\Logging.cpp">
       <Filter>src\Duck\Logging</Filter>
     </ClCompile>
-<<<<<<< Updated upstream
-=======
-    <ClCompile Include="src\Duck\Map\Map.cpp">
-      <Filter>src\Duck\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
-      <Filter>src\Duck\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Math\Vector2D.cpp">
-      <Filter>src\Duck\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\collision.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp">
       <Filter>src\Duck\Platform\OpenGL</Filter>
     </ClCompile>
->>>>>>> Stashed changes
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math\Matrix3x3.cpp">
-      <Filter>src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\Vector2D.cpp">
-      <Filter>src\Math</Filter>
-    </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
+      <Filter>src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Math\Vector2D.cpp">
+      <Filter>src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\collision.cpp">
+      <Filter>src\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Map\Map.cpp">
+      <Filter>src\Map</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

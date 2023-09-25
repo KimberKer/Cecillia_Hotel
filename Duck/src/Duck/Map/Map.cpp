@@ -1,5 +1,6 @@
+#include "duckpch.h"
 #include "Map.h"
-#include <cerrno>
+
 
 MapDataHandler::MapDataHandler() {
 	MapWidth =0;
@@ -50,7 +51,7 @@ int MapDataHandler::GetMapData(const char* FileName)
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
 				if (MapData[i][j] == 1) { //wall
-					CollisionData[i][j] > 1;
+					CollisionData[i][j] = 1;
 				}
 				else {
 					CollisionData[i][j] = 0;

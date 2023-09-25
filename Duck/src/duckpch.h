@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
 #include <iostream>
+#include "Duck/Core.h"
+#include <vector>
 #include <memory>
 #include <utility>
-#include <algorithm>
 #include <functional>
 #include <sstream>
 

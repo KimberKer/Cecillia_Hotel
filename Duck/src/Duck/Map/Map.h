@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 
@@ -29,6 +28,6 @@ public:
     void SnapToCell(float* Coordinate);
     int GetCellValue(int X, int Y);
     int CheckInstanceBinaryMapCollision(float PosX, float PosY,
-        float scaleX, float scaleY);
+    float scaleX, float scaleY);
     void printMapData();
 };
