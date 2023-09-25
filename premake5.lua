@@ -49,6 +49,7 @@ project "Duck"
 	-- Directories to Include
     includedirs {
 		"%{prj.name}/src",
+		"Duck/vendor",
 		"Duck/vendor/spdlog/include",
         --"lib/glfw-3.3.8.bin.WIN64/include",
 		"%{IncludeDir.GLFW}",

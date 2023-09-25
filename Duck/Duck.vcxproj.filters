@@ -1442,5 +1442,8 @@
     <ClCompile Include="src\Duck\Map\Map.cpp">
       <Filter>src\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

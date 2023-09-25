@@ -1,4 +1,5 @@
 #include <Duck.h>
+#include "imgui/imgui.h"
 
 class ExampleLayer : public Duck::Layer
 {
@@ -11,6 +12,16 @@ public:
 		if (Duck::Input::IsKeyPressed(Duck::Key::Tab)) {
 			DUCK_INFO("Tab key is pressed! (Poll)");
 		}
+	}
+	void yomama() {
+
+	}
+	virtual void OnImGuiRender()
+	{
+		ImGui::Begin("test");
+		ImGui::Text("Hello World");
+		ImGui::End();
+
 	}
 
 	void OnEvent(Duck::Event& event) override {
@@ -32,7 +43,6 @@ class Sandbox : public Duck::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Duck::ImGuiLayer());
 	}
 
 	~Sandbox() {

@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "Duck/LayerStack.h"
 #include "Duck/Events/ApplicationEvent.h"
+#include "Duck/ImGui/ImGuiLayer.h"
 
 namespace Duck {
 	class DUCK_API Application {
@@ -30,6 +31,7 @@ namespace Duck {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 

@@ -14,21 +14,15 @@ namespace Duck {
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void OnAttach();
-		void OnDetach();
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
 
-		void OnUpdate();
+		virtual void OnImGuiRender() override;
+
 		void OnEvent(Event& event);
 
-	private:
-		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
-		bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
-		bool OnMouseEvent(MouseMovedEvent& e);
-		bool OnMouseScrollEvent(MouseScrolledEvent& e);
-		bool OnKeyReleasedEvent(KeyReleasedEvent& e);
-		bool OnKeyPressedEvent(KeyPressedEvent& e);
-		bool OnKeyTypedEvent(KeyTypedEvent& e);
-		bool OnWindowResizedEvent(WindowResizeEvent& e);
+		void Begin();
+		void End();
 
 	private:
 		float m_time = 0.0f;

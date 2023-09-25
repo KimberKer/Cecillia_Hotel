@@ -33,6 +33,6 @@ namespace Duck {
 
 	private:
 		std::vector<Layer*> m_Layers; // Container to hold layers
-		std::vector<Layer*>::iterator m_LayerInsert; // Iterator to insert layers at a specific position
+		unsigned int m_LayerInsertIndex = 0; // Iterator to insert layers at a specific position
 	};
 }

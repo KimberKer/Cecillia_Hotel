@@ -554,6 +554,7 @@
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
+    <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
     <ClCompile Include="src\Duck\LayerStack.cpp" />
