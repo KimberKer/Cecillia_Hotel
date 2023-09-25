@@ -67,5 +67,5 @@ namespace Duck {
 }
 
 
- GLFWwindow* window;
+ //GLFWwindow* window;
  

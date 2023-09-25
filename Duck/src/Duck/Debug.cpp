@@ -1,10 +1,11 @@
+#include "duckpch.h"
+
 #include "Debug.h"
 #include "Physics/PhysicsManager.h"  
 #include <iostream>   // For console output
 #include <iomanip>
 #include <string>
 #include <map>
-//#include "duckpch.h"
 
 namespace Duck {
     // This flag is to check whether the user has been informed about the debug commands

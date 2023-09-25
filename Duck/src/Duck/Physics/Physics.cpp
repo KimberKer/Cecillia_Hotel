@@ -1,3 +1,4 @@
+#include "duckpch.h"
 #include "Physics.h"
 
 namespace Duck {
