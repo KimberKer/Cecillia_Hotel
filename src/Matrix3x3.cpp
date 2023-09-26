@@ -1,10 +1,10 @@
 #include "duckpch.h"
 #include "Matrix3x3.h"
-#include "Vector2D.h"
+
 
 constexpr float PI = 3.14159265358f;
 
-namespace CSD1130
+namespace MathLib
 {
 	Matrix3x3::Matrix3x3(const float *pArr)
 	{
@@ -258,4 +258,4 @@ namespace CSD1130
 			pResult->m22 /= *determinant;
 		}
 	}
-} //end namespace CSD1130
+} //end namespace MathLib

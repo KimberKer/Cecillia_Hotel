@@ -2,8 +2,9 @@
 namespace Duck {
 	enum ComponentTypeID {
 		CT_NONE = 0,
-		CT_TRANSFORM,
-		CT_RIGIDBODY,
-		CT_MAXCOMPONENT
+		CT_TRANSFORM = 2,
+		CT_RIGIDBODY = 4,
+		CT_MAXCOMPONENT = 8,
+		CT_DRAWABLES = 16
 	};
 }

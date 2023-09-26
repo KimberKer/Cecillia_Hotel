@@ -1,7 +1,13 @@
 #pragma once
-
+#include "duckpch.h"
 #include "Vector2D.h"
+#include <math.h>
+#include <iostream>
 
+<<<<<<<< HEAD:inc/Matrix3x3.h
+========
+
+>>>>>>>> Kimber:Duck/src/Duck/Math/Matrix3x3.h
 namespace MathLib
 {
 	#ifdef _MSC_VER
