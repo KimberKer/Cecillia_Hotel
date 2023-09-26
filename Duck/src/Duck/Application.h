@@ -14,6 +14,7 @@
 #include "Duck/Graphics/Renderer.h"
 
 
+
 namespace Duck {
 	class DUCK_API Application {
 	public:
@@ -38,6 +39,10 @@ namespace Duck {
 		LayerStack m_LayerStack;
 
 
+/////////////////////////// MAHDI ////////////////////////////////////
+///																   ///
+
+
 		std::shared_ptr<Shader> m_Shader; 
 		std::shared_ptr<VertexArray> m_VertexArray;
 		std::shared_ptr<VertexBuffer> m_VertexBuffer;
@@ -52,10 +57,32 @@ namespace Duck {
 		std::shared_ptr<VertexArray> m_LineVA;
 		std::shared_ptr<Shader> m_LineShader;
 
+
+		std::shared_ptr<VertexArray> m_SquareImgVA;
+		std::shared_ptr<Shader> m_SquareImgShader;
+		std::shared_ptr<Shader> m_BackgroundImgShader;
+
+		std::shared_ptr<VertexArray> m_SquareSprVA;
+		std::shared_ptr<Shader> m_SquareSprShader;
+
+		uint32_t m_CharacterTexture;
+		uint32_t m_BackgroundTexture;
+		//glm::vec2<*int> m_TextureDim;
+		uint32_t m_Sprite;
+		int m_SpriteWidth, m_SpriteHeight;
+
+
+
 		glm::mat4 m_SquareTransform;
 		glm::mat4 m_TriangleTransform;
 		glm::mat4 m_PointTransform;
 		glm::mat4 m_LineTransform;
+		glm::mat4 m_SquareImgTransform;
+		glm::mat4 m_SquareSprTransform;
+
+
+///																   ///
+/////////////////////////// MAHDI ////////////////////////////////////
 
 
 

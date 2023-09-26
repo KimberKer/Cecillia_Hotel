@@ -3,10 +3,11 @@
 #include "Events/ApplicationEvent.h"
 #include "Duck//Log.h"
 #include "Time.h"
+#include "Duck/Graphics/Graphics.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtx/matrix_transform_2d.hpp>
+#include "Duck/stb_image.h"
 
 #include "Input.h"
 
@@ -38,10 +39,6 @@ namespace Duck {
 
 /////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
 /////                                                                                                                /////
-
-
-
-
 
 
 
@@ -81,10 +78,10 @@ namespace Duck {
 
         float SquareVertices[3 * 4] = {
             //Coordinates         
-            -0.5f, -0.5f, 0.0f,   
-             0.5f, -0.5f, 0.0f, 
-             0.5f,  0.5f, 0.0f, 
-            -0.5f,  0.5f, 0.0f
+            -1.0f, -1.0f, 0.0f,   
+             1.0f, -1.0f, 0.0f, 
+             1.0f,  1.0f, 0.0f, 
+            -1.0f,  1.0f, 0.0f
         };
 
 
@@ -144,8 +141,8 @@ namespace Duck {
 
         float LineVertices[3 * 2] = {
             //Coordinates         
-             0.5f, 0.0f, 0.0f,
-            -0.5f, 0.0f, 0.0f
+             1.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f
         };
 
 
@@ -169,9 +166,84 @@ namespace Duck {
         m_LineVA->SetPrimitiveType(GL_LINES);
 
 
+
+
+
+        /////////////////////////////// SQUARE W/ IMAGE /////////////////////////////
+
+
+        m_SquareImgVA.reset(new VertexArray);
+
+        float SquareImgVertices[5 * 4] = {
+            //Coordinates          //Texture Coord  
+            -1.0f, -1.0f, 0.0f,    0.0f, 0.0f,
+             1.0f, -1.0f, 0.0f,    1.0f, 0.0f,
+             1.0f,  1.0f, 0.0f,    1.0f, 1.0f,
+            -1.0f,  1.0f, 0.0f,    0.0f, 1.0f
+        };
+
+        std::shared_ptr<VertexBuffer> SquareImgVB;
+        SquareImgVB.reset(new VertexBuffer(SquareImgVertices, sizeof(SquareImgVertices)));
+
+        BufferLayout SquareImgLayout = {
+
+            { ShaderDataType::Float3, "aPos"},
+            { ShaderDataType::Float2, "aTex"}
+
+        };
+
+        SquareImgVB->SetLayout(SquareImgLayout);
+        m_SquareImgVA->AddVertexBuffer(SquareImgVB);
+
+        unsigned int SquareImgIndices[6] = { 0, 1, 2, 2, 3, 0 };
+        std::shared_ptr<IndexBuffer> SquareImgIB;
+        SquareImgIB.reset(new IndexBuffer(SquareImgIndices, sizeof(SquareImgIndices)));
+        m_SquareImgVA->AddIndexBuffer(SquareImgIB);
+
+        m_SquareImgVA->SetPrimitiveType(GL_TRIANGLES);
+
+
+
+
+        /////////////////////////////// SQUARE W/ SPRITE /////////////////////////////
+
+
+        m_SquareSprVA.reset(new VertexArray);
+
+        float SquareSprVertices[5 * 4] = {
+            //Coordinates          //Texture Coord  
+            -1.0f, -1.0f, 0.0f,    0.0f, 0.0f,
+             1.0f, -1.0f, 0.0f,    1.0f, 0.0f,
+             1.0f,  1.0f, 0.0f,    1.0f, 1.0f,
+            -1.0f,  1.0f, 0.0f,    0.0f, 1.0f
+        };
+
+        std::shared_ptr<VertexBuffer> SquareSprVB;
+        SquareSprVB.reset(new VertexBuffer(SquareSprVertices, sizeof(SquareSprVertices)));
+
+        BufferLayout SquareSprLayout = {
+
+            { ShaderDataType::Float3, "aPos"},
+            { ShaderDataType::Float2, "aTex"}
+
+        };
+
+        SquareSprVB->SetLayout(SquareSprLayout);
+        m_SquareSprVA->AddVertexBuffer(SquareSprVB);
+
+        unsigned int SquareSprIndices[6] = { 0, 1, 2, 2, 3, 0 };
+        std::shared_ptr<IndexBuffer> SquareSprIB;
+        SquareSprIB.reset(new IndexBuffer(SquareSprIndices, sizeof(SquareSprIndices)));
+        m_SquareSprVA->AddIndexBuffer(SquareSprIB);
+
+        m_SquareSprVA->SetPrimitiveType(GL_TRIANGLES);
+
+
+
         /////////////////////////////// SHADERS /////////////////////////////
 
         // Load vertex and fragment shader source code
+       
 
         // Triangle Shaders
         std::string vertexShaderSource = Shader::LoadShaderSource("../shaders/vertex_shader.glsl");
@@ -193,6 +265,27 @@ namespace Duck {
         std::string LineFragmentShaderSrc = Shader::LoadShaderSource("../shaders/Line_Frg_Shader.glsl");
         m_LineShader.reset(new Shader(LineVertexShaderSrc, LineFragmentShaderSrc));
 
+        // Square Image Shaders
+        std::string SquareImgVertexShaderSrc = Shader::LoadShaderSource("../shaders/SquareImg_Vtx_Shader.glsl");
+        std::string SquareImgFragmentShaderSrc = Shader::LoadShaderSource("../shaders/SquareImg_Frg_Shader.glsl");
+        m_SquareImgShader.reset(new Shader(SquareImgVertexShaderSrc, SquareImgFragmentShaderSrc));
+
+        // Background Image Shaders
+        std::string BackgroundImgVertexShaderSrc = Shader::LoadShaderSource("../shaders/Background_Vtx_Shader.glsl");
+        std::string BackgroundImgFragmentShaderSrc = Shader::LoadShaderSource("../shaders/Background_Frg_Shader.glsl");
+        m_BackgroundImgShader.reset(new Shader(BackgroundImgVertexShaderSrc, BackgroundImgFragmentShaderSrc));
+
+        
+
+        // Square Sprite Shaders
+        std::string SquareSprVertexShaderSrc = Shader::LoadShaderSource("../shaders/SquareSpr_Vtx_Shader.glsl");
+        std::string SquareSprFragmentShaderSrc = Shader::LoadShaderSource("../shaders/SquareSpr_Frg_Shader.glsl");
+        m_SquareSprShader.reset(new Shader(SquareSprVertexShaderSrc, SquareSprFragmentShaderSrc));
+
+
+        m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+        m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
+        m_Sprite = Shader::LoadTexture("../images/Character1Sprite.png", m_SpriteWidth, m_SpriteHeight);
 
 
 /////                                                                                                                /////
@@ -259,25 +352,49 @@ namespace Duck {
             // Would be used for cameras
             Renderer::BeginScene();
 
-            glm::vec3 SquarePos{ 0.2f,0.2f,0.0f };
-            m_SquareTransform = glm::translate(glm::mat4(1.0), SquarePos);
-            Renderer::Submit(m_SquareVA, m_SquareShader, m_SquareTransform);
+            //glm::vec3 SquarePos{ 0.2f,0.2f,0.0f };
+            //m_SquareTransform = glm::translate(glm::mat4(1.0), SquarePos);
+            //Renderer::Submit(m_SquareVA, m_SquareShader, m_SquareTransform);
 
-            glm::vec3 TrianglePos{ 0.2f,0.2f,0.0f };
-            m_TriangleTransform = glm::translate(glm::mat4(1.0), TrianglePos);
-            Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
+            //glm::vec3 TrianglePos{ 0.2f,0.2f,0.0f };
+            //m_TriangleTransform = glm::translate(glm::mat4(1.0), TrianglePos);
+            //Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
            
-            glm::vec3 LinePos{ 0.5f,0.5f,0.0f };
-            float LineAngle{ 45.f };
-            glm::vec3 LineScale{ 2.0f, 2.0f, 1.0f };
-            m_LineTransform = glm::translate(glm::mat4(1.0), LinePos);
-            m_LineTransform = glm::rotate(m_LineTransform,glm::radians(LineAngle), glm::vec3(0, 0, 1));
-            m_LineTransform = glm::scale(m_LineTransform, LineScale);
-            Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
-            
-            glm::vec3 PointPos{ 0.0f,0.0f,0.0f };
-            m_PointTransform = glm::translate(glm::mat4(1.0), PointPos);
-            Renderer::Submit(m_PointVA, m_PointShader, m_PointTransform);
+            //glm::vec3 LinePos{ 0.5f,0.5f,0.0f };
+            //float LineAngle{ 45.f };
+            //glm::vec3 LineScale{ 2.0f, 2.0f, 1.0f };
+            //m_LineTransform = glm::translate(glm::mat4(1.0), LinePos);
+            //m_LineTransform = glm::rotate(m_LineTransform,glm::radians(LineAngle), glm::vec3(0, 0, 1));
+            //m_LineTransform = glm::scale(m_LineTransform, LineScale);
+            //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
+
+            //glm::vec3 Line2Pos{ 0.0f,0.0f,0.0f };
+            //float Line2Angle{ 0.0f };
+            //glm::vec3 Line2Scale{ 1.0f, 1.0f, 1.0f };
+            //m_LineTransform = glm::translate(glm::mat4(1.0), Line2Pos);
+            //m_LineTransform = glm::rotate(m_LineTransform, glm::radians(Line2Angle), glm::vec3(0, 0, 1));
+            //m_LineTransform = glm::scale(m_LineTransform, Line2Scale);
+            //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
+            //
+            //glm::vec3 PointPos{ 0.0f,0.0f,0.0f };
+            //m_PointTransform = glm::translate(glm::mat4(1.0), PointPos);
+            //Renderer::Submit(m_PointVA, m_PointShader, m_PointTransform);
+
+            //glm::vec3 SquareImgPos{ -0.5f,-0.5f,0.0f };
+            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareImgPos);
+            //Renderer::Submit(m_SquareImgVA, m_SquareImgShader, m_SquareImgTransform, m_Texture);
+
+            //glm::vec3 SquareSprPos{ 0.5f,-0.5f,0.0f };
+            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
+            //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
+
+
+            DrawBackground(10, 10, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
+
+            DrawSquareObject(4, 4, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+
+            //DrawGrid(10, 10, m_LineVA, m_LineShader);
+
            
             
             Renderer::EndScene();

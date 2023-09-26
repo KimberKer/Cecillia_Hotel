@@ -96,7 +96,13 @@
     <ClInclude Include="src\Duck\Graphics\Graphics.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Renderer.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Shader.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Vertex.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
@@ -142,6 +148,9 @@
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Window.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\stb_image.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\duckpch.h">
@@ -1409,7 +1418,13 @@
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Renderer.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Shader.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Vertex.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Layer.cpp">
