@@ -110,6 +110,10 @@
     <ClInclude Include="src\Duck\Events\Event.h" />
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
+    <ClInclude Include="src\Duck\Graphics\Buffer.h" />
+    <ClInclude Include="src\Duck\Graphics\Renderer.h" />
+    <ClInclude Include="src\Duck\Graphics\Shader.h" />
+    <ClInclude Include="src\Duck\Graphics\Vertex.h" />
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
@@ -548,6 +552,10 @@
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
