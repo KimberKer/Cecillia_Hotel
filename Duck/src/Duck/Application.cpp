@@ -22,10 +22,8 @@
 #include <Windows.h>
 #include "Application.h"
 #include "Physics/PhysicsManager.h"
+#include "Audio/AudioManager.h"
 #include "Debug.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 
 
 GameObject player;
@@ -237,17 +235,7 @@ namespace Duck {
                
          ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
-        glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
-
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-
-        // Setup Platform/Renderer backends
-        ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-        ImGui_ImplOpenGL3_Init();
+        //glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
 
         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
     }
@@ -333,37 +321,31 @@ namespace Duck {
                 //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-                ;
-                Debug* debugger = Debug::GetInstance();
+                
+                //Debug* debugger = Debug::GetInstance();
 
-                // Initialize the physics manager and its test objects
-                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
-                physicsManager->InitializeTestObjects();
+                //// Initialize the physics manager and its test objects
+                //PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+                //physicsManager->InitializeTestObjects();
 
-                // Calculate delta time
-                double currentFrameTime = glfwGetTime();
-                double deltaTime = currentFrameTime - lastFrameTime;
-                lastFrameTime = currentFrameTime;
+                //// Calculate delta time
+                //double currentFrameTime = glfwGetTime();
+                //double deltaTime = currentFrameTime - lastFrameTime;
+                //lastFrameTime = currentFrameTime;
 
-                // Wraps the physics system to calculate the system time
-                debugger->BeginSystemProfile("Physics");
-                physicsManager->UpdateALL(deltaTime);
-                debugger->EndSystemProfile("Physics");
+                //// Wraps the physics system to calculate the system time
+                //debugger->BeginSystemProfile("Physics");
+                //physicsManager->UpdateALL(deltaTime);
+                //debugger->EndSystemProfile("Physics");
 
-                // Update debugging utilities
-                debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
+                //// Update debugging utilities
+                //debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
+                AudioManager audioManager;
 
-                //ImGui_ImplOpenGL3_NewFrame();
-                //ImGui_ImplGlfw_NewFrame();
-                //ImGui::NewFrame();
-                //ImGui::ShowDemoWindow();
+                audioManager.LoadSound("bgMusic", "SCI-FI.wav");
 
-                //// Rendering
-                //ImGui::Render();
-                //int display_w, display_h;
-                //glfwGetFramebufferSize(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), &display_w, &display_h);
-                //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                audioManager.PlaySound("bgMusic");
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 

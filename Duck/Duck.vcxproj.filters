@@ -7,6 +7,9 @@
     <Filter Include="src\Duck">
       <UniqueIdentifier>{A3771DCF-8F44-78DA-B85D-6682A489AD68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Duck\Audio">
+      <UniqueIdentifier>{E4F3EBB8-D0C1-DFBE-B955-50E5A5C2BB23}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Duck\De-serialize">
       <UniqueIdentifier>{30E3C6FE-9C4F-82F9-6543-1A57D16EA461}</UniqueIdentifier>
     </Filter>
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="src\Duck\Application.h">
       <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\AudioManager.h">
+      <Filter>src\Duck\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Components.h">
       <Filter>src\Duck</Filter>
@@ -1411,6 +1417,9 @@
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
       <Filter>src\Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Audio\AudioManager.cpp">
+      <Filter>src\Duck\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>src\Duck\De-serialize</Filter>

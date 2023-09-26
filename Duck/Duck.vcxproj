@@ -70,12 +70,13 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll" "..\bin\Debug-windows-x86_64\Duck" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll" "..\bin\Debug-windows-x86_64\Duck" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,17 +99,19 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll" "..\bin\Release-windows-x86_64\Duck" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll" "..\bin\Release-windows-x86_64\Duck" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
+    <ClInclude Include="src\Duck\Audio\AudioManager.h" />
     <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\De-serialize\GameObject.h" />
@@ -560,6 +563,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\Audio\AudioManager.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
     <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />

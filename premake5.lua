@@ -91,11 +91,19 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
+		links { "fmodL_vc.lib" }
+		postbuildcommands {
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmodL.dll\" \"%{cfg.targetdir}\"")
+		}
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
+		links { "fmod_vc.lib" }
+		postbuildcommands {
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmod.dll\" \"%{cfg.targetdir}\"")
+		}
 
 project "Sandbox"
 	location "Sandbox"
