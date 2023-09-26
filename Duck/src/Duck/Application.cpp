@@ -9,7 +9,22 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Duck/stb_image.h"
 
+// Headers for memory leak detection
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>
+
 #include "Input.h"
+#include <fstream>
+#include <exception>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
+#include <Windows.h>
+#include "Application.h"
+#include "Physics/PhysicsManager.h"
+#include "Audio/AudioManager.h"
+#include "Debug.h"
 
 
 GameObject player;
@@ -20,8 +35,6 @@ void error_callback(int error, const char* description) {
     std::cerr << "Error: " << description << std::endl;
 }
 
-
-
 namespace Duck {
     Application* Application::s_Instance = nullptr;
 
@@ -30,15 +43,15 @@ namespace Duck {
 
 
 
-	Application::Application() {
+    Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-/////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
-/////                                                                                                                /////
+        /////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
+        /////                                                                                                                /////
 
 
 
@@ -46,14 +59,14 @@ namespace Duck {
 
         m_VertexArray.reset(new VertexArray());
 
-        float vertices[3*7] = {
-           //Coordinates         //Colors
-           -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,
-            0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f
+        float vertices[3 * 7] = {
+            //Coordinates         //Colors
+            -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,
+             0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,
+             0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f
         };
 
-        m_VertexBuffer.reset(new VertexBuffer(vertices , sizeof(vertices)));
+        m_VertexBuffer.reset(new VertexBuffer(vertices, sizeof(vertices)));
 
         BufferLayout layout = {
 
@@ -87,7 +100,7 @@ namespace Duck {
 
         std::shared_ptr<VertexBuffer> SquareVB;
         SquareVB.reset(new VertexBuffer(SquareVertices, sizeof(SquareVertices)));
-            
+
         BufferLayout SquareLayout = {
 
             { ShaderDataType::Float3, "aPos"}
@@ -288,35 +301,37 @@ namespace Duck {
         m_Sprite = Shader::LoadTexture("../images/Character1Sprite.png", m_SpriteWidth, m_SpriteHeight);
 
 
-/////                                                                                                                /////
-////////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////
+        /////                                                                                                                /////
+        ////////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////
 
 
 
-        //// Initialize GLFW
-        //if (!glfwInit()) {
-        //    std::cerr << "Failed to initialize GLFW" << std::endl;
-        //    return;
-        //}
+                //// Initialize GLFW
+                //if (!glfwInit()) {
+                //    std::cerr << "Failed to initialize GLFW" << std::endl;
+                //    return;
+                //}
 
-        //// Set the GLFW error callback
-        //glfwSetErrorCallback(error_callback);
+                //// Set the GLFW error callback
+                //glfwSetErrorCallback(error_callback);
 
-        //// Create a GLFW window and OpenGL context
-        //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
-        //if (!window) { 
-        //    std::cerr << "Failed to create GLFW window" << std::endl;
-        //    glfwTerminate();
-        //    return;
-        //}
+                //// Create a GLFW window and OpenGL context
+                //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
+                //if (!window) { 
+                //    std::cerr << "Failed to create GLFW window" << std::endl;
+                //    glfwTerminate();
+                //    return;
+                //}
 
-        //// Make the window's context current
-        //glfwMakeContextCurrent(window);
-	}
+                //// Make the window's context current
+                //glfwMakeContextCurrent(window);
+               
+         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
-	Application::~Application() {
+        //glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
 
-	}
+        ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+    }
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
@@ -324,6 +339,11 @@ namespace Duck {
 
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
+    }
+
+    Application::~Application() {
+        Debug::DestroyInstance();
+        PhysicsManager::DestroyInstance();
     }
 
     void Application::OnEvent(Event& e) {
@@ -340,111 +360,171 @@ namespace Duck {
         }
     }
 
-	void Application::Run() {
-        while (m_Running) {
+    void Application::Run() {
+        // Enable memory leak detection
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
-/////                                                                                                                /////
+        double lastFrameTime = glfwGetTime();
+
+        try {
+            while (m_Running) {
+
+                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+                /////                                                                                                                /////
+
+                // Would be used for cameras
+                Renderer::BeginScene();
+
+                //glm::vec3 SquarePos{ 0.2f,0.2f,0.0f };
+                //m_SquareTransform = glm::translate(glm::mat4(1.0), SquarePos);
+                //Renderer::Submit(m_SquareVA, m_SquareShader, m_SquareTransform);
+
+                //glm::vec3 TrianglePos{ 0.2f,0.2f,0.0f };
+                //m_TriangleTransform = glm::translate(glm::mat4(1.0), TrianglePos);
+                //Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
             
-            RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
-            RenderCommand::Clear();
+                //glm::vec3 LinePos{ 0.5f,0.5f,0.0f };
+                //float LineAngle{ 45.f };
+                //glm::vec3 LineScale{ 2.0f, 2.0f, 1.0f };
+                //m_LineTransform = glm::translate(glm::mat4(1.0), LinePos);
+                //m_LineTransform = glm::rotate(m_LineTransform,glm::radians(LineAngle), glm::vec3(0, 0, 1));
+                //m_LineTransform = glm::scale(m_LineTransform, LineScale);
+                //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
 
-            // Would be used for cameras
-            Renderer::BeginScene();
+                //glm::vec3 Line2Pos{ 0.0f,0.0f,0.0f };
+                //float Line2Angle{ 0.0f };
+                //glm::vec3 Line2Scale{ 1.0f, 1.0f, 1.0f };
+                //m_LineTransform = glm::translate(glm::mat4(1.0), Line2Pos);
+                //m_LineTransform = glm::rotate(m_LineTransform, glm::radians(Line2Angle), glm::vec3(0, 0, 1));
+                //m_LineTransform = glm::scale(m_LineTransform, Line2Scale);
+                //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
+                //
+                //glm::vec3 PointPos{ 0.0f,0.0f,0.0f };
+                //m_PointTransform = glm::translate(glm::mat4(1.0), PointPos);
+                //Renderer::Submit(m_PointVA, m_PointShader, m_PointTransform);
 
-            //glm::vec3 SquarePos{ 0.2f,0.2f,0.0f };
-            //m_SquareTransform = glm::translate(glm::mat4(1.0), SquarePos);
-            //Renderer::Submit(m_SquareVA, m_SquareShader, m_SquareTransform);
+                //glm::vec3 SquareImgPos{ -0.5f,-0.5f,0.0f };
+                //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareImgPos);
+                //Renderer::Submit(m_SquareImgVA, m_SquareImgShader, m_SquareImgTransform, m_Texture);
 
-            //glm::vec3 TrianglePos{ 0.2f,0.2f,0.0f };
-            //m_TriangleTransform = glm::translate(glm::mat4(1.0), TrianglePos);
-            //Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
-           
-            //glm::vec3 LinePos{ 0.5f,0.5f,0.0f };
-            //float LineAngle{ 45.f };
-            //glm::vec3 LineScale{ 2.0f, 2.0f, 1.0f };
-            //m_LineTransform = glm::translate(glm::mat4(1.0), LinePos);
-            //m_LineTransform = glm::rotate(m_LineTransform,glm::radians(LineAngle), glm::vec3(0, 0, 1));
-            //m_LineTransform = glm::scale(m_LineTransform, LineScale);
-            //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
-
-            //glm::vec3 Line2Pos{ 0.0f,0.0f,0.0f };
-            //float Line2Angle{ 0.0f };
-            //glm::vec3 Line2Scale{ 1.0f, 1.0f, 1.0f };
-            //m_LineTransform = glm::translate(glm::mat4(1.0), Line2Pos);
-            //m_LineTransform = glm::rotate(m_LineTransform, glm::radians(Line2Angle), glm::vec3(0, 0, 1));
-            //m_LineTransform = glm::scale(m_LineTransform, Line2Scale);
-            //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
-            //
-            //glm::vec3 PointPos{ 0.0f,0.0f,0.0f };
-            //m_PointTransform = glm::translate(glm::mat4(1.0), PointPos);
-            //Renderer::Submit(m_PointVA, m_PointShader, m_PointTransform);
-
-            //glm::vec3 SquareImgPos{ -0.5f,-0.5f,0.0f };
-            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareImgPos);
-            //Renderer::Submit(m_SquareImgVA, m_SquareImgShader, m_SquareImgTransform, m_Texture);
-
-            //glm::vec3 SquareSprPos{ 0.5f,-0.5f,0.0f };
-            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
-            //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
+                //glm::vec3 SquareSprPos{ 0.5f,-0.5f,0.0f };
+                //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
+                //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
 
 
-            DrawBackground(10, 10, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
+                DrawBackground(10, 10, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
 
-            DrawSquareObject(4, 4, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+                DrawSquareObject(4, 4, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
 
-            //DrawGrid(10, 10, m_LineVA, m_LineShader);
+                //DrawGrid(10, 10, m_LineVA, m_LineShader);
 
            
             
-            Renderer::EndScene();
+                Renderer::EndScene();
 
-/////                                                                                                                /////
-////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+                /////                                                                                                                /////
+                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
 
-            for (Layer* layer : m_LayerStack) {
-                layer->OnUpdate();
+                for (Layer* layer : m_LayerStack) {
+                    layer->OnUpdate();
+                }
+
+                m_Window->OnUpdate();
+                //// Log Mouse Position to Console
+                //auto [x, y] = Input::GetMousePosition();
+                //DUCK_CORE_TRACE("{0}, {1}", x, y);
+
+                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+                
+                //Debug* debugger = Debug::GetInstance();
+
+                //// Initialize the physics manager and its test objects
+                //PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+                //physicsManager->InitializeTestObjects();
+
+                //// Calculate delta time
+                //double currentFrameTime = glfwGetTime();
+                //double deltaTime = currentFrameTime - lastFrameTime;
+                //lastFrameTime = currentFrameTime;
+
+                //// Wraps the physics system to calculate the system time
+                //debugger->BeginSystemProfile("Physics");
+                //physicsManager->UpdateALL(deltaTime);
+                //debugger->EndSystemProfile("Physics");
+
+                //// Update debugging utilities
+                //debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
+
+                //AudioManager audioManager;
+
+                //audioManager.LoadSound("bgMusic", "SCI-FI.wav");
+
+                //audioManager.PlaySound("bgMusic");
+
+                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+
+            }
+        }
+        catch (const std::exception& e)
+        {
+            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+            
+            // Define the directory for crash logs
+            const char* crashLogsDir = "CrashLogs/";
+
+            // Check if the directory exists, if not, create it
+            if (GetFileAttributesA(crashLogsDir) == INVALID_FILE_ATTRIBUTES)
+            {
+                CreateDirectoryA(crashLogsDir, NULL);
             }
 
-            //// Log Mouse Position to Console
-            //auto [x, y] = Input::GetMousePosition();
-            //DUCK_CORE_TRACE("{0}, {1}", x, y);
+            // Generate the filename based on current timestamp
+            struct tm newtime;
+            time_t now = time(0);
+            localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
+            std::ostringstream oss;
+            oss << std::put_time(&newtime, "/CrashLog %d-%m-%Y.txt");   // format the date and time for the crashlog filename
+            std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
 
+            // Write the exception message to crash log
+            std::ofstream crashLog(crashLogFileName, std::ios::out);
+            crashLog << "Crash with message: " << e.what() << std::endl;
+            crashLog.close();
 
-            m_Window->OnUpdate();
+            // Re-throw the exception to allow for external handling or just terminate the program
+            throw;
+
+            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
         }
+    }
 
-        // Loop until the user closes the window
-        //while (!glfwWindowShouldClose(window)) {
-        //    // Render here (you can put your OpenGL drawing code here)
-        //    Time run_time;
-        //    double delta_time = run_time.get_elapsed_time();
-        //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
+    // Loop until the user closes the window
+    //while (!glfwWindowShouldClose(window)) {
+    //    // Render here (you can put your OpenGL drawing code here)
+    //    Time run_time;
+    //    double delta_time = run_time.get_elapsed_time();
+    //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
 
-        //    // Swap front and back buffers
-        //    glfwSwapBuffers(window);
+    //    // Swap front and back buffers
+    //    glfwSwapBuffers(window);
 
-        //    // Poll for and process events
-        //    glfwPollEvents();
+    //    // Poll for and process events
+    //    glfwPollEvents();
 
-        //    // Load Game Objects
-        //    if (!loadFiles) {
-        //        // Load player data
-        //        player.loadPlayerData();
-        //        loadFiles = true; // Set the flag to true to indicate data has been loaded
+    //    // Load Game Objects
+    //    if (!loadFiles) {
+    //        // Load player data
+    //        player.loadPlayerData();
+    //        loadFiles = true; // Set the flag to true to indicate data has been loaded
 
-        //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
-        //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
-        //    }
-        //}
+    //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
+    //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
+    //    }
+    //}
 
-        //// Terminate GLFW
-        //glfwTerminate();
+    //// Terminate GLFW
+    //glfwTerminate();
 
-
-
-
-	}
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         m_Running = false;

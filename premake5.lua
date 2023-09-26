@@ -16,6 +16,8 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
 IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 IncludeDir["glm"] = "Duck/vendor/glm"
+IncludeDir["IMGui"] = "Duck/vendor/imgui/include"
+IncludeDir["FMOD"] = "Duck/vendor/FMOD/inc"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
@@ -51,12 +53,15 @@ project "Duck"
         --"lib/glfw-3.3.8.bin.WIN64/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.IMGui}",
+		"%{IncludeDir.FMOD}"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+		"Duck/vendor/FMOD/lib"
     }
 
 	-- Link Input .dll
@@ -86,11 +91,19 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
+		links { "fmodL_vc.lib" }
+		postbuildcommands {
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmodL.dll\" \"%{cfg.targetdir}\"")
+		}
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
+		links { "fmod_vc.lib" }
+		postbuildcommands {
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmod.dll\" \"%{cfg.targetdir}\"")
+		}
 
 project "Sandbox"
 	location "Sandbox"

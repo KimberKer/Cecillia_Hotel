@@ -20,7 +20,6 @@ namespace Duck {
 	public:
 		Application();
 		virtual ~Application();
-
 		void Run();
 
 		void OnEvent(Event& e);
@@ -94,4 +93,6 @@ namespace Duck {
 	Application* CreateApplication();
 }
 
+
  //GLFWwindow* window;
+ 
