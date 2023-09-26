@@ -111,6 +111,7 @@
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
     <ClInclude Include="src\Duck\Graphics\Buffer.h" />
+    <ClInclude Include="src\Duck\Graphics\Graphics.h" />
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
     <ClInclude Include="src\Duck\Time.h" />
     <ClInclude Include="src\Duck\Window.h" />
+    <ClInclude Include="src\Duck\stb_image.h" />
     <ClInclude Include="src\duckpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -553,6 +555,7 @@
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
