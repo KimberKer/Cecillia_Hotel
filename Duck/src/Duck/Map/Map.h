@@ -25,9 +25,10 @@ public:
     int GetMapData(const char* File);
     int UpdateCellData(const char* filename, int row, int column, int value);
     void FreeMapData();
-    void SnapToCell(float* Coordinate);
     int GetCellValue(int X, int Y);
     int CheckInstanceBinaryMapCollision(float PosX, float PosY,
     float scaleX, float scaleY);
+    float SnapToCellX(float cellSize, float x);
+    float SnapToCellY(float cellSize, float y);
     void printMapData();
 };

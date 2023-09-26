@@ -60,7 +60,7 @@ namespace Duck {
 	void DrawSquareObject(float PosX, float PosY, std::shared_ptr<VertexArray> VA, std::shared_ptr<Shader> shader, uint32_t texture) {
 
 		float x = (PosX * 0.2f) - 0.9;
-		float y = -(PosX * 0.2f) + 0.9;
+		float y = -(PosY * 0.2f) + 0.9;
 
 
 		glm::vec3 Pos{ x,y ,0.0f };

@@ -1,1 +1,6 @@
-125.0 60.0 20.0 1.0
+pos_x	0.0
+pos_y	0.0
+vel_x	0.0
+vel_y	0.0
+state	STATE_NONE
+type	TYPE_PLAYER

@@ -1,18 +1,24 @@
 #include "duckpch.h"
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
+#include "Events/ApplicationEvent.h"
+#include "Map/Map.h"
 #include "Duck//Log.h"
 #include "Time.h"
 #include "Duck/Graphics/Graphics.h"
-
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Duck/stb_image.h"
 #include <GLFW/glfw3.h>
 
+
 #include "Input.h"
 
+
+const float  PLAYER_VELOCITY = 0.1F;
+
 GameObject player;
+MapDataHandler map;
 bool loadFiles = false;
 bool showImGuiWindow = false;
 
@@ -22,35 +28,38 @@ void error_callback(int error, const char* description) {
 }
 
 namespace Duck {
-      Application* Application::s_Instance = nullptr;
+    Application* Application::s_Instance = nullptr;
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 
-	Application::Application() {
+    Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-/////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
-/////                                                                                                                /////
+        //gets player values
+        player.loadFromFile("player.txt");
+
+        /////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
+        /////                                                                                                                /////
 
 
 
-        /////////////////////////////// TRIANGLES /////////////////////////////
+                /////////////////////////////// TRIANGLES /////////////////////////////
 
         m_VertexArray.reset(new VertexArray());
 
-        float vertices[3*7] = {
-           //Coordinates         //Colors
-           -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,
-            0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f
+        float vertices[3 * 7] = {
+            //Coordinates         //Colors
+            -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f,
+             0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,
+             0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f
         };
 
-        m_VertexBuffer.reset(new VertexBuffer(vertices , sizeof(vertices)));
+        m_VertexBuffer.reset(new VertexBuffer(vertices, sizeof(vertices)));
 
         BufferLayout layout = {
 
@@ -75,16 +84,16 @@ namespace Duck {
 
         float SquareVertices[3 * 4] = {
             //Coordinates         
-            -1.0f, -1.0f, 0.0f,   
-             1.0f, -1.0f, 0.0f, 
-             1.0f,  1.0f, 0.0f, 
+            -1.0f, -1.0f, 0.0f,
+             1.0f, -1.0f, 0.0f,
+             1.0f,  1.0f, 0.0f,
             -1.0f,  1.0f, 0.0f
         };
 
 
         std::shared_ptr<VertexBuffer> SquareVB;
         SquareVB.reset(new VertexBuffer(SquareVertices, sizeof(SquareVertices)));
-            
+
         BufferLayout SquareLayout = {
 
             { ShaderDataType::Float3, "aPos"}
@@ -242,7 +251,7 @@ namespace Duck {
         /////////////////////////////// SHADERS /////////////////////////////
 
         // Load vertex and fragment shader source code
-       
+
 
         // Triangle Shaders
         std::string vertexShaderSource = Shader::LoadShaderSource("../shaders/vertex_shader.glsl");
@@ -274,7 +283,6 @@ namespace Duck {
         std::string BackgroundImgFragmentShaderSrc = Shader::LoadShaderSource("../shaders/Background_Frg_Shader.glsl");
         m_BackgroundImgShader.reset(new Shader(BackgroundImgVertexShaderSrc, BackgroundImgFragmentShaderSrc));
 
-        
 
         // Square Sprite Shaders
         std::string SquareSprVertexShaderSrc = Shader::LoadShaderSource("../shaders/SquareSpr_Vtx_Shader.glsl");
@@ -287,35 +295,35 @@ namespace Duck {
         m_Sprite = Shader::LoadTexture("../images/Character1Sprite.png", m_SpriteWidth, m_SpriteHeight);
 
 
-/////                                                                                                                /////
-////////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////
+        /////                                                                                                                /////
+        ////////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////
 
 
 
-        //// Initialize GLFW
-        //if (!glfwInit()) {
-        //    std::cerr << "Failed to initialize GLFW" << std::endl;
-        //    return;
-        //}
+                //// Initialize GLFW
+                //if (!glfwInit()) {
+                //    std::cerr << "Failed to initialize GLFW" << std::endl;
+                //    return;
+                //}
 
-        //// Set the GLFW error callback
-        //glfwSetErrorCallback(error_callback);
+                //// Set the GLFW error callback
+                //glfwSetErrorCallback(error_callback);
 
-        //// Create a GLFW window and OpenGL context
-        //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
-        //if (!window) { 
-        //    std::cerr << "Failed to create GLFW window" << std::endl;
-        //    glfwTerminate();
-        //    return;
-        //}
+                //// Create a GLFW window and OpenGL context
+                //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
+                //if (!window) { 
+                //    std::cerr << "Failed to create GLFW window" << std::endl;
+                //    glfwTerminate();
+                //    return;
+                //}
 
-        //// Make the window's context current
-        //glfwMakeContextCurrent(window);
-	}
+                //// Make the window's context current
+                //glfwMakeContextCurrent(window);
+    }
 
-	Application::~Application() {
+    Application::~Application() {
 
-	}
+    }
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
@@ -345,17 +353,82 @@ namespace Duck {
             if (keyEvent.GetKeyCode() == Key::I) {
                 showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
             }
+
+            //Gameobject changing state
+            switch (keyEvent.GetKeyCode()) {
+                //GameObj go LEFT
+            case Key::A:
+                player.SetState(STATE_GOING_LEFT);
+                break;
+            case Key::D:
+                player.SetState(STATE_GOING_RIGHT);
+                break;
+            case Key::W:
+                player.SetState(STATE_GOING_UP);
+                break;
+            case Key::S:
+                player.SetState(STATE_GOING_DOWN);
+                break;
+            default:
+                player.SetState(STATE_NONE);
+                break;
+            }
+        }
+        else if (e.GetEventType() == EventType::KeyReleased) {
+            KeyReleasedEvent& keyEvent = dynamic_cast<KeyReleasedEvent&>(e);
+            // Reset the velocity when the 'D' key is released
+            switch (keyEvent.GetKeyCode()) {
+                //GameObj go LEFT
+            case Key::A:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::D:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::W:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::S:
+                player.SetState(STATE_NONE);
+                break;
+          
+            }
         }
     }
 
-	void Application::Run() {
+    void Application::Run() {
         while (m_Running) {
             glClearColor(1, 0, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
-////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
-/////                                                                                                                /////
-            
+            //object
+            switch (player.getState()) {
+            case STATE_GOING_LEFT:
+                player.SetVelocityX(-PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_RIGHT:
+                player.SetVelocityX(PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_DOWN:
+                player.SetVelocityY(PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_UP:
+                player.SetVelocityY(-PLAYER_VELOCITY);
+                break;
+                case STATE_NONE:
+                player.SetVelocityX(0);
+                player.SetVelocityY(0);
+                break;
+            }
+
+            //NEED MULTIPLY BY DELTA TIME
+            player.SetPositionX(player.getVelocityX() + player.getX());
+            player.SetPositionY(player.getVelocityY() + player.getY());
+           // pInst->posCurr.y = pInst->velCurr.y * g_dt + pInst->posCurr.y;
+
+            ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+            /////                                                                                                                /////
+
             RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
             RenderCommand::Clear();
 
@@ -369,7 +442,7 @@ namespace Duck {
             //glm::vec3 TrianglePos{ 0.2f,0.2f,0.0f };
             //m_TriangleTransform = glm::translate(glm::mat4(1.0), TrianglePos);
             //Renderer::Submit(m_VertexArray, m_Shader, m_TriangleTransform);
-           
+
             //glm::vec3 LinePos{ 0.5f,0.5f,0.0f };
             //float LineAngle{ 45.f };
             //glm::vec3 LineScale{ 2.0f, 2.0f, 1.0f };
@@ -399,36 +472,37 @@ namespace Duck {
             //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
 
 
-            DrawBackground(10, 10, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
 
-            DrawSquareObject(4, 4, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            DrawBackground(20, 20, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
+            std::cout << player.getX() << " " << player.getY() << std::endl;
 
-            //DrawGrid(10, 10, m_LineVA, m_LineShader);
+            DrawSquareObject(map.SnapToCellX(0.5f,player.getX()), map.SnapToCellX(0.5f,player.getY()), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            //(player.getX(), player.getY(), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            DrawGrid(20, 20, m_LineVA, m_LineShader);
 
-           
-            
+
             Renderer::EndScene();
 
-/////                                                                                                                /////
-////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+            /////                                                                                                                /////
+            ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
 
-            // Log Mouse Position to Console
-            auto [x, y] = Input::GetMousePosition();
-            DUCK_CORE_TRACE("{0}, {1}", x, y);
+                        // Log Mouse Position to Console
+           // auto [x, y] = Input::GetMousePosition();
+            //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate();
             }
 
-          
+
             m_ImGuiLayer->Begin();
             if (showImGuiWindow) {
                 for (Layer* layer : m_LayerStack) {
                     layer->OnImGuiRender();
                 }
             }
-                m_ImGuiLayer->End();
-            
+            m_ImGuiLayer->End();
+
             m_Window->OnUpdate();
         }
 
@@ -459,10 +533,10 @@ namespace Duck {
         //// Terminate GLFW
         //glfwTerminate();
 
-	}
+    }
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         m_Running = false;
         return true;
     }
-}
+};

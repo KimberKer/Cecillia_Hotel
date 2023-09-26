@@ -10,6 +10,11 @@
 #include "Duck/Events/ApplicationEvent.h"
 #include "Duck/ImGui/ImGuiLayer.h"
 
+#include "Duck/Graphics/Shader.h"
+#include "Duck/Graphics/Buffer.h"
+#include "Duck/Graphics/Vertex.h"
+#include "Duck/Graphics/Renderer.h"
+
 
 
 namespace Duck {
