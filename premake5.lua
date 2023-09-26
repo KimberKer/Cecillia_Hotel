@@ -68,8 +68,7 @@ project "Duck"
 	links {
 		"GLFW",
 		"Glad",
-		"opengl32.lib",
-		"fmod.lib"
+		"opengl32.lib"
         --"glfw3"
     }
 

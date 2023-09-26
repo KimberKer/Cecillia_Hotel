@@ -237,7 +237,7 @@ namespace Duck {
                
          ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
-        glfwSetKeyCallback(window, Debug::HandleDebugInput);
+        glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
 
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -246,7 +246,7 @@ namespace Duck {
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 
         // Setup Platform/Renderer backends
-        ImGui_ImplGlfw_InitForOpenGL(YOUR_WINDOW, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+        ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
         ImGui_ImplOpenGL3_Init();
 
         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
@@ -333,7 +333,7 @@ namespace Duck {
                 //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-
+                ;
                 Debug* debugger = Debug::GetInstance();
 
                 // Initialize the physics manager and its test objects
@@ -351,19 +351,19 @@ namespace Duck {
                 debugger->EndSystemProfile("Physics");
 
                 // Update debugging utilities
-                debugger->Update(deltaTime, window);
+                debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
 
-                ImGui_ImplOpenGL3_NewFrame();
-                ImGui_ImplGlfw_NewFrame();
-                ImGui::NewFrame();
-                ImGui::ShowDemoWindow();
+                //ImGui_ImplOpenGL3_NewFrame();
+                //ImGui_ImplGlfw_NewFrame();
+                //ImGui::NewFrame();
+                //ImGui::ShowDemoWindow();
 
-                // Rendering
-                ImGui::Render();
-                int display_w, display_h;
-                glfwGetFramebufferSize(window, &display_w, &display_h);
-                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                //// Rendering
+                //ImGui::Render();
+                //int display_w, display_h;
+                //glfwGetFramebufferSize(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), &display_w, &display_h);
+                //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
