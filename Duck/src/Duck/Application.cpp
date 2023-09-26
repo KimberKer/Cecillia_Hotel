@@ -328,7 +328,7 @@ namespace Duck {
                
          ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
-        //glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
+        glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
 
         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
     }
@@ -368,10 +368,10 @@ namespace Duck {
 
         try {
             while (m_Running) {
-
+                Debug* debugger = Debug::GetInstance();
                 ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
                 /////                                                                                                                /////
-
+                debugger->BeginSystemProfile("Graphics");
                 // Would be used for cameras
                 Renderer::BeginScene();
 
@@ -421,7 +421,7 @@ namespace Duck {
            
             
                 Renderer::EndScene();
-
+                debugger->EndSystemProfile("Graphics");
                 /////                                                                                                                /////
                 ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
 
@@ -436,24 +436,24 @@ namespace Duck {
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
                 
-                //Debug* debugger = Debug::GetInstance();
+                
 
-                //// Initialize the physics manager and its test objects
-                //PhysicsManager* physicsManager = PhysicsManager::GetInstance();
-                //physicsManager->InitializeTestObjects();
+                // Initialize the physics manager and its test objects
+                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+                physicsManager->InitializeTestObjects();
 
-                //// Calculate delta time
-                //double currentFrameTime = glfwGetTime();
-                //double deltaTime = currentFrameTime - lastFrameTime;
-                //lastFrameTime = currentFrameTime;
+                // Calculate delta time
+                double currentFrameTime = glfwGetTime();
+                double deltaTime = currentFrameTime - lastFrameTime;
+                lastFrameTime = currentFrameTime;
+                
+                // Wraps the physics system to calculate the system time
+                debugger->BeginSystemProfile("Physics");
+                physicsManager->UpdateALL(deltaTime);
+                debugger->EndSystemProfile("Physics");
 
-                //// Wraps the physics system to calculate the system time
-                //debugger->BeginSystemProfile("Physics");
-                //physicsManager->UpdateALL(deltaTime);
-                //debugger->EndSystemProfile("Physics");
-
-                //// Update debugging utilities
-                //debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
+                // Update debugging utilities
+                debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
                 //AudioManager audioManager;
 
