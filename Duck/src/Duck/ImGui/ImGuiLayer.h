@@ -21,6 +21,7 @@ namespace Duck {
 
 		void Begin();
 		void End();
+		
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 

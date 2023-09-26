@@ -1,5 +1,6 @@
 #include <Duck.h>
 #include "imgui/imgui.h"
+#include "Duck/Time.h"
 
 class ExampleLayer : public Duck::Layer
 {
@@ -16,8 +17,13 @@ public:
 
 	void OnImGuiRender() override
 	{
-		ImGui::Begin("test");
-		ImGui::Text("Hello World");
+		Duck::Time time;
+
+		time.start_frame();
+		time.end_frame();
+		double dt = time.get_delta_time();
+		ImGui::Begin("FrameRate");
+		ImGui::Text("FPS: %d", 1.0f/dt);
 		ImGui::End();
 
 	}

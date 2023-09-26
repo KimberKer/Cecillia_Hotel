@@ -5,11 +5,13 @@
 #include "Time.h"
 
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "Input.h"
 
 GameObject player;
 bool loadFiles = false;
+bool showImGuiWindow = false;
 
 // Function to handle errors
 void error_callback(int error, const char* description) {
@@ -79,6 +81,13 @@ namespace Duck {
                 break;
             }
         }
+
+        if (e.GetEventType() == EventType::KeyPressed) {
+            KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
+            if (keyEvent.GetKeyCode() == Key::I) {
+                showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
+            }
+        }
     }
 
 	void Application::Run() {
@@ -94,12 +103,15 @@ namespace Duck {
                 layer->OnUpdate();
             }
 
+          
             m_ImGuiLayer->Begin();
-            for (Layer* layer : m_LayerStack) {
-                layer->OnImGuiRender();
+            if (showImGuiWindow) {
+                for (Layer* layer : m_LayerStack) {
+                    layer->OnImGuiRender();
+                }
             }
-            m_ImGuiLayer->End();
-
+                m_ImGuiLayer->End();
+            
             m_Window->OnUpdate();
         }
 
