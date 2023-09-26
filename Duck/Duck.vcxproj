@@ -59,7 +59,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\lib\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\lib\glfw-3.3.8.bin.WIN64\include;..\lib\FMOD Studio API Windows\api\core\inc;..\lib\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -69,8 +69,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\glfw-3.3.8.bin.WIN64\lib-vc2022;..\lib\FMOD Studio API Windows\api\core\lib\x64;..\lib\FMOD Studio API Windows\api\studio\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -82,7 +82,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\lib\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\lib\glfw-3.3.8.bin.WIN64\include;..\lib\FMOD Studio API Windows\api\core\inc;..\lib\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -96,8 +96,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\glfw-3.3.8.bin.WIN64\lib-vc2022;..\lib\FMOD Studio API Windows\api\core\lib\x64;..\lib\FMOD Studio API Windows\api\studio\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -105,11 +105,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio\Audio.h" />
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
-    <ClInclude Include="src\Duck\GameObj.h" />
     <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\Map.h" />
     <ClInclude Include="src\Duck\Time.h" />
@@ -118,17 +118,13 @@
     <ClInclude Include="src\Physics\collision.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Audio\Audio.cpp" />
     <ClCompile Include="src\Duck\Application.cpp" />
-    <ClCompile Include="src\Duck\GameObj.cpp" />
     <ClCompile Include="src\Duck\Input.cpp" />
     <ClCompile Include="src\Duck\Map.cpp" />
     <ClCompile Include="src\Duck\Time.cpp" />
-    <ClCompile Include="src\Math\Matrix3x3.cpp">
-      <ObjectFileName>$(IntDir)\Matrix3x31.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="src\Math\Vector2D.cpp">
-      <ObjectFileName>$(IntDir)\Vector2D1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\Math\Matrix3x3.cpp" />
+    <ClCompile Include="src\Math\Vector2D.cpp" />
     <ClCompile Include="src\Physics\collision.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

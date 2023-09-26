@@ -1,30 +1,34 @@
 #pragma once
 
 #include "Core.h"
-#include <chrono>
+#include <GLFW/glfw3.h>
 
-namespace Duck {
+namespace Duck 
+{
 
-	class DUCK_API Time {
+	class Time 
+	{
+
 	public:
-		Time();
-		Time(double fps);
+		Time(double fps = 60.0);
 
-		void startFrame();
-		void endFrame();
+		void update();
 
-		double getElapsedTime();
-		double getDeltaTime();
+		double getElapsedTime() const;
+		double getDeltaTime() const;
+
+		double getFPS() const;
+		double getFrameTime() const;
 
 	private:
-		double FPS;
+		double limitFPS;
+
 		double frameTime;
-		std::chrono::high_resolution_clock::time_point frameStart;
-		std::chrono::high_resolution_clock::time_point frameEnd;
-		double elapsedTime = 0.0;
-		double deltaTime = 0.0;
-		double lastFrameTime = 0.0;
+		double lastFrameTime;
 
-	}; //end of class FrameTime
+		double elapsedTime;
+		double deltaTime;
+		
+	}; 
 
-} //end of namespace Duck
+}

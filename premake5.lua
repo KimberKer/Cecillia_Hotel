@@ -31,17 +31,23 @@ project "Duck"
 
 	-- Directories to Include
     includedirs {
-        "lib/glfw-3.3.8.bin.WIN64/include"
+        "lib/glfw-3.3.8.bin.WIN64/include",
+		"lib/FMOD Studio API Windows/api/core/inc",
+		"lib/FMOD Studio API Windows/api/studio/inc"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
-        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022",
+		"lib/FMOD Studio API Windows/api/core/lib/x64",
+		"lib/FMOD Studio API Windows/api/studio/lib/x64"
     }
 
 	-- Link Input .dll
 	links {
-        "glfw3"
+        "glfw3",
+		"fmod_vc",
+		"fmodstudio_vc"
     }
 
 	filter "system:windows"
@@ -57,6 +63,7 @@ project "Duck"
 		postbuildcommands {
 			-- Copy Duck.dll into Sandbox
 			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+
 		}
 
 	filter "configurations:Debug"
@@ -87,17 +94,23 @@ project "Sandbox"
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
-		"lib/glfw-3.3.8.bin.WIN64/include"
+		"lib/glfw-3.3.8.bin.WIN64/include",
+		"lib/FMOD Studio API Windows/api/core/inc",
+		"lib/FMOD Studio API Windows/api/studio/inc"
 	}
 
 	-- Libs to Include, ".lib" files
 	libdirs {
-        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+        "lib/glfw-3.3.8.bin.WIN64/lib-vc2022",
+		"lib/FMOD Studio API Windows/api/core/lib/x64",
+		"lib/FMOD Studio API Windows/api/studio/lib/x64"
     }
 
 	links {
 		"Duck",
-		"glfw3"
+		"glfw3",
+		"fmod_vc",
+		"fmodstudio_vc"
 	}
 
 	filter "system:windows"

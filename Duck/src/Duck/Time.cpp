@@ -1,37 +1,49 @@
 #include "Time.h"
 
-namespace Duck {
 
-	Time::Time() : FPS() {
-		frameTime = 1.0 / 60.0;
+
+namespace Duck 
+{
+	
+	Time::Time(double fps)
+	{
+		limitFPS = fps;
+
+		frameTime = 1 / limitFPS;
+		lastFrameTime = glfwGetTime();
+
+		elapsedTime = 0.0;
+		deltaTime = 0.0;
 	}
 
-	Time::Time(double fps) : FPS(fps) {
-		frameTime = 1.0 / fps;
+	void Time::update()
+	{
+		double currFrameTime = glfwGetTime();
+		
+		deltaTime = currFrameTime - lastFrameTime;
+		lastFrameTime = currFrameTime;
+
+		elapsedTime += deltaTime;
 	}
 
-	void Time::startFrame() {
-		frameStart = std::chrono::high_resolution_clock::now();
-	}
-
-	void Time::endFrame() {
-		frameEnd = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> frame_duration = frameEnd - frameStart;
-
-		//calc elapsed time
-		elapsedTime += frame_duration.count();
-
-		//calc delta time
-		deltaTime = frame_duration.count();
-		lastFrameTime = elapsedTime;
-	}
-
-	double Time::getElapsedTime() {
+	double Time::getElapsedTime() const
+	{
 		return elapsedTime;
 	}
 
-	double Time::getDeltaTime() {
+	double Time::getDeltaTime() const
+	{
 		return deltaTime;
+	}
+
+	double Time::getFPS() const
+	{
+		return limitFPS;
+	}
+
+	double Time::getFrameTime() const
+	{
+		return frameTime;
 	}
 
 }

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Core.h"
-#include "Time.h"
-#include "Input.h"
 
 #include <iostream>
 #include <GLFW/glfw3.h>

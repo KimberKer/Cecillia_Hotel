@@ -3,9 +3,11 @@
 #include "Core.h"
 #include <GLFW/glfw3.h>
 
-namespace Duck {
+namespace Duck 
+{
 
-	class DUCK_API Input {
+	class DUCK_API Input 
+	{
 
 	public:
 		static void inputInit(GLFWwindow* window);
@@ -21,6 +23,7 @@ namespace Duck {
 
 	private:
 		static GLFWwindow* window;
+
 	};
 
 }

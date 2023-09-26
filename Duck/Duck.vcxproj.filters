@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{9718D90C-032D-01BE-CCAE-A41D3882FDEE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Duck">
       <UniqueIdentifier>{2C58847C-188F-850D-C17B-6B10AD91010F}</UniqueIdentifier>
     </Filter>
@@ -8,10 +11,13 @@
       <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Physics">
-      <UniqueIdentifier>{7ff9d468-4eb0-4b43-b9d0-0ee54f678ee2}</UniqueIdentifier>
+      <UniqueIdentifier>{888B590D-F46A-D8A8-FD82-637F69E13E0A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio\Audio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h">
       <Filter>Duck</Filter>
@@ -20,9 +26,6 @@
       <Filter>Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\EntryPoint.h">
-      <Filter>Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\GameObj.h">
       <Filter>Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
@@ -37,18 +40,18 @@
     <ClInclude Include="src\Math\Matrix3x3.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\collision.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\Vector2D.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics\collision.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Duck\Application.cpp">
-      <Filter>Duck</Filter>
+    <ClCompile Include="src\Audio\Audio.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\GameObj.cpp">
+    <ClCompile Include="src\Duck\Application.cpp">
       <Filter>Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Input.cpp">

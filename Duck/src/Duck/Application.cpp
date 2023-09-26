@@ -1,5 +1,9 @@
 #include "Application.h"
 
+#include "Time.h"
+#include "Input.h"
+#include "../Audio/Audio.h"
+
 
 
 // Function to handle errors
@@ -12,48 +16,53 @@ void error_callback(int error, const char* description) {
 namespace Duck {
 
     //TESTING - time.h
-    void testTime() {
-        Time time;
+    void testTime()
+    {
+        Time test;
 
-        time.startFrame();
-        time.endFrame();
+        bool done = false;
 
-        double elapsed = time.getElapsedTime();
-        double delta = time.getDeltaTime();
+        while (!done)
+        {
+            test.update();
 
-        std::cout << "Elapsed time: " << elapsed << std::endl;
-        std::cout << "Delta time: " << delta << std::endl;
+            std::cout << "Elapsed time: " << test.getElapsedTime() << std::endl;
+            std::cout << "Delta time: " << test.getDeltaTime() << std::endl;
+
+            if (Input::isKeyLongPressed(GLFW_KEY_A, 3.0))
+                done = true;
+        }
+
+        std::cout << "Time test done!\n";
     }
 
-    //TESTING - input.h
-    void testInput(GLFWwindow *_window) {
-        Input::inputInit(_window);
-        
-        //test keyboard
-        if (Input::isKeyPressed(GLFW_KEY_A)) {
-            std::cout << "Key A is pressed!\n";
+    //TESTING - audio.h
+    void testAudio() 
+    {
+        using namespace AudioMgr;
+
+        Audio audio;
+        audio.init();
+
+        SoundInfo* testSound = new SoundInfo("test", "../Assets/Audio/test.wav");
+
+        audio.loadSound(*testSound);
+
+        audio.playSound(*testSound);
+
+        bool done = false;
+
+        while (!done)
+        {
+            audio.update();
+
+            if (Duck::Input::isKeyPressed(GLFW_KEY_A))
+                audio.stopSound(*testSound);
         }
 
-        if (Input::isKeyLongPressed(GLFW_KEY_A, 1.0)) {
-            std::cout << "Key A is long pressed (1.0s)\n";
-        }
+        audio.deactivate();
 
-        if (Input::isKeyLongPressed(GLFW_KEY_A, 3.0)) {
-            std::cout << "Key At is long pressed (3.0s)\n";
-        }
-
-        //test mouse
-        if (Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            std::cout << "Mouse left is pressed!\n";
-        }
-
-        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 1.0)) {
-            std::cout << "Mouse left is long pressed (1.0s)\n";
-        }
-        
-        if (Input::isMouseButtonLongPressed(GLFW_MOUSE_BUTTON_LEFT, 3.0)) {
-            std::cout << "Mouse left is long pressed (3.0s)\n";
-        }
+        std::cout << "Audio test done!\n";
     }
 
 	Application::Application() {
@@ -86,19 +95,19 @@ namespace Duck {
 
 	void Application::Run() {
 
-
-
         // Loop until the user closes the window
         while (!glfwWindowShouldClose(window)) {
+
             // Render here (you can put your OpenGL drawing code here)
-            //testTime();
-            testInput(window);
+            testAudio();
+            testTime();
 
             // Swap front and back buffers
             glfwSwapBuffers(window);
 
             // Poll for and process events
             glfwPollEvents();
+
         }
 
         // Terminate GLFW
