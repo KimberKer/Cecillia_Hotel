@@ -23,6 +23,9 @@
 #include "Application.h"
 #include "Physics/PhysicsManager.h"
 #include "Debug.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 
 GameObject player;
@@ -231,8 +234,22 @@ namespace Duck {
 
                 //// Make the window's context current
                 //glfwMakeContextCurrent(window);
+               
+         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
         glfwSetKeyCallback(window, Debug::HandleDebugInput);
+
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+
+        // Setup Platform/Renderer backends
+        ImGui_ImplGlfw_InitForOpenGL(YOUR_WINDOW, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+        ImGui_ImplOpenGL3_Init();
+
+        ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
     }
 
     void Application::PushLayer(Layer* layer) {
