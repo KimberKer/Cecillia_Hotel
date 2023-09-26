@@ -7,9 +7,7 @@ project "ImGui"
 
     systemversion "latest"
 
-    -- Output Directory Shortcut
-    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-    
+  
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -40,9 +38,13 @@ project "ImGui"
         "$(SolutionDir)extern/glfw-3.3.8.bin.WIN64/include",
         "%{IncludeDir.GLFW}"
     }
+
     links {
-		"GLFW"
+		    "GLFW"
     }
+
+    filter "system:windows"
+		systemversion "latest"
 
     filter "configurations:Debug"
         runtime "Debug"
