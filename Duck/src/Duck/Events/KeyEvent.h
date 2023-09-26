@@ -5,7 +5,7 @@
 
 namespace Duck {
 	// Base class for keyboard-related events
-	class DUCK_API KeyEvent : public Event {
+	class KeyEvent : public Event {
 	public:
 		// Getter function for the key code
 		inline KeyCode GetKeyCode() const { return m_KeyCode; }
@@ -21,7 +21,7 @@ namespace Duck {
 	};
 
 	// Event for a key press
-	class DUCK_API KeyPressedEvent : public KeyEvent {
+	class KeyPressedEvent : public KeyEvent {
 	public:
 		// Constructor to initialize with a key code and repeat count
 		KeyPressedEvent(int keycode, int repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
@@ -44,7 +44,7 @@ namespace Duck {
 	};
 
 	// Event for a key release
-	class DUCK_API KeyReleasedEvent : public KeyEvent {
+	class KeyReleasedEvent : public KeyEvent {
 	public:
 		// Constructor to initialize with a key code
 		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}

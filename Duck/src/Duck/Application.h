@@ -11,7 +11,7 @@
 #include "Duck/ImGui/ImGuiLayer.h"
 
 namespace Duck {
-	class DUCK_API Application {
+	class  Application {
 	public:
 		Application();
 		virtual ~Application();
@@ -22,6 +22,7 @@ namespace Duck {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
 		

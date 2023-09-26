@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef DUCK_PLATFORM_WINDOWS
+#if DUCK_DYNAMIC_LINK
 	#ifdef DUCK_BUILD_DLL
 		#define DUCK_API __declspec(dllexport)
 	#else
 		#define DUCK_API __declspec(dllimport)
 	#endif
+#else
+	#define DUCK_API
+#endif
 #else
 	#error Duck Engine only supports Windows!
 #endif

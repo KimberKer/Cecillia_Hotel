@@ -8,7 +8,7 @@
 #include "Duck/Events/MouseEvent.h"
 
 namespace Duck {
-	class DUCK_API ImGuiLayer : public Layer
+	class ImGuiLayer : public Layer
 	{
 	public:
 		ImGuiLayer();
@@ -16,15 +16,16 @@ namespace Duck {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-
+		virtual void OnEvent(Event& e) override;
 		virtual void OnImGuiRender() override;
-
-		void OnEvent(Event& event);
 
 		void Begin();
 		void End();
 
+		void BlockEvents(bool block) { m_BlockEvents = block; }
+
 	private:
+		bool m_BlockEvents = true;
 		float m_time = 0.0f;
 	};
 }

@@ -25,9 +25,10 @@ include "Duck/vendor/imgui"
 -- Duck.dll
 project "Duck"
 	location "Duck"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -49,7 +50,6 @@ project "Duck"
 	-- Directories to Include
     includedirs {
 		"%{prj.name}/src",
-		"Duck/vendor",
 		"Duck/vendor/spdlog/include",
         --"lib/glfw-3.3.8.bin.WIN64/include",
 		"%{IncludeDir.GLFW}",
@@ -73,19 +73,16 @@ project "Duck"
     }
 
 	filter "system:windows"
-		cppdialect "C++20"
-		systemversion "latest"
 
-		defines {
-			"DUCK_PLATFORM_WINDOWS",
-			"DUCK_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
+	systemversion "latest"
 
-		postbuildcommands {
-			-- Copy Duck.dll into Sandbox
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
+	defines {
+		"DUCK_PLATFORM_WINDOWS",
+		"DUCK_BUILD_DLL",
+		"GLFW_INCLUDE_NONE",
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
@@ -97,11 +94,17 @@ project "Duck"
 		runtime "Release"
 		optimize "On"
 
+	filter "configurations:Dist"
+		defines "HZ_DIST"
+		runtime "Release"
+		optimize "On"
+
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -118,6 +121,7 @@ project "Sandbox"
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
+		"Duck/vendor",
 		"Duck/vendor/spdlog/include",
 		"%{IncludeDir.glm}"
 		--"{prj.name}/src",
@@ -135,7 +139,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines {
@@ -145,9 +148,15 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
+	
+	filter "configurations:Dist"
+		defines "DUCK_DIST"
+		runtime "Release"
+		optimize "on"
+

@@ -29,7 +29,7 @@ namespace Duck {
 	};
 
 	// Event for window close
-	class DUCK_API WindowCloseEvent : public Event {
+	class WindowCloseEvent : public Event {
 	public:
 		// Constructor
 		WindowCloseEvent() {}

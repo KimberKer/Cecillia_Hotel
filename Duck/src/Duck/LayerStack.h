@@ -5,7 +5,7 @@
 
 namespace Duck {
 	// A class for managing layers and overlays in an application
-	class DUCK_API LayerStack {
+	class LayerStack {
 	public:
 		// Constructor to initialize the layer stack
 		LayerStack();

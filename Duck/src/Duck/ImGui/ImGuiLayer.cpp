@@ -20,7 +20,7 @@ namespace Duck {
 	}
 	void ImGuiLayer::OnAttach()
 	{
-		//HZ_PROFILE_FUNCTION();
+		//DUCK_PROFILE_FUNCTION();
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -33,9 +33,9 @@ namespace Duck {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		float fontSize = 18.0f;// *2.0f;
-		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		//float fontSize = 18.0f;// *2.0f;
+		//io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
+		//io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -74,6 +74,17 @@ namespace Duck {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		//ImGuizmo::BeginFrame();
+
+		ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
+	}
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		if (m_BlockEvents)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
 	}
 
 	void ImGuiLayer::End()
@@ -96,7 +107,9 @@ namespace Duck {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
-	void ImGuiLayer::OnImGuiRender() {
+
+	void ImGuiLayer::OnImGuiRender()
+	{
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 	}
