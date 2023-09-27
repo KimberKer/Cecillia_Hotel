@@ -25,6 +25,7 @@
 #include "Physics/PhysicsManager.h"
 #include "Audio/Audio.h"
 #include "Debug.h"
+#include "CoreManager.h"
 
 
 GameObject player;
@@ -37,7 +38,7 @@ void error_callback(int error, const char* description) {
 
 namespace Duck {
     Application* Application::s_Instance = nullptr;
-
+    CoreManager* coreManager = CoreManager::GetInstance();
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     //KRISTY TESTING - audio.h
@@ -79,7 +80,7 @@ namespace Duck {
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
-
+        
         /////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
         /////                                                                                                                /////
 
@@ -358,7 +359,7 @@ namespace Duck {
                
          ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
-        glfwSetKeyCallback(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()), Debug::HandleDebugInput);
+        coreManager->Init(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
         ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
     }
@@ -372,8 +373,7 @@ namespace Duck {
     }
 
     Application::~Application() {
-        Debug::DestroyInstance();
-        PhysicsManager::DestroyInstance();
+
     }
 
     void Application::OnEvent(Event& e) {
@@ -395,14 +395,15 @@ namespace Duck {
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
         double lastFrameTime = glfwGetTime();
+        Time runtime;
 
         try {
             while (m_Running) {
-
-                Debug* debugger = Debug::GetInstance();
+                runtime.update();
+              
                 ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
                 /////                                                                                                                /////
-                debugger->BeginSystemProfile("Graphics");
+                Debug::GetInstance()->BeginSystemProfile("Graphics");
                 // Would be used for cameras
                 Renderer::BeginScene();
 
@@ -453,7 +454,7 @@ namespace Duck {
            
             
                 Renderer::EndScene();
-                debugger->EndSystemProfile("Graphics");
+                Debug::GetInstance()->EndSystemProfile("Graphics");
                 /////                                                                                                                /////
                 ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
 
@@ -467,29 +468,13 @@ namespace Duck {
                 //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-                
-                
 
-                // Initialize the physics manager and its test objects
-                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
-                physicsManager->InitializeTestObjects();
-
-                // Calculate delta time
-                double currentFrameTime = glfwGetTime();
-                double deltaTime = currentFrameTime - lastFrameTime;
-                lastFrameTime = currentFrameTime;
-                
-                // Wraps the physics system to calculate the system time
-                debugger->BeginSystemProfile("Physics");
-                physicsManager->UpdateALL(deltaTime);
-                debugger->EndSystemProfile("Physics");
-
-                // Update debugging utilities
-                debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
-
-
+                Debug::GetInstance()->BeginSystemProfile("Audio");
                 //KRISTY - testing audio manager
                 testAudio();
+                Debug::GetInstance()->EndSystemProfile("Audio");
+
+                coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 

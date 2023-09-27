@@ -46,6 +46,7 @@ namespace Duck {
 			DEBUG_SYS_ACTIVE = 1 << 1,
 			DEBUG_MOUSE_ACTIVE = 1 << 2,
 			DEBUG_PHYSICS_ACTIVE = 1 << 3,
+			DEBUG_KEY_ACTIVE = 1 << 4	
 		};
 
 		// Toggle the FPS debug state on/off
@@ -59,6 +60,9 @@ namespace Duck {
 
 		// Toggle the physics test debug state on/off
 		void TogglePhysicsDebug();
+
+		// Toggle key state debug info on/off
+		void ToggleKeyStateDebug();
 
 		// Static instance to access the non-static members from the static function
 		static Debug* debugInstance;

@@ -125,6 +125,17 @@ namespace Duck {
         }
     }
 
+    void Debug::ToggleKeyStateDebug() 
+    {
+        if (!(debugState & DEBUG_KEY_ACTIVE)) 
+        {
+            debugState |= DEBUG_KEY_ACTIVE;
+        }
+        else {
+            debugState &= ~DEBUG_KEY_ACTIVE;
+        }
+    }
+
     // Handle debug input based on key presses
     void Debug::HandleDebugInput(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
@@ -158,6 +169,11 @@ namespace Duck {
                 debugInstance->TogglePhysicsDebug();
                 std::cout << "Physics Debug: " << (debugInstance->debugState & DEBUG_PHYSICS_ACTIVE ? "On" : "Off") << std::endl;
             }
+			else if (key == GLFW_KEY_F5)   // F5 key for key state debug
+			{
+				debugInstance->ToggleKeyStateDebug();
+				std::cout << "Key State Debug: " << (debugInstance->debugState & DEBUG_KEY_ACTIVE ? "On" : "Off") << std::endl;
+			}
         }
     }
 
@@ -183,6 +199,7 @@ namespace Duck {
             std::cout << "Press F2 to debug system" << std::endl;
             std::cout << "Press F3 to debug Mouse position" << std::endl;
             std::cout << "Press F4 to debug Physics" << std::endl;
+            std::cout << "Press F5 to debug key state" << std::endl;
             std::cout << "Press ` clear console" << std::endl << std::endl;
             isPromptDisplayed = true;
         }
@@ -211,6 +228,7 @@ namespace Duck {
                 {
                     // Calculate the percentage of time spent on each system
                     double systemPercentage = (pair.second / deltaTime) * 100;
+                    std::cout << std::fixed << std::setprecision(2);  // Set the format
                     std::cout << pair.first << " system used " << systemPercentage << "% of total game loop time" << std::endl;
                 }
             }
@@ -223,6 +241,14 @@ namespace Duck {
                 {
                     std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
                 }
+            }
+
+            //Key state debug info
+            if (debugState & DEBUG_KEY_ACTIVE) {
+                std::cout << "W Key State: " << (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
+                std::cout << "A Key State: " << (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
+                std::cout << "S Key State: " << (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
+                std::cout << "D Key State: " << (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
             }
 
             // Flush the output buffer to ensure all debug messages are shown
