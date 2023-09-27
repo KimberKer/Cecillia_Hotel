@@ -105,6 +105,9 @@
     <ClInclude Include="src\Duck\Graphics\Renderer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Renderer.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Shader.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -160,6 +163,9 @@
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Window.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\stb_image.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\duckpch.h">
@@ -1428,6 +1434,9 @@
       <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Renderer.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp">

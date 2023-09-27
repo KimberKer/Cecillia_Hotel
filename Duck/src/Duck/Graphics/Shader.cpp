@@ -3,6 +3,8 @@
 
 #include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include "Duck/stb_image.h"
 
 namespace Duck {
 
@@ -183,10 +185,106 @@ namespace Duck {
 	}
 
 
+	// Would return the height and width. Is needed for Sprite images.
+	uint32_t Shader::LoadTexture(const char* filePath, int& Width, int& Height ) {
+
+		uint32_t textureID;
+		glGenTextures(1, &textureID);
+
+		int width, height, channels;
+		stbi_set_flip_vertically_on_load(true); // Flip the image vertically (OpenGL expects the top-left corner as the origin)
+
+		unsigned char* data = stbi_load(filePath, &width, &height, &channels, 0);
+
+		if (!data) {
+			std::cerr << "Failed to load texture from " << filePath << std::endl;
+			return 0; // Return 0 to indicate failure
+		}
+
+		Width = width;
+		Height = height;
+
+		GLenum format = GL_RGB;
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// Set texture parameters (optional)
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data); // Free the loaded image data, as it's already been uploaded to the GPU
+
+		return textureID;
+
+
+	}
+
+	uint32_t Shader::LoadTexture(const char* filePath) {
+
+		uint32_t textureID;
+		glGenTextures(1, &textureID);
+
+		int width, height, channels;
+		stbi_set_flip_vertically_on_load(true); // Flip the image vertically (OpenGL expects the top-left corner as the origin)
+
+		unsigned char* data = stbi_load(filePath, &width, &height, &channels, 0);
+
+		if (!data) {
+			std::cerr << "Failed to load texture from " << filePath << std::endl;
+			return 0; // Return 0 to indicate failure
+		}
+
+		GLenum format = GL_RGB;
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// Set texture parameters (optional)
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data); // Free the loaded image data, as it's already been uploaded to the GPU
+
+		return textureID;
+
+
+	}
+
+
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {
 
 		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+
+	}
+
+	void Shader::UploadUniformInt(const std::string& name, int value) {
+
+		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		glUniform1i(location, value);
+
+	}
+
+	void Shader::UploadUniformFloat(const std::string& name, float value) {
+
+		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		glUniform1f(location, value);
+
 	}
 
 
