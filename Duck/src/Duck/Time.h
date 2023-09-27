@@ -1,54 +1,64 @@
 #pragma once
 
-#include <chrono>
+#include <GLFW/glfw3.h>
 
+namespace Duck
+{
 
-namespace Duck {
+	class Time
+	{
 
-	class Time {
 	public:
-		//constructor
-		Time(): FPS(60) {
-			frame_time = 1.0 / 60.0;
+		Time(double fps = 60.0)
+		{
+			limitFPS = fps;
+
+			frameTime = 1 / limitFPS;
+			lastFrameTime = glfwGetTime();
+
+			elapsedTime = 0.0;
+			deltaTime = 0.0;
 		}
 
-		Time(double fps) : FPS(fps) {
-			frame_time = 1.0 / fps;
+		void update()
+		{
+			double currFrameTime = glfwGetTime();
+
+			deltaTime = currFrameTime - lastFrameTime;
+			lastFrameTime = currFrameTime;
+
+			elapsedTime += deltaTime;
 		}
 
-		void start_frame() {
-			frame_start = std::chrono::high_resolution_clock::now();
+		double getElapsedTime() const
+		{
+			return elapsedTime;
 		}
 
-		void end_frame() {
-			frame_end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double> frame_duration = frame_end - frame_start;
-
-			//calc elapsed time
-			elapsed_time += frame_duration.count();
-
-			//calc delta time
-			delta_time = frame_duration.count();
-			last_frame_time = elapsed_time;
+		double getDeltaTime() const
+		{
+			return deltaTime;
 		}
 
-		double get_elapsed_time() {
-			return elapsed_time;
+		double getFPS() const
+		{
+			return limitFPS;
 		}
 
-		double get_delta_time() {
-			return delta_time;
+		double getFrameTime() const
+		{
+			return frameTime;
 		}
 
 	private:
-		double FPS;
-		double frame_time;
-		std::chrono::high_resolution_clock::time_point frame_start;
-		std::chrono::high_resolution_clock::time_point frame_end;
-		double elapsed_time = 0.0;
-		double delta_time = 0.0;
-		double last_frame_time = 0.0;
+		double limitFPS;
 
-	}; //end of class FrameTime
+		double frameTime;
+		double lastFrameTime;
 
-} //end of namespace Duck
+		double elapsedTime;
+		double deltaTime;
+
+	};
+
+}

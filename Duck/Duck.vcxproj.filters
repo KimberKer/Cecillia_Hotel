@@ -66,7 +66,7 @@
     <ClInclude Include="src\Duck\Application.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Audio\AudioManager.h">
+    <ClInclude Include="src\Duck\Audio\Audio.h">
       <Filter>src\Duck\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Components.h">
@@ -102,7 +102,7 @@
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Graphics\Renderer.h">
+    <ClInclude Include="src\Duck\Graphics\Graphics.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Renderer.h">
@@ -1424,7 +1424,7 @@
     <ClCompile Include="src\Duck\Application.cpp">
       <Filter>src\Duck</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Audio\AudioManager.cpp">
+    <ClCompile Include="src\Duck\Audio\Audio.cpp">
       <Filter>src\Duck\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
@@ -1436,7 +1436,7 @@
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Graphics\Renderer.cpp">
+    <ClCompile Include="src\Duck\Graphics\Graphics.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp">

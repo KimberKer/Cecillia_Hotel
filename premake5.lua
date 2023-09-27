@@ -17,10 +17,12 @@ IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
 IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 IncludeDir["glm"] = "Duck/vendor/glm"
 IncludeDir["IMGui"] = "Duck/vendor/imgui/include"
-IncludeDir["FMOD"] = "Duck/vendor/FMOD/inc"
+IncludeDir["FMODcore"] = "Duck/vendor/FMOD/api/core/inc"
+IncludeDir["FMODstudio"] = "Duck/vendor/FMOD/api/studio/inc"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
+
 
 -- Duck.dll
 project "Duck"
@@ -55,13 +57,15 @@ project "Duck"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.IMGui}",
-		"%{IncludeDir.FMOD}"
+		"%{IncludeDir.FMODcore}",
+		"%{IncludeDir.FMODstudio}"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/lib"
+		"Duck/vendor/FMOD/api/core/lib",
+		"Duck/vendor/FMOD/api/studio/lib"
     }
 
 	-- Link Input .dll
@@ -91,18 +95,36 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		links { "fmodL_vc.lib" }
+		links { "fmod_vc.lib" }
 		postbuildcommands {
-			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmodL.dll\" \"%{cfg.targetdir}\"")
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
+		}
+
+	filter "configurations:Debug"
+		defines "DUCK_DEBUG"
+		runtime "Debug"
+		symbols "On"
+		links { "fmodstudio_vc.lib" }
+		postbuildcommands {
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
 		}
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
-		links { "fmod_vc.lib" }
+		links { "fmodL_vc.lib" }
 		postbuildcommands {
-			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmod.dll\" \"%{cfg.targetdir}\"")
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
+		}
+	
+	filter "configurations:Release"
+		defines "DUCK_RELEASE"
+		runtime "Release"
+		optimize "On"
+		links { "fmodstudioL_vc.lib" }
+		postbuildcommands {
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
 		}
 
 project "Sandbox"

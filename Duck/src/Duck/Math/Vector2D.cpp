@@ -5,13 +5,9 @@
 
 namespace MathLib
 {
+
 	Vector2D::Vector2D(float _x, float _y) : x(_x), y(_y) {};
 
-	/*----------------------------------------------------------
-	* 
-	* assignment operators
-	* 
-	----------------------------------------------------------*/
 	Vector2D& Vector2D::operator += (const Vector2D &rhs)
 	{
 		x += rhs.x;
@@ -44,21 +40,11 @@ namespace MathLib
 		return *this;
 	}
 
-	/*----------------------------------------------------------
-	*
-	* unary operators
-	*
-	----------------------------------------------------------*/
 	Vector2D Vector2D::operator - () const
 	{
 		return {-x, -y};
 	}
 
-	/*----------------------------------------------------------
-	*
-	* binary operators
-	*
-	----------------------------------------------------------*/
 	Vector2D operator + (const Vector2D& lhs, const Vector2D& rhs)
 	{
 		Vector2D result;
@@ -190,4 +176,5 @@ namespace MathLib
 	{
 		return (pVec0.x * pVec1.y) - (pVec0.y * pVec1.x);
 	}
-} //end namespace CSD1130
+
+}

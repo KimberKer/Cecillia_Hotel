@@ -23,7 +23,7 @@
 #include <Windows.h>
 #include "Application.h"
 #include "Physics/PhysicsManager.h"
-#include "Audio/AudioManager.h"
+#include "Audio/Audio.h"
 #include "Debug.h"
 
 
@@ -40,7 +40,37 @@ namespace Duck {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+    //KRISTY TESTING - audio.h
+    void testAudio()
+    {
+        using namespace AudioMgr;
 
+        Audio audio;
+        audio.init();
+
+        std::cout << "Create SoundInfo\n";
+        SoundInfo* testSound = new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav");
+        std::cout << "Load sound\n";
+        audio.loadSound(*testSound);
+        std::cout << "Play sound\n";
+        audio.playSound(*testSound);
+
+        bool done = false;
+        Time time;
+        std::cout << "Update loop\n";
+        while (!done)
+        {
+            audio.update();
+            time.update();
+
+            if (time.getElapsedTime() > 7.0)
+                done = true;
+        }
+        std::cout << "Deavtivate audio\n";
+        audio.deactivate();
+
+        std::cout << "Audio test done!\n";
+    }
 
 
     Application::Application() {
@@ -368,6 +398,7 @@ namespace Duck {
 
         try {
             while (m_Running) {
+
                 Debug* debugger = Debug::GetInstance();
                 ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
                 /////                                                                                                                /////
@@ -418,6 +449,7 @@ namespace Duck {
 
                 //DrawGrid(10, 10, m_LineVA, m_LineShader);
 
+                
            
             
                 Renderer::EndScene();
@@ -455,11 +487,9 @@ namespace Duck {
                 // Update debugging utilities
                 debugger->Update(deltaTime, static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
-                //AudioManager audioManager;
 
-                //audioManager.LoadSound("bgMusic", "SCI-FI.wav");
-
-                //audioManager.PlaySound("bgMusic");
+                //KRISTY - testing audio manager
+                testAudio();
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 
