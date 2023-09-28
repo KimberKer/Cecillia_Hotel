@@ -29,7 +29,6 @@ public:
     // Accessors for grid size in the X and Y dimensions
     int GetGridSizeX() const;
     int GetGridSizeY() const;
-
 private:
     std::string filename_; // The name of the JSON file to read
     rapidjson::Document document_; // RapidJSON document to hold the parsed JSON data
