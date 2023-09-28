@@ -149,7 +149,10 @@ project "Sandbox"
 	includedirs {
 		"Duck/src",
 		"Duck/vendor/spdlog/include",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.FMODcore}",
+		"%{IncludeDir.FMODstudio}"
+		
 		--"{prj.name}/src",
 		--"lib/glfw-3.3.8.bin.WIN64/include"
 	}
@@ -157,6 +160,8 @@ project "Sandbox"
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
+		"Duck/vendor/FMOD/api/core/lib",
+		"Duck/vendor/FMOD/api/studio/lib"
     }
 
 	links {

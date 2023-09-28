@@ -3,7 +3,7 @@
 
 
 
-namespace AudioMgr {
+namespace Duck {
 
 	/*****************
 		SoundInfo
@@ -95,20 +95,20 @@ namespace AudioMgr {
 		ERRCHECK(studioSys->update());
 	}
 
-	void Audio::loadSound(SoundInfo& soundInfo)
+	void Audio::loadSound(std::shared_ptr<SoundInfo> soundInfo)
 	{
-		const char* fileName = soundInfo.getFileName();
+		const char* fileName = soundInfo->getFileName();
 
-		if (!soundInfo.isLoaded())
+		if (!soundInfo->isLoaded())
 		{
 
 			FMOD::Sound* sound;
-			ERRCHECK(lowLevelSys->createSound(soundInfo.getFilePath(), FMOD_2D, 0, &sound));
-			ERRCHECK(sound->setMode(soundInfo.isLoop() ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF));
+			ERRCHECK(lowLevelSys->createSound(soundInfo->getFilePath(), FMOD_2D, 0, &sound));
+			ERRCHECK(sound->setMode(soundInfo->isLoop() ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF));
 			
 			sounds.insert({fileName, sound});
 
-			soundInfo.setLoaded(true);
+			soundInfo->setLoaded(true);
 		}
 
 		else
@@ -117,43 +117,43 @@ namespace AudioMgr {
 		}
 	}
 
-	void Audio::playSound(SoundInfo& soundInfo)
+	void Audio::playSound(std::shared_ptr<SoundInfo> soundInfo)
 	{
-		const char* fileName = soundInfo.getFileName();
+		const char* fileName = soundInfo->getFileName();
 
-		if (soundInfo.isLoaded())
+		if (soundInfo->isLoaded())
 		{
 			FMOD::Channel* channel;
 			ERRCHECK(lowLevelSys->playSound(sounds[fileName], 0, true, &channel));
 
-			channel->setVolume(soundInfo.getVolume());
+			channel->setVolume(soundInfo->getVolume());
 
-			if (soundInfo.isLoop())
+			if (soundInfo->isLoop())
 			{
 				loopsPlaying.insert({fileName, channel});
 			}
 
 			ERRCHECK(channel->setPaused(false));
 
-			soundInfo.setPlaying(true);
+			soundInfo->setPlaying(true);
 		}
 
 		else
 		{
 			std::cout << fileName << ": Can't play a sound that is not loaded." << std::endl;
-			soundInfo.setPlaying(false);
+			soundInfo->setPlaying(false);
 		}
 	}
 
-	void Audio::stopSound(SoundInfo& soundInfo)
+	void Audio::stopSound(std::shared_ptr<SoundInfo>soundInfo)
 	{
-		const char* fileName = soundInfo.getFileName();
+		const char* fileName = soundInfo->getFileName();
 
-		if (soundInfo.isPlaying())
+		if (soundInfo->isPlaying())
 		{
 			ERRCHECK(loopsPlaying[fileName]->stop());
 
-			soundInfo.setPlaying(false);
+			soundInfo->setPlaying(false);
 
 			loopsPlaying.erase(fileName);
 		}
@@ -164,15 +164,15 @@ namespace AudioMgr {
 		}
 	}
 
-	void Audio::updateVol(SoundInfo& soundInfo, float newVol)
+	void Audio::updateVol(std::shared_ptr<SoundInfo> soundInfo, float newVol)
 	{
-		std::string fileName = soundInfo.getFileName();
+		std::string fileName = soundInfo->getFileName();
 
-		if (soundInfo.isPlaying())
+		if (soundInfo->isPlaying())
 		{
 			FMOD::Channel* channel = loopsPlaying[fileName];
 			ERRCHECK(channel->setVolume(newVol));
-			soundInfo.setVol(newVol);
+			soundInfo->setVol(newVol);
 		}
 
 		else

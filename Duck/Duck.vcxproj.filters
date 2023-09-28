@@ -75,6 +75,9 @@
     <ClInclude Include="src\Duck\Core.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\CoreManager.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\De-serialize\GameObject.h">
       <Filter>src\Duck\De-serialize</Filter>
     </ClInclude>
@@ -1419,9 +1422,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\CoreManager.h">
-      <Filter>src\Duck</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1429,6 +1429,9 @@
     </ClCompile>
     <ClCompile Include="src\Duck\Audio\Audio.cpp">
       <Filter>src\Duck\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\CoreManager.cpp">
+      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>src\Duck\De-serialize</Filter>
@@ -1489,9 +1492,6 @@
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\CoreManager.cpp">
-      <Filter>src\Duck</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

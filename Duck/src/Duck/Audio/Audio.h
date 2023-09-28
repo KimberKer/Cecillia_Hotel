@@ -4,13 +4,14 @@
 #include "../FMOD/api/core/inc/fmod.hpp"
 #include "../FMOD/api/core/inc/fmod_errors.h"
 
+
 #include <iostream>
 #include <map>
 #include <string>
 
 
 
-namespace AudioMgr 
+namespace Duck 
 {
     //Error handling for FMOD errors
     void ERRCHECK_fn(FMOD_RESULT result, const char* file, int line);
@@ -60,10 +61,10 @@ namespace AudioMgr
         void deactivate();
         void update();
 
-        void loadSound(SoundInfo& soundInfo);
-        void playSound(SoundInfo& soundInfo);
-        void stopSound(SoundInfo& soundInfo);
-        void updateVol(SoundInfo& soundInfo, float vol);
+        void loadSound(std::shared_ptr<SoundInfo> soundInfo);
+        void playSound(std::shared_ptr<SoundInfo> soundInfo);
+        void stopSound(std::shared_ptr<SoundInfo> soundInfo);
+        void updateVol(std::shared_ptr< SoundInfo> soundInfo, float vol);
 
         // The audio sampling rate of the audio engine
         static const int AUDIO_SAMPLE_RATE = 44100;
