@@ -90,48 +90,6 @@ namespace Duck{
 
 	}
 
-	void Renderer::AnimationSubmit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t texture, const int cols, const int rows) {
-
-
-		float SpriteWidth = 1.f / cols;
-		float SpriteHeight = 1.f / rows;
-
-
-		// Calculate the row and column of the current frame
-		//int row = currentFrame / cols;
-		//int col = currentFrame % cols;
-
-		// Calculate the u (horizontal) and v (vertical) texture coordinates for the current frame
-		//float u = col * SpriteWidth;
-		//float v = 1.0f - (row + 1) * SpriteWidth; // Invert v for OpenGL's coordinate system
-
-		// Bind the shader and set uniform values
-		shader->Bind();
-		shader->UploadUniformMat4("u_Transform", transform);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-
-		shader->Bind();
-		shader->UploadUniformMat4("u_Transform", transform);
-
-
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		shader->UploadUniformInt("u_Tex", 0);
-
-
-		vertexArray->Bind();
-
-
-		RenderCommand::DrawIndex(vertexArray);
-
-
-	}
-
 
 	//void Renderer::SubmitSprite(const std::shared_ptr<VertexArray>& vertexArray,
 	//							const std::shared_ptr<Shader>& shader, 
@@ -182,7 +140,6 @@ namespace Duck{
 		// Set texture coordinates for the current frame
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 		//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(glm::vec4(1.0f))); // Set border color to white
 		//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(glm::vec4(0.0f))); // Set border color to black
 

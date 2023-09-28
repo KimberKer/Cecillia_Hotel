@@ -12,6 +12,11 @@ namespace MathLib
 	#pragma warning( disable : 4201 )
 	#endif
 
+	/**************************************************************************/
+	/*!
+
+	 */
+	/**************************************************************************/
 	typedef union Matrix3x3
 	{
 		struct 
@@ -109,5 +114,4 @@ namespace MathLib
 	*/
 	/**************************************************************************/
 	void Mtx33Inverse(Matrix3x3 *pResult, float *determinant, const Matrix3x3 &pMtx);
-
 }

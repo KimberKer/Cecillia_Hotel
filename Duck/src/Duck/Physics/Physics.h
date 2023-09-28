@@ -1,14 +1,3 @@
-//---------------------------------------------------------
-// file:	Physics.h
-// authors:	muhammad zikry bin zakaria
-// email:	muhammadzikry.b\@digipen.edu
-//
-// brief:	Contains the declaration of the PhysicsObject class for implementing basic physics properties.
-//
-//
-// Copyright © 2023 DigiPen, All rights reserved.
-//---------------------------------------------------------
-
 #pragma once
 
 namespace Duck {

@@ -19,12 +19,9 @@ IncludeDir["glm"] = "Duck/vendor/glm"
 IncludeDir["IMGui"] = "Duck/vendor/imgui/include"
 IncludeDir["FMOD"] = "Duck/vendor/FMOD/inc"
 IncludeDir["rapidjson"] = "Duck/vendor/rapidjson"
-IncludeDir["FMODcore"] = "Duck/vendor/FMOD/api/core/inc"
-IncludeDir["FMODstudio"] = "Duck/vendor/FMOD/api/studio/inc"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
-
 
 -- Duck.dll
 project "Duck"
@@ -61,15 +58,12 @@ project "Duck"
 		"%{IncludeDir.IMGui}",
 		"%{IncludeDir.FMOD}",
 		"%{IncludeDir.rapidjson}"
-		"%{IncludeDir.FMODcore}",
-		"%{IncludeDir.FMODstudio}"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
+		"Duck/vendor/FMOD/lib"
     }
 
 	-- Link Input .dll
@@ -99,36 +93,18 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		links { "fmod_vc.lib" }
-		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
-		}
-
-	filter "configurations:Debug"
-		defines "DUCK_DEBUG"
-		runtime "Debug"
-		symbols "On"
-		links { "fmodstudio_vc.lib" }
-		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
-		}
-
-	filter "configurations:Release"
-		defines "DUCK_RELEASE"
-		runtime "Release"
-		optimize "On"
 		links { "fmodL_vc.lib" }
 		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmodL.dll\" \"%{cfg.targetdir}\"")
 		}
-	
+
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
-		links { "fmodstudioL_vc.lib" }
+		links { "fmod_vc.lib" }
 		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
+			("{COPY} \"%{wks.location}/Duck/vendor/FMOD/lib/fmod.dll\" \"%{cfg.targetdir}\"")
 		}
 
 project "Sandbox"
@@ -153,10 +129,7 @@ project "Sandbox"
 	includedirs {
 		"Duck/src",
 		"Duck/vendor/spdlog/include",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.FMODcore}",
-		"%{IncludeDir.FMODstudio}"
-		
+		"%{IncludeDir.glm}"
 		--"{prj.name}/src",
 		--"lib/glfw-3.3.8.bin.WIN64/include"
 	}
@@ -164,8 +137,6 @@ project "Sandbox"
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
     }
 
 	links {

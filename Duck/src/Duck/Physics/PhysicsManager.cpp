@@ -1,14 +1,3 @@
-//---------------------------------------------------------
-// file:	PhysicsManager.cpp
-// authors:	muhammad zikry bin zakaria
-// email:	muhammadzikry.b\@digipen.edu
-//
-// brief:	Contains the implementation of the PhysicsManager class for managing physics objects in the game
-//
-//
-// Copyright © 2023 DigiPen, All rights reserved.
-//---------------------------------------------------------
-
 #include "duckpch.h"
 #include "PhysicsManager.h"
 #include <iostream>   // For console output

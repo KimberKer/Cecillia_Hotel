@@ -3,12 +3,16 @@
 
 namespace MathLib
 {
+#ifdef _MSC_VER
+	// Supress warning: nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4201 )
+#endif
 
-	#ifdef _MSC_VER
-		// Supress warning: nonstandard extension used : nameless struct/union
-	#pragma warning( disable : 4201 )
-	#endif
+/**************************************************************************/
+/*!
 
+ */
+ /**************************************************************************/
 	typedef union Vector2D
 	{
 		struct
@@ -38,11 +42,12 @@ namespace MathLib
 	} Vector2D, Vec2, Point2D, Pt2;
 
 
-	#ifdef _MSC_VER
-		// Supress warning: nonstandard extension used : nameless struct/union
-	#pragma warning( default : 4201 )
-	#endif
+#ifdef _MSC_VER
+	// Supress warning: nonstandard extension used : nameless struct/union
+#pragma warning( default : 4201 )
+#endif
 
+// Binary operators
 	Vector2D operator + (const Vector2D& lhs, const Vector2D& rhs);
 	Vector2D operator - (const Vector2D& lhs, const Vector2D& rhs);
 	Vector2D operator * (const Vector2D& lhs, float rhs);
@@ -101,5 +106,4 @@ namespace MathLib
 	 */
 	 /**************************************************************************/
 	float	Vector2DCrossProductMag(const Vector2D& pVec0, const Vector2D& pVec1);
-
 }

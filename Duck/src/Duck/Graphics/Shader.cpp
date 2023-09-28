@@ -13,10 +13,10 @@ namespace Duck {
 		m_rendererID = {};
 
 
-		// START OF VERTEX SHADER /////////////////////////////////////////////////////////
+// START OF VERTEX SHADER /////////////////////////////////////////////////////////
 
-		// Create an empty vertex shader handle
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+			// Create an empty vertex shader handle
+			GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		// Send the vertex shader source code to GL
 		// Note that std::string's .c_str is NULL character terminated.
@@ -45,7 +45,7 @@ namespace Duck {
 			return;
 		}
 
-		// START OF FRAGMENT SHADER ////////////////////////////////////////////////////////
+// START OF FRAGMENT SHADER ////////////////////////////////////////////////////////
 
 		// Create an empty fragment shader handle
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -115,8 +115,8 @@ namespace Duck {
 			glDeleteShader(fragmentShader);
 
 			// Use the infoLog as you see fit.
-			// In this simple program, we'll just leave
 
+			// In this simple program, we'll just leave
 			return;
 		}
 
@@ -218,10 +218,7 @@ namespace Duck {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);\
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		stbi_image_free(data); // Free the loaded image data, as it's already been uploaded to the GPU
 
@@ -255,13 +252,11 @@ namespace Duck {
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Set texture parameters
+		// Set texture parameters (optional)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		stbi_image_free(data); // Free the loaded image data, as it's already been uploaded to the GPU
 

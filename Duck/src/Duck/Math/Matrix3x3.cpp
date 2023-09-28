@@ -44,6 +44,13 @@ namespace MathLib
 		return *this;
 	}
 
+
+
+	/*----------------------------------------------------------
+	*
+	* assignment operators
+	*
+	----------------------------------------------------------*/
 	Matrix3x3& Matrix3x3::operator *= (const Matrix3x3& rhs)
 	{
 		float _m00, _m01, _m02, _m10, _m11, _m12, _m20, _m21, _m22;
@@ -250,7 +257,5 @@ namespace MathLib
 			pResult->m21 /= *determinant;
 			pResult->m22 /= *determinant;
 		}
-
 	}
-
-}
+} //end namespace MathLib
