@@ -1,6 +1,4 @@
 #include <Duck.h>
-#include "imgui/imgui.h"
-#include "Duck/Time.h"
 
 class ExampleLayer : public Duck::Layer
 {

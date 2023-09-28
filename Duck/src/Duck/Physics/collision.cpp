@@ -27,10 +27,10 @@ namespace Duck {
 	bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 		const AABB& aabb2, const MathLib::Vector2D& vel2)
 	{
-		DeltaTime time;
-		time.Update(); // Call this at the beginning of each frame
+		Time time;
+		time.update(); // Call this at the beginning of each frame
 
-		float dt = time.GetDeltaTime();
+		float dt = time.getDeltaTime();
 		//No intersection
 		if ((aabb1.minVec.x < aabb2.maxVec.x) &&
 			(aabb1.maxVec.x > aabb2.minVec.x) &&

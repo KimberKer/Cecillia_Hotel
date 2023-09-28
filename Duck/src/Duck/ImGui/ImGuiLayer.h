@@ -1,5 +1,14 @@
+//---------------------------------------------------------
+// File:		ImGuiLayer.cpp
+// 
+// authors:		Rina Firdianna binte Raihan
+// email:		rinafirdiana.b\@digipen.edu
+//
+// Brief:      Integration of ImGui for GUI rendering.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
 #pragma once
-
 
 #include "Duck/Layer.h"
 

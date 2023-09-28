@@ -1,5 +1,5 @@
 //---------------------------------------------------------
-// File:      CoreManager.cpp
+// File:    CoreManager.cpp
 // authors:	muhammad zikry bin zakaria
 // email:	muhammadzikry.b\@digipen.edu
 //
