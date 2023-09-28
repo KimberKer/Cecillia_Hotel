@@ -7,14 +7,14 @@
 #include <utility>
 #include <functional>
 #include <sstream>
-
+#include <exception>
 #include <iomanip>
 #include <ctime>
 #include <fstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <iosfwd>  // Include this for forward declaration
+#include <iosfwd>
 #include <math.h>
 
 #ifdef DUCK_PLATFORM_WINDOWS

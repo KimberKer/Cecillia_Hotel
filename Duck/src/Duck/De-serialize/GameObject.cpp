@@ -1,5 +1,6 @@
 #include "duckpch.h"
 #include "GameObject.h"
+#include "../Log.h"
 
 GameObject::GameObject() : x(0.0f), y(0.0f), velocityX(0.0f), velocityY(0.0f) {}
 
@@ -36,13 +37,18 @@ bool GameObject::loadFromFile(const std::string& filename) {
     file >> x >> y >> velocityX >> velocityY;
 
     file.close();
+    
+    DUCK_INFO("Player Object Loaded!");
+
     return true;
 }
 
 void GameObject::loadPlayerData() {
     if (loadFromFile("player.txt")) {
-        std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
-        std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
+        DUCK_INFO("Player Position(x, y): {0}, {1}", getX(), getY());
+
+        //std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
+        //std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
     }
     else {
         std::cerr << "Failed to load player data from file.\n";

@@ -1,9 +1,15 @@
 #include "duckpch.h"
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
-#include "Duck//Log.h"
+#include "Duck/Log.h"
 #include "Time.h"
 #include "Duck/Graphics/Graphics.h"
+#include "Json.h"
+#include "Input.h"
+#include <Windows.h>
+#include "Physics/PhysicsManager.h"
+#include "Audio/AudioManager.h"
+#include "Debug.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,21 +20,10 @@
 #include <stdlib.h>  
 #include <crtdbg.h>
 
-#include "Input.h"
-#include <fstream>
-#include <exception>
-#include <ctime>
-#include <sstream>
-#include <iomanip>
-#include <Windows.h>
-#include "Application.h"
-#include "Physics/PhysicsManager.h"
-#include "Audio/AudioManager.h"
-#include "Debug.h"
 
 
-GameObject player;
-bool loadFiles = false;
+bool loadPlayer = false;
+bool loadGrid = false;
 
 // Function to handle errors
 void error_callback(int error, const char* description) {
@@ -39,9 +34,6 @@ namespace Duck {
     Application* Application::s_Instance = nullptr;
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
-
-
-
 
     Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -411,14 +403,56 @@ namespace Duck {
                 //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
                 //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
 
-
                 DrawBackground(10, 10, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
 
-                DrawSquareObject(4, 4, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+                JsonReader jsonReaderPlayer("../json/playerinfo.json"); // Create a JsonReader instance for playerinfo.json
+                JsonReader jsonReaderGrid("../json/gridsize.json");     // Create a JsonReader instance for gridsize.json
 
-                //DrawGrid(10, 10, m_LineVA, m_LineShader);
+                if (jsonReaderPlayer.ReadAndParse()) {
+                    // Retrieve the player's position and velocity using GetPlayerData
+                    if (jsonReaderPlayer.GetPlayerData()) {
+                        // Use the retrieved player's position and velocity
+                        float xPosition = jsonReaderPlayer.GetPlayerXPosition();
+                        float yPosition = jsonReaderPlayer.GetPlayerYPosition();
+                        float xVelocity = jsonReaderPlayer.GetPlayerXVelocity();
+                        float yVelocity = jsonReaderPlayer.GetPlayerYVelocity();
 
-           
+                        // Call DrawSquareObject with the retrieved values
+                        DrawSquareObject(xPosition, yPosition, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+
+                        if (!loadPlayer) {
+                            DUCK_INFO("Player Position (x, y): {0}, {1}", xPosition, yPosition);
+                            DUCK_INFO("Player Velocity (x, y): {0}, {1}", xVelocity, yVelocity);
+
+                            // Set the flag to true to indicate data has been loaded
+                            loadPlayer = true;
+                        }
+                    }
+                    else {
+                        DUCK_ERROR("Failed to retrieve player data from JSON");
+                    }
+                }
+
+                if (jsonReaderGrid.ReadAndParse()) {
+                    // Retrieve the grid x and y using GetPlayerData
+                    if (jsonReaderGrid.GetGridSize()) {
+                        // Use the retrieved player's position and velocity
+                        int xGrid = jsonReaderGrid.GetGridSizeX();
+                        int yGrid = jsonReaderGrid.GetGridSizeY();
+
+                        DrawGrid(xGrid, yGrid, m_LineVA, m_LineShader);
+
+                        if (!loadGrid) {
+                            DUCK_INFO("Grid: (x, y): {0}, {1}", xGrid, yGrid);
+
+                            // Set the flag to true to indicate data has been loaded
+                            loadGrid = true;
+                        }
+                    }
+                    else {
+                        DUCK_ERROR("Failed to retrieve grid data from JSON");
+                    }
+                }
             
                 Renderer::EndScene();
                 debugger->EndSystemProfile("Graphics");
@@ -497,34 +531,6 @@ namespace Duck {
             ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
         }
     }
-
-    // Loop until the user closes the window
-    //while (!glfwWindowShouldClose(window)) {
-    //    // Render here (you can put your OpenGL drawing code here)
-    //    Time run_time;
-    //    double delta_time = run_time.get_elapsed_time();
-    //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
-
-    //    // Swap front and back buffers
-    //    glfwSwapBuffers(window);
-
-    //    // Poll for and process events
-    //    glfwPollEvents();
-
-    //    // Load Game Objects
-    //    if (!loadFiles) {
-    //        // Load player data
-    //        player.loadPlayerData();
-    //        loadFiles = true; // Set the flag to true to indicate data has been loaded
-
-    //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
-    //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
-    //    }
-    //}
-
-    //// Terminate GLFW
-    //glfwTerminate();
-
 
     bool Application::OnWindowClose(WindowCloseEvent& e) {
         m_Running = false;

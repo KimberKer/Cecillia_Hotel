@@ -18,6 +18,7 @@ IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 IncludeDir["glm"] = "Duck/vendor/glm"
 IncludeDir["IMGui"] = "Duck/vendor/imgui/include"
 IncludeDir["FMOD"] = "Duck/vendor/FMOD/inc"
+IncludeDir["rapidjson"] = "Duck/vendor/rapidjson"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
@@ -55,7 +56,8 @@ project "Duck"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.IMGui}",
-		"%{IncludeDir.FMOD}"
+		"%{IncludeDir.FMOD}",
+		"%{IncludeDir.rapidjson}"
     }
 
 	-- Libs to Include, ".lib" files
