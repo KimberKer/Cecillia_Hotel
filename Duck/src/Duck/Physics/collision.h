@@ -1,36 +1,35 @@
 #ifndef PHYSICSLIB_HPP
 #define PHYSICSLIB_HPP
 #include "../Math/Vector2D.h"
-#include "../Time.h"
+
 
 
 namespace Duck {
+
     class AABB {
     public:
-        MathLib::Vector2D min;
-        MathLib::Vector2D max;
+        MathLib::Vector2D minVec;
+        MathLib::Vector2D maxVec;
+
+    public:
+            AABB();
+            AABB(const MathLib::Vector2D& min, const MathLib::Vector2D& max);
+            AABB ConvertToAABB(float x, float y, float width, float height);
+
     };
 
     class PhysicsLib {
 
-    template <typename T>
-    T Max(const T& a, const T& b);
+        template <typename T>
+        T Max(const T& a, const T& b);
 
     public:
-
-        PhysicsLib() {
-
-        };
-        ~PhysicsLib() {};
-
         bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
             const AABB& aabb2, const MathLib::Vector2D& vel2);
-
-        void PlayerMovement(bool keyPressed, int longPressedKey, MathLib::Vector2D player_current_position, MathLib::Vector2D player_current_Velocity);
-        //        void testCollison(int longKeyPressed,GLFWwindow* _window, MathLib::Vector2D* player_pos);
-
+        bool IsOutOfBounds(const AABB& boundingBox, const AABB& other) const;
+        float CalculateXIntersectionDepth(const AABB& aabb1, const AABB& aabb2);
     private:
-        Time time;
+
  
     };
 

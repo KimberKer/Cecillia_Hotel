@@ -28,7 +28,7 @@ public:
     int GetCellValue(int X, int Y);
     int CheckInstanceBinaryMapCollision(float PosX, float PosY,
     float scaleX, float scaleY);
-    float SnapToCellX(float cellSize, float x);
+    int SnapToCellX(float cellSize, float x);
     float SnapToCellY(float cellSize, float y);
     void printMapData();
 };

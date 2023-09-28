@@ -5,6 +5,7 @@
 #include "Map/Map.h"
 #include "Duck//Log.h"
 #include "Time.h"
+#include "Physics/collision.h"
 #include "Duck/Graphics/Graphics.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,13 +15,26 @@
 
 #include "Input.h"
 
+//Flags
+const unsigned int	FLAG_ACTIVE             = 0x00000001;
+const unsigned int	FLAG_VISIBLE            = 0x00000002;
+const unsigned int	FLAG_NON_COLLIDABLE     = 0x00000004;
 
-const float  PLAYER_VELOCITY = 0.1F;
+//Collision flags
+const unsigned int	COLLISION_LEFT          = 0x00000001;	//0001
+const unsigned int	COLLISION_RIGHT         = 0x00000002;	//0010
+const unsigned int	COLLISION_TOP           = 0x00000004;	//0100
+const unsigned int	COLLISION_BOTTOM        = 0x00000008;	//1000
 
-GameObject player;
-MapDataHandler map;
-bool loadFiles = false;
-bool showImGuiWindow = false;
+//window
+float const         WINDOW_COL              = 10;
+float const         WINDOW_ROW              = 10;
+
+const float         PLAYER_VELOCITY         = 5.f;
+
+bool                loadFiles               = false;
+bool                showImGuiWindow         = false;
+static              GameObj*                sGameObjList;
 
 // Function to handle errors
 void error_callback(int error, const char* description) {
@@ -28,7 +42,13 @@ void error_callback(int error, const char* description) {
 }
 
 namespace Duck {
+    static              GameObj* sGameObjList;
+    GameObject obj;
+    MapDataHandler map;
+    PhysicsLib phy;
+
     Application* Application::s_Instance = nullptr;
+
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -40,8 +60,9 @@ namespace Duck {
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-        //gets player values
-        player.loadFromFile("player.txt");
+        //gets obj values
+        obj.loadFromFile("player.txt");
+
 
         /////////////////////////////////////////////////// MAHDI ////////////////////////////////////////////////////////////////
         /////                                                                                                                /////
@@ -397,6 +418,10 @@ namespace Duck {
     }
 
     void Application::Run() {
+        bool PlayerStop = false;
+        AABB aabb;
+        DeltaTime time;
+
         while (m_Running) {
             glClearColor(1, 0, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -415,16 +440,30 @@ namespace Duck {
             case STATE_GOING_UP:
                 player.SetVelocityY(-PLAYER_VELOCITY);
                 break;
-                case STATE_NONE:
-                player.SetVelocityX(0);
-                player.SetVelocityY(0);
+            case STATE_NONE:
+                    player.SetVelocityX(0);
+                    player.SetVelocityY(0);
                 break;
             }
 
+            
+                time.Update(); // Call this at the beginning of each frame
+
+                float dt = time.GetDeltaTime(); // Get delta time in seconds
+
+       
+           
+
+        
             //NEED MULTIPLY BY DELTA TIME
-            player.SetPositionX(player.getVelocityX() + player.getX());
-            player.SetPositionY(player.getVelocityY() + player.getY());
-           // pInst->posCurr.y = pInst->velCurr.y * g_dt + pInst->posCurr.y;
+            player.SetPositionX(player.getVelocityX() * dt + player.getX());
+            player.SetPositionY(player.getVelocityY() * dt + player.getY());
+
+           /* pInst->boundingBox.min.x = -BOUNDING_RECT_SIZE * pInst->scale.x + pInst->posCurr.x;
+            pInst->boundingBox.min.y = -BOUNDING_RECT_SIZE * pInst->scale.y + pInst->posCurr.y;
+
+            pInst->boundingBox.max.x = BOUNDING_RECT_SIZE * pInst->scale.x + pInst->posCurr.x;
+            pInst->boundingBox.max.y = BOUNDING_RECT_SIZE * pInst->scale.y + pInst->posCurr.y;*/
 
             ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
             /////                                                                                                                /////
@@ -470,18 +509,50 @@ namespace Duck {
             //glm::vec3 SquareSprPos{ 0.5f,-0.5f,0.0f };
             //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
             //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
+            MathLib::Vector2D obj2(5.0, 5.0);
+            AABB windowAABB = aabb.ConvertToAABB(0, 0, 10 * 1, 10 * 1);
+            AABB playerAABB = aabb.ConvertToAABB(player.getX(), player.getY(), 0.9f, 0.9f);
+            AABB player2AABB = aabb.ConvertToAABB(obj2.x, obj2.y, 1.f, 1.f);
+            
+            
+            std::cout << playerAABB.maxVec.x << " " << player2AABB.maxVec.x << std::endl;
+                if (phy.CollisionIntersection_RectRect(playerAABB, { player.getVelocityX(), player.getVelocityY() }, player2AABB, { 0,0 })) {
+                
+                        //std::cout << "collides at the right" << std::endl;
+                        player.SetPositionX(map.SnapToCellX(1.f, player.getX()));
+                        player.SetPositionY(map.SnapToCellY(1.f, player.getY()));
+                        player.SetVelocityX(0);
+    
+                
+                }
+
+                if (phy.IsOutOfBounds(windowAABB, playerAABB))
+                {
+                    player.SetPositionX(map.SnapToCellX(1.f, player.getX())); // Adjust as needed
+                    player.SetPositionY(map.SnapToCellY(1.f, player.getY()));
+                    player.SetVelocityX(0);
+                    player.SetVelocityY(0);
+
+                }
+        
 
 
+            DrawBackground(WINDOW_COL, WINDOW_ROW, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
+           // std::cout << player.getX() << " " << map.SnapToCellX(1.f, player.getX()) << std::endl;
 
-            DrawBackground(20, 20, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
-            std::cout << player.getX() << " " << player.getY() << std::endl;
+            DrawSquareObject(map.SnapToCellX(1.f,player.getX()), map.SnapToCellX(1.f,player.getY()), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+           // DrawSquareObject(player.getX(), player.getY(), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            DrawSquareObject(5, 5, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
 
-            DrawSquareObject(map.SnapToCellX(0.5f,player.getX()), map.SnapToCellX(0.5f,player.getY()), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+           
             //(player.getX(), player.getY(), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
-            DrawGrid(20, 20, m_LineVA, m_LineShader);
+            DrawGrid(WINDOW_COL, WINDOW_ROW, m_LineVA, m_LineShader);
+          /*  MathLib::Vector2D window(WINDOW_WIDTH, WINDOW_HEIGHT);
+            MathLib::Vector2D player(player.getX(), player.getY());*/
+            
+         
 
 
-            Renderer::EndScene();
 
             /////                                                                                                                /////
             ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////

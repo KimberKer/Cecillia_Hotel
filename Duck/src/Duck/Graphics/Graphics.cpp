@@ -14,9 +14,6 @@ namespace Duck {
 		transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
 		Renderer::BackgroundSubmit(BGVA, BGshader, transform, texture, cols, rows);
 		
-
-
-
 	}
 
 	void DrawGrid(const int cols, const int rows, const std::shared_ptr<VertexArray>& LineVA, const std::shared_ptr<Shader>& LineShader) {
