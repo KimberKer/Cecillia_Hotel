@@ -1,12 +1,16 @@
 #include "duckpch.h"
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
-#include "Duck/Log.h"
+#include "Events/ApplicationEvent.h"
+#include "Map/Map.h"
+#include "Duck//Log.h"
 #include "Time.h"
-
+#include "Physics/collision.h"
+#include "Duck/Graphics/Graphics.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Duck/stb_image.h"
+#include <GLFW/glfw3.h>
 
 // Headers for memory leak detection
 #define _CRTDBG_MAP_ALLOC  
@@ -26,12 +30,41 @@
 #include "Debug.h"
 #include "CoreManager.h"
 
-GameObject player;
-bool loadFiles = false;
-bool showImGuiWindow = false;
+//Flags
+const unsigned int	FLAG_ACTIVE             = 0x00000001;
+const unsigned int	FLAG_VISIBLE            = 0x00000002;
+const unsigned int	FLAG_NON_COLLIDABLE     = 0x00000004;
 
+//Collision flags
+const unsigned int	COLLISION_LEFT          = 0x00000001;	//0001
+const unsigned int	COLLISION_RIGHT         = 0x00000002;	//0010
+const unsigned int	COLLISION_TOP           = 0x00000004;	//0100
+const unsigned int	COLLISION_BOTTOM        = 0x00000008;	//1000
+
+//window
+float const         WINDOW_COL              = 10;
+float const         WINDOW_ROW              = 10;
+
+const float         PLAYER_VELOCITY         = 5.f;
+
+bool                loadFiles               = false;
+bool                showImGuiWindow         = false;
+static              GameObj*                sGameObjList;
+
+// Function to handle errors
+void error_callback(int error, const char* description) {
+    std::cerr << "Error: " << description << std::endl;
+}
 
 namespace Duck {
+    static              GameObj* sGameObjList;
+    GameObject obj;
+    MapDataHandler map;
+    PhysicsLib phy;
+
+    Application* Application::s_Instance = nullptr;
+
+
 	Application* Application::s_Instance = nullptr;
 	CoreManager* coreManager = CoreManager::GetInstance();
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -70,6 +103,7 @@ namespace Duck {
 	
 	}
 
+	Application::~Application() {
 
 	void Application::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
@@ -116,7 +150,110 @@ namespace Duck {
 			while (m_Running) {
 				runtime.update();
 				m_Audio->update();
+        if (e.GetEventType() == EventType::KeyPressed) {
+            KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
+            if (keyEvent.GetKeyCode() == Key::I) {
+                showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
+            }
 
+            //Gameobject changing state
+            switch (keyEvent.GetKeyCode()) {
+                //GameObj go LEFT
+            case Key::A:
+                player.SetState(STATE_GOING_LEFT);
+                break;
+            case Key::D:
+                player.SetState(STATE_GOING_RIGHT);
+                break;
+            case Key::W:
+                player.SetState(STATE_GOING_UP);
+                break;
+            case Key::S:
+                player.SetState(STATE_GOING_DOWN);
+                break;
+            default:
+                player.SetState(STATE_NONE);
+                break;
+            }
+        }
+        else if (e.GetEventType() == EventType::KeyReleased) {
+            KeyReleasedEvent& keyEvent = dynamic_cast<KeyReleasedEvent&>(e);
+            // Reset the velocity when the 'D' key is released
+            switch (keyEvent.GetKeyCode()) {
+                //GameObj go LEFT
+            case Key::A:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::D:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::W:
+                player.SetState(STATE_NONE);
+                break;
+            case Key::S:
+                player.SetState(STATE_NONE);
+                break;
+          
+            }
+        }
+    }
+
+    void Application::Run() {
+        bool PlayerStop = false;
+        AABB aabb;
+        DeltaTime time;
+
+        while (m_Running) {
+            glClearColor(1, 0, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            //object
+            switch (player.getState()) {
+            case STATE_GOING_LEFT:
+                player.SetVelocityX(-PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_RIGHT:
+                player.SetVelocityX(PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_DOWN:
+                player.SetVelocityY(PLAYER_VELOCITY);
+                break;
+            case STATE_GOING_UP:
+                player.SetVelocityY(-PLAYER_VELOCITY);
+                break;
+            case STATE_NONE:
+                    player.SetVelocityX(0);
+                    player.SetVelocityY(0);
+                break;
+            }
+
+            
+                time.Update(); // Call this at the beginning of each frame
+
+                float dt = time.GetDeltaTime(); // Get delta time in seconds
+
+       
+           
+
+        
+            //NEED MULTIPLY BY DELTA TIME
+            player.SetPositionX(player.getVelocityX() * dt + player.getX());
+            player.SetPositionY(player.getVelocityY() * dt + player.getY());
+
+           /* pInst->boundingBox.min.x = -BOUNDING_RECT_SIZE * pInst->scale.x + pInst->posCurr.x;
+            pInst->boundingBox.min.y = -BOUNDING_RECT_SIZE * pInst->scale.y + pInst->posCurr.y;
+
+            pInst->boundingBox.max.x = BOUNDING_RECT_SIZE * pInst->scale.x + pInst->posCurr.x;
+            pInst->boundingBox.max.y = BOUNDING_RECT_SIZE * pInst->scale.y + pInst->posCurr.y;*/
+
+            ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+            /////                                                                                                                /////
+
+            RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
+            RenderCommand::Clear();
+
+            // Would be used for cameras
+            Renderer::BeginScene();
 
 				
 				////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
@@ -133,7 +270,68 @@ namespace Duck {
 				m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
 
 
-				Renderer::EndScene();
+            //glm::vec3 Line2Pos{ 0.0f,0.0f,0.0f };
+            //float Line2Angle{ 0.0f };
+            //glm::vec3 Line2Scale{ 1.0f, 1.0f, 1.0f };
+            //m_LineTransform = glm::translate(glm::mat4(1.0), Line2Pos);
+            //m_LineTransform = glm::rotate(m_LineTransform, glm::radians(Line2Angle), glm::vec3(0, 0, 1));
+            //m_LineTransform = glm::scale(m_LineTransform, Line2Scale);
+            //Renderer::Submit(m_LineVA, m_LineShader, m_LineTransform);
+            //
+            //glm::vec3 PointPos{ 0.0f,0.0f,0.0f };
+            //m_PointTransform = glm::translate(glm::mat4(1.0), PointPos);
+            //Renderer::Submit(m_PointVA, m_PointShader, m_PointTransform);
+
+            //glm::vec3 SquareImgPos{ -0.5f,-0.5f,0.0f };
+            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareImgPos);
+            //Renderer::Submit(m_SquareImgVA, m_SquareImgShader, m_SquareImgTransform, m_Texture);
+
+            //glm::vec3 SquareSprPos{ 0.5f,-0.5f,0.0f };
+            //m_SquareImgTransform = glm::translate(glm::mat4(1.0), SquareSprPos);
+            //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, m_SquareSprTransform, m_Texture);
+            MathLib::Vector2D obj2(5.0, 5.0);
+            AABB windowAABB = aabb.ConvertToAABB(0, 0, 10 * 1, 10 * 1);
+            AABB playerAABB = aabb.ConvertToAABB(player.getX(), player.getY(), 0.9f, 0.9f);
+            AABB player2AABB = aabb.ConvertToAABB(obj2.x, obj2.y, 1.f, 1.f);
+            
+            
+            std::cout << playerAABB.maxVec.x << " " << player2AABB.maxVec.x << std::endl;
+                if (phy.CollisionIntersection_RectRect(playerAABB, { player.getVelocityX(), player.getVelocityY() }, player2AABB, { 0,0 })) {
+                
+                        //std::cout << "collides at the right" << std::endl;
+                        player.SetPositionX(map.SnapToCellX(1.f, player.getX()));
+                        player.SetPositionY(map.SnapToCellY(1.f, player.getY()));
+                        player.SetVelocityX(0);
+    
+                
+                }
+
+                if (phy.IsOutOfBounds(windowAABB, playerAABB))
+                {
+                    player.SetPositionX(map.SnapToCellX(1.f, player.getX())); // Adjust as needed
+                    player.SetPositionY(map.SnapToCellY(1.f, player.getY()));
+                    player.SetVelocityX(0);
+                    player.SetVelocityY(0);
+
+                }
+        
+
+
+            DrawBackground(WINDOW_COL, WINDOW_ROW, m_SquareImgVA, m_BackgroundImgShader, m_BackgroundTexture);
+           // std::cout << player.getX() << " " << map.SnapToCellX(1.f, player.getX()) << std::endl;
+
+            DrawSquareObject(map.SnapToCellX(1.f,player.getX()), map.SnapToCellX(1.f,player.getY()), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+           // DrawSquareObject(player.getX(), player.getY(), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            DrawSquareObject(5, 5, m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+
+           
+            //(player.getX(), player.getY(), m_SquareImgVA, m_SquareImgShader, m_CharacterTexture);
+            DrawGrid(WINDOW_COL, WINDOW_ROW, m_LineVA, m_LineShader);
+          /*  MathLib::Vector2D window(WINDOW_WIDTH, WINDOW_HEIGHT);
+            MathLib::Vector2D player(player.getX(), player.getY());*/
+            
+         
+
 
 
 				Debug::GetInstance()->EndSystemProfile("Graphics");

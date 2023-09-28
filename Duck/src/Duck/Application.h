@@ -17,6 +17,13 @@
 #include "Duck/Graphics/Graphics.h"
 #include "Audio/Audio.h"
 
+#include "Duck/Graphics/Shader.h"
+#include "Duck/Graphics/Buffer.h"
+#include "Duck/Graphics/Vertex.h"
+#include "Duck/Graphics/Renderer.h"
+
+
+
 namespace Duck {
 	class Graphics;
 	class SoundInfo;

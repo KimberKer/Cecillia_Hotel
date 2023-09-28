@@ -132,11 +132,6 @@ void MapDataHandler::FreeMapData(void)
 }
 
 
-void MapDataHandler::SnapToCell(float* Coordinate)
-{
-	*Coordinate = static_cast<int>(*Coordinate) + 0.5f;
-}
-
 int MapDataHandler::GetCellValue(int X, int Y)
 {
 	/*UNREFERENCED_PARAMETER(X);
@@ -147,6 +142,16 @@ int MapDataHandler::GetCellValue(int X, int Y)
 	else {
 		return CollisionData[Y][X];
 	}
+}
+int MapDataHandler::SnapToCellX(float cellSize, float x) {
+	// Calculate the new x and y positions based on the cell size
+	x = static_cast<int>(std::round(x / cellSize));
+	return x;
+}
+float MapDataHandler::SnapToCellY(float cellSize, float y) {
+	// Calculate the new x and y positions based on the cell size
+	y = std::round((y / cellSize));
+	return y;
 }
 
 int MapDataHandler::CheckInstanceBinaryMapCollision(float PosX, float PosY,
