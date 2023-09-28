@@ -5,22 +5,35 @@
 #include "Time.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include "Duck/stb_image.h"
+
+// Headers for memory leak detection
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>
 
 #include "Input.h"
+#include <fstream>
+#include <exception>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
+#include <Windows.h>
+#include "Application.h"
+#include "Physics/PhysicsManager.h"
+//#include "Audio/Audio.h"
+#include "Debug.h"
+#include "CoreManager.h"
 
 GameObject player;
 bool loadFiles = false;
 bool showImGuiWindow = false;
 
-// Function to handle errors
-void error_callback(int error, const char* description) {
-    std::cerr << "Error: " << description << std::endl;
-}
 
 namespace Duck {
-      Application* Application::s_Instance = nullptr;
-
+    Application* Application::s_Instance = nullptr;
+    CoreManager* coreManager = CoreManager::GetInstance();
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 
@@ -31,32 +44,26 @@ namespace Duck {
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-        m_ImGuiLayer = new ImGuiLayer();
-        PushOverlay(m_ImGuiLayer);
+        
+        m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 
-        //// Initialize GLFW
-        //if (!glfwInit()) {
-        //    std::cerr << "Failed to initialize GLFW" << std::endl;
-        //    return;
-        //}
+        m_Graphics->SetGridSize(10);
 
-        //// Set the GLFW error callback
-        //glfwSetErrorCallback(error_callback);
 
-        //// Create a GLFW window and OpenGL context
-        //window = glfwCreateWindow(800, 800, "Cecillia's Hotel", NULL, NULL);
-        //if (!window) { 
-        //    std::cerr << "Failed to create GLFW window" << std::endl;
-        //    glfwTerminate();
-        //    return;
-        //}
+        m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+        m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 
-        //// Make the window's context current
-        //glfwMakeContextCurrent(window);
-	}
 
-	Application::~Application() {
 
+        //TESTING AUDIO
+        m_Audio = std::shared_ptr<Audio>(new Audio);
+        std::cout << "Create SoundInfo\n";
+        m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
+        m_Audio->init();
+        std::cout << "Load sound\n";
+        m_Audio->loadSound(m_SoundInfo);
+
+        coreManager->Init(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 	}
 
     void Application::PushLayer(Layer* layer) {
@@ -67,6 +74,10 @@ namespace Duck {
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
         layer->OnAttach();
+    }
+
+    Application::~Application() {
+        coreManager->DestroyInstance();
     }
 
     void Application::OnEvent(Event& e) {
@@ -90,6 +101,41 @@ namespace Duck {
         }
     }
 
+    void Application::Run() {
+        // Enable memory leak detection
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+        Time runtime;
+
+        try {
+            while (m_Running) {
+                runtime.update();
+                m_Audio->update();
+              
+                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+                /////                                                                                                                /////
+                Debug::GetInstance()->BeginSystemProfile("Graphics");
+                // Would be used for cameras
+                Renderer::BeginScene();
+
+                m_Graphics->DrawBackground(m_BackgroundTexture);
+                m_Graphics->ShowGrid();
+
+                m_Graphics->DrawSquareObject(1.0f, 1.0f, 2.0f, 45.0f, m_CharacterTexture, true);
+                m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
+                m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
+
+
+                Renderer::EndScene();                
+           
+           
+                Debug::GetInstance()->EndSystemProfile("Graphics");
+                /////                                                                                                                /////
+                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
+
+                for (Layer* layer : m_LayerStack) {
+                    layer->OnUpdate();
+                }
 	void Application::Run() {
         while (m_Running) {
             glClearColor(1, 0, 1, 1);
@@ -102,7 +148,7 @@ namespace Duck {
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate();
             }
-
+/////                                                                                                                /////
           
             m_ImGuiLayer->Begin();
             if (showImGuiWindow) {
@@ -114,38 +160,72 @@ namespace Duck {
             
             m_Window->OnUpdate();
         }
+                m_Window->OnUpdate();
+                //// Log Mouse Position to Console
+                //auto [x, y] = Input::GetMousePosition();
+                //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
-        // Loop until the user closes the window
-        //while (!glfwWindowShouldClose(window)) {
-        //    // Render here (you can put your OpenGL drawing code here)
-        //    Time run_time;
-        //    double delta_time = run_time.get_elapsed_time();
-        //    //std::cout << "Elapsed Time: " << delta_time << std::endl;
+                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+                
+                // Testing of variable watch
+                std::string deltatime = std::to_string(runtime.getDeltaTime());              
+                Debug::GetInstance()->WatchVariable("DT", deltatime);
+            //auto [x, y] = Input::GetMousePosition();
+            //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
-        //    // Swap front and back buffers
-        //    glfwSwapBuffers(window);
 
-        //    // Poll for and process events
-        //    glfwPollEvents();
+            m_Window->OnUpdate();
+        }
 
-        //    // Load Game Objects
-        //    if (!loadFiles) {
-        //        // Load player data
-        //        player.loadPlayerData();
-        //        loadFiles = true; // Set the flag to true to indicate data has been loaded
+                Debug::GetInstance()->BeginSystemProfile("Audio");
+                //KRISTY - testing audio manager
+                m_Audio->playSound(m_SoundInfo);
+                Debug::GetInstance()->EndSystemProfile("Audio");
 
-        //        consoleLogger.Log("All Game Object Loaded!", LogLevel::INFO);
-        //        fileLogger.Log("All Game Object Loaded!", LogLevel::DEBUG);
-        //    }
-        //}
+                coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 
-        //// Terminate GLFW
-        //glfwTerminate();
+                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+
+            }
+        }
+        catch (const std::exception& e)
+        {
+            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+            
+            // Define the directory for crash logs
+            const char* crashLogsDir = "CrashLogs/";
+
+            // Generate the filename based on current timestamp
+            struct tm newtime;
+            time_t now = time(0);
+            localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
+            std::ostringstream oss;
+            oss << std::put_time(&newtime, "/Crashlog [%d-%m-%Y].txt");   // format the date and time for the crashlog filename
+            std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
+
+            // Write the exception message to crash log
+            std::ofstream crashLog(crashLogFileName, std::ios::out);
+            crashLog << "Crash with message: " << e.what() << std::endl;
+            crashLog.close();
+
+            // Re-throw the exception to allow for external handling or just terminate the program
+            throw;
+
+            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+        }
+    }
+            }
+
+
+
 
 	}
 
+
     bool Application::OnWindowClose(WindowCloseEvent& e) {
+
         m_Running = false;
         return true;
+
     }
 }

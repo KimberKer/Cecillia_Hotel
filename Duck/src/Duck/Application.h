@@ -8,14 +8,21 @@
 #include "Window.h"
 #include "Duck/LayerStack.h"
 #include "Duck/Events/ApplicationEvent.h"
-#include "Duck/ImGui/ImGuiLayer.h"
+#include "Duck/Graphics/Shader.h"
+#include "Duck/Graphics/Buffer.h"
+#include "Duck/Graphics/Vertex.h"
+#include "Duck/Graphics/Renderer.h"
+#include "Duck/Graphics/Graphics.h"
+#include "Audio/Audio.h"
 
 namespace Duck {
-	class  Application {
+	class Graphics;
+	class SoundInfo;
+	class Audio;
+	class DUCK_API Application {
 	public:
 		Application();
 		virtual ~Application();
-
 		void Run();
 
 		void OnEvent(Event& e);
@@ -36,12 +43,28 @@ namespace Duck {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
+		std::shared_ptr<SoundInfo> m_SoundInfo;
+		std::shared_ptr<Audio> m_Audio;
+
+		std::unique_ptr<Graphics> m_Graphics;
+
+		uint32_t m_CharacterTexture;
+		uint32_t m_BackgroundTexture;
+
+
 	private:
 		static Application* s_Instance;
 	};
+
+
+
+
+
 
 	// To be defined in CLIENT
 	Application* CreateApplication();
 }
 
+
  //GLFWwindow* window;
+ 

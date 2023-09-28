@@ -23,7 +23,7 @@ namespace Duck {
 
 
 		MathLib::Vector2D tFirst{ 0, 0 };
-		MathLib::Vector2D tLast{ static_cast<float>(time.get_delta_time()), static_cast<float>(time.get_delta_time())};
+		MathLib::Vector2D tLast{ static_cast<float>(time.getDeltaTime()), static_cast<float>(time.getDeltaTime())};
 
 		// Initialize and calculate the new velocity of Vb
 
