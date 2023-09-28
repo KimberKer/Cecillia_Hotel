@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// file:	Physics.cpp
+// authors:	muhammad zikry bin zakaria
+// email:	muhammadzikry.b\@digipen.edu
+//
+// brief:	Contains functions for implementing in-game physics for game levels.
+//
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Physics.h"
 

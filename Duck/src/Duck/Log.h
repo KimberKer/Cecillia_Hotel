@@ -21,6 +21,7 @@ namespace Duck {
 	private:
 		// Static instances of the core and client loggers
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
+
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
 }

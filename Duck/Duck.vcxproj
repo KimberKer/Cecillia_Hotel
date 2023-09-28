@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\inc;vendor\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -70,13 +70,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Debug-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Duck\Duck.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)
-IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll" "..\bin\Debug-windows-x86_64\Duck" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll" "..\bin\Debug-windows-x86_64\Duck" &gt; nul)</Command>
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,7 +86,7 @@ IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll"\ (xcopy /Q /E /Y /I "$(
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\inc;vendor\rapidjson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui\include;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -99,21 +100,24 @@ IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmodL.dll"\ (xcopy /Q /E /Y /I "$(
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\FMOD\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;fmodL_vc.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Duck\Duck.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Release-windows-x86_64\Duck\Duck.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Duck\Duck.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
-IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll" "..\bin\Release-windows-x86_64\Duck" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll" "..\bin\Release-windows-x86_64\Duck" &gt; nul)</Command>
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
-    <ClInclude Include="src\Duck\Audio\AudioManager.h" />
+    <ClInclude Include="src\Duck\Audio\Audio.h" />
     <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
+    <ClInclude Include="src\Duck\CoreManager.h" />
+    <ClInclude Include="src\Duck\De-serialize\GameObject.h" />
     <ClInclude Include="src\Duck\Debug.h" />
     <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
@@ -127,11 +131,11 @@ IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll"\ (xcopy /Q /E /Y /I "$(S
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
     <ClInclude Include="src\Duck\Input.h" />
-    <ClInclude Include="src\Duck\Json.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
     <ClInclude Include="src\Duck\Layer.h" />
     <ClInclude Include="src\Duck\LayerStack.h" />
     <ClInclude Include="src\Duck\Log.h" />
+    <ClInclude Include="src\Duck\Logging\Logging.h" />
     <ClInclude Include="src\Duck\Map\Map.h" />
     <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Math\Vector2D.h" />
@@ -564,17 +568,19 @@ IF EXIST "$(SolutionDir)\Duck\vendor\FMOD\lib\fmod.dll"\ (xcopy /Q /E /Y /I "$(S
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
-    <ClCompile Include="src\Duck\Audio\AudioManager.cpp" />
+    <ClCompile Include="src\Duck\Audio\Audio.cpp" />
+    <ClCompile Include="src\Duck\CoreManager.cpp" />
+    <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
     <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
-    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />
+    <ClCompile Include="src\Duck\Logging\Logging.cpp" />
     <ClCompile Include="src\Duck\Map\Map.cpp" />
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />

@@ -44,13 +44,6 @@ namespace MathLib
 		return *this;
 	}
 
-
-
-	/*----------------------------------------------------------
-	*
-	* assignment operators
-	*
-	----------------------------------------------------------*/
 	Matrix3x3& Matrix3x3::operator *= (const Matrix3x3& rhs)
 	{
 		float _m00, _m01, _m02, _m10, _m11, _m12, _m20, _m21, _m22;
@@ -91,12 +84,6 @@ namespace MathLib
 		return result;
 	}
 
-	/**************************************************************************/
-	/*!
-		This operator multiplies the matrix pMtx with the vector rhs
-		and returns the result as a vector
-	 */
-	 /**************************************************************************/
 	Vector2D  operator * (const Matrix3x3& pMtx, const Vector2D& rhs)
 	{
 		Vector2D result;
@@ -107,11 +94,6 @@ namespace MathLib
 		return result;
 	}
 
-	/**************************************************************************/
-	/*!
-		This function sets the matrix pResult to the identity matrix
-	 */
-	 /**************************************************************************/
 	void Mtx33Identity(Matrix3x3& pResult)
 	{
 		pResult.m00 = 1;
@@ -127,12 +109,6 @@ namespace MathLib
 		pResult.m22 = 1;
 	}
 
-	/**************************************************************************/
-	/*!
-		This function creates a translation matrix from x & y
-		and saves it in pResult
-	 */
-	 /**************************************************************************/
 	void Mtx33Translate(Matrix3x3& pResult, float x, float y)
 	{
 		Mtx33Identity(pResult);
@@ -141,12 +117,6 @@ namespace MathLib
 		pResult.m12 = y;
 	}
 
-	/**************************************************************************/
-	/*!
-		This function creates a scaling matrix from x & y
-		and saves it in pResult
-	 */
-	 /**************************************************************************/
 	void Mtx33Scale(Matrix3x3& pResult, float x, float y)
 	{
 		Mtx33Identity(pResult);
@@ -155,12 +125,6 @@ namespace MathLib
 		pResult.m11 = y;
 	}
 
-	/**************************************************************************/
-	/*!
-		This matrix creates a rotation matrix from "angle" whose value
-		is in radian. Save the resultant matrix in pResult.
-	 */
-	 /**************************************************************************/
 	void Mtx33RotRad(Matrix3x3& pResult, float angle)
 	{
 		Mtx33Identity(pResult);
@@ -172,12 +136,6 @@ namespace MathLib
 		pResult.m11 = cosf(angle);
 	}
 
-	/**************************************************************************/
-	/*!
-		This matrix creates a rotation matrix from "angle" whose value
-		is in degree. Save the resultant matrix in pResult.
-	 */
-	 /**************************************************************************/
 	void Mtx33RotDeg(Matrix3x3& pResult, float angle)
 	{
 		Mtx33Identity(pResult);
@@ -188,12 +146,6 @@ namespace MathLib
 		pResult.m11 = cosf(angle * PI / 180);
 	}
 
-	/**************************************************************************/
-	/*!
-		This functions calculated the transpose matrix of pMtx
-		and saves it in pResult
-	 */
-	 /**************************************************************************/
 	void Mtx33Transpose(Matrix3x3& pResult, const Matrix3x3& pMtx)
 	{
 		pResult.m00 = pMtx.m00;
@@ -209,13 +161,6 @@ namespace MathLib
 		pResult.m22 = pMtx.m22;
 	}
 
-	/**************************************************************************/
-	/*!
-		This function calculates the inverse matrix of pMtx and saves the
-		result in pResult. If the matrix inversion fails, pResult
-		would be set to NULL.
-	*/
-	/**************************************************************************/
 	void Mtx33Inverse(Matrix3x3* pResult, float* determinant, const Matrix3x3& pMtx)
 	{
 		// Calculate the determinant of the matrix
@@ -257,5 +202,7 @@ namespace MathLib
 			pResult->m21 /= *determinant;
 			pResult->m22 /= *determinant;
 		}
+
 	}
-} //end namespace MathLib
+
+}

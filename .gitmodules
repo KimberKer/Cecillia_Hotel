@@ -7,6 +7,3 @@
 [submodule "Duck/vendor/glm"]
 	path = Duck/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "Duck/Vendor/rapidjson"]
-	path = Duck/Vendor/rapidjson
-	url = https://github.com/Tencent/rapidjson
