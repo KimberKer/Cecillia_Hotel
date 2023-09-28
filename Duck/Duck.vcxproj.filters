@@ -66,13 +66,16 @@
     <ClInclude Include="src\Duck\Application.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Audio\AudioManager.h">
+    <ClInclude Include="src\Duck\Audio\Audio.h">
       <Filter>src\Duck\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Components.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Core.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\CoreManager.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\De-serialize\GameObject.h">
@@ -1424,8 +1427,11 @@
     <ClCompile Include="src\Duck\Application.cpp">
       <Filter>src\Duck</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Audio\AudioManager.cpp">
+    <ClCompile Include="src\Duck\Audio\Audio.cpp">
       <Filter>src\Duck\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\CoreManager.cpp">
+      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp">
       <Filter>src\Duck\De-serialize</Filter>
