@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -70,8 +70,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -79,7 +84,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -95,15 +100,23 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;fmodL_vc.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
+    <ClInclude Include="src\Duck\Audio\Audio.h" />
     <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
+    <ClInclude Include="src\Duck\CoreManager.h" />
     <ClInclude Include="src\Duck\De-serialize\GameObject.h" />
+    <ClInclude Include="src\Duck\Debug.h" />
     <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
     <ClInclude Include="src\Duck\Events\ApplicationEvent.h" />
@@ -111,6 +124,7 @@
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
     <ClInclude Include="src\Duck\Graphics\Buffer.h" />
+    <ClInclude Include="src\Duck\Graphics\Graphics.h" />
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
@@ -125,12 +139,15 @@
     <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Math\Vector2D.h" />
     <ClInclude Include="src\Duck\MouseCodes.h" />
+    <ClInclude Include="src\Duck\Physics\Physics.h" />
+    <ClInclude Include="src\Duck\Physics\PhysicsManager.h" />
     <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
     <ClInclude Include="src\Duck\Time.h" />
     <ClInclude Include="src\Duck\Window.h" />
+    <ClInclude Include="src\Duck\stb_image.h" />
     <ClInclude Include="src\duckpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -551,8 +568,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\Audio\Audio.cpp" />
+    <ClCompile Include="src\Duck\CoreManager.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
+    <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
@@ -565,10 +586,13 @@
     <ClCompile Include="src\Duck\Map\Map.cpp" />
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
+    <ClCompile Include="src\Duck\Physics\Physics.cpp" />
+    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
+    <ClCompile Include="src\Duck\Time.cpp" />
     <ClCompile Include="src\duckpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

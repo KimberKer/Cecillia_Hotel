@@ -15,18 +15,7 @@ public:
 		}
 	}
 
-	void OnImGuiRender() override
-	{
-		Duck::Time time;
 
-		time.start_frame();
-		time.end_frame();
-		double dt = time.get_delta_time();
-		ImGui::Begin("FrameRate");
-		ImGui::Text("FPS: %d", 1.0f/dt);
-		ImGui::End();
-
-	}
 
 	void OnEvent(Duck::Event& event) override {
 		//DUCK_TRACE("{0}", event);

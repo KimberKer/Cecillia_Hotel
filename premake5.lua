@@ -58,7 +58,7 @@ project "Duck"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.FMODcore}",
 		"%{IncludeDir.FMODstudio}"
     }
