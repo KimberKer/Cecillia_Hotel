@@ -64,15 +64,8 @@ namespace Duck {
         std::cout << "Load sound\n";
         m_Audio->loadSound(m_SoundInfo);
 
-
-	}
-
-	Application::~Application() {
-
         coreManager->Init(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
-
-        ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-    }
+	}
 
     void Application::PushLayer(Layer* layer) {
         m_LayerStack.PushLayer(layer);
@@ -80,6 +73,10 @@ namespace Duck {
 
     void Application::PushOverlay(Layer* layer) {
         m_LayerStack.PushOverlay(layer);
+    }
+
+    Application::~Application() {
+        coreManager->DestroyInstance();
     }
 
     void Application::OnEvent(Event& e) {
@@ -100,7 +97,6 @@ namespace Duck {
         // Enable memory leak detection
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-        double lastFrameTime = glfwGetTime();
         Time runtime;
 
         try {
@@ -139,11 +135,13 @@ namespace Duck {
                 //DUCK_CORE_TRACE("{0}, {1}", x, y);
 
                 ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+                
+                // Testing of variable watch
+                std::string deltatime = std::to_string(runtime.getDeltaTime());              
+                Debug::GetInstance()->WatchVariable("DT", deltatime);
 
                 Debug::GetInstance()->BeginSystemProfile("Audio");
                 //KRISTY - testing audio manager
-                //testAudio()
-                std::cout << "Play sound\n";
                 m_Audio->playSound(m_SoundInfo);
                 Debug::GetInstance()->EndSystemProfile("Audio");
 
@@ -171,7 +169,7 @@ namespace Duck {
             time_t now = time(0);
             localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
             std::ostringstream oss;
-            oss << std::put_time(&newtime, "/CrashLog %d-%m-%Y.txt");   // format the date and time for the crashlog filename
+            oss << std::put_time(&newtime, "/Crashlog [%d-%m-%Y].txt");   // format the date and time for the crashlog filename
             std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
 
             // Write the exception message to crash log

@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// file:	Debug.cpp
+// authors:	muhammad zikry bin zakaria
+// email:	muhammadzikry.b\@digipen.edu
+//
+// brief:	Contains the implementation of the Debug class for handling debugging and profiling in the console
+//
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 
 #include "Debug.h"
@@ -11,6 +22,12 @@ namespace Duck {
     // This flag is to check whether the user has been informed about the debug commands
     bool isPromptDisplayed = false;
 
+    // Explicit template instantiation for the WatchVariable function
+    template void Debug::WatchVariable<int>(const std::string& name, const int& value);
+    template void Debug::WatchVariable<float>(const std::string& name, const float& value);
+    template void Debug::WatchVariable<double>(const std::string& name, const double& value);
+    template void Debug::WatchVariable<std::string>(const std::string& name, const std::string& value);
+
     // Static instance initialization
     Debug* Debug::debugInstance = nullptr;
 
@@ -19,6 +36,8 @@ namespace Duck {
 
     // Destructor
     Debug::~Debug() {}
+
+   
 
     // Singleton pattern's method to get or create the instance
     Debug* Debug::GetInstance()
@@ -73,6 +92,15 @@ namespace Duck {
         }
     }
 
+    // Watch a variable and store its value 
+    template <typename T>
+    void Debug::WatchVariable(const std::string& name, const T& variable)
+    {
+        std::stringstream ss;
+        ss << variable;
+        watchedVariables[name] = ss.str();
+    }
+
     // Toggle FPS debug state
     void Debug::ToggleFPSDebug()
     {
@@ -125,6 +153,7 @@ namespace Duck {
         }
     }
 
+    // Toggle key state debug state
     void Debug::ToggleKeyStateDebug() 
     {
         if (!(debugState & DEBUG_KEY_ACTIVE)) 
@@ -134,6 +163,19 @@ namespace Duck {
         else {
             debugState &= ~DEBUG_KEY_ACTIVE;
         }
+    }
+
+    // Toggle variable debug state
+    void Debug::ToggleVariableDebug()
+    {
+		if (!(debugState & DEBUG_VARIABLE_ACTIVE))
+		{
+			debugState |= DEBUG_VARIABLE_ACTIVE;
+		}
+		else
+		{
+			debugState &= ~DEBUG_VARIABLE_ACTIVE;
+		}
     }
 
     // Handle debug input based on key presses
@@ -174,6 +216,11 @@ namespace Duck {
 				debugInstance->ToggleKeyStateDebug();
 				std::cout << "Key State Debug: " << (debugInstance->debugState & DEBUG_KEY_ACTIVE ? "On" : "Off") << std::endl;
 			}
+            else if (key == GLFW_KEY_F6)   // F6 key for variable debug
+			{
+				debugInstance->ToggleVariableDebug();
+				std::cout << "Variable Debug: " << (debugInstance->debugState & DEBUG_VARIABLE_ACTIVE ? "On" : "Off") << std::endl;
+			}
         }
     }
 
@@ -200,6 +247,7 @@ namespace Duck {
             std::cout << "Press F3 to debug Mouse position" << std::endl;
             std::cout << "Press F4 to debug Physics" << std::endl;
             std::cout << "Press F5 to debug key state" << std::endl;
+            std::cout << "Press F6 to debug variable" << std::endl;
             std::cout << "Press ` clear console" << std::endl << std::endl;
             isPromptDisplayed = true;
         }
@@ -242,14 +290,15 @@ namespace Duck {
                     std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
                 }
             }
-
-            //Key state debug info
-            if (debugState & DEBUG_KEY_ACTIVE) {
-                std::cout << "W Key State: " << (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
-                std::cout << "A Key State: " << (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
-                std::cout << "S Key State: " << (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
-                std::cout << "D Key State: " << (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ? "Pressed" : "Not Pressed") << std::endl;
-            }
+            
+            // Variable debug info
+            if (debugState & DEBUG_VARIABLE_ACTIVE)
+			{
+				for (const auto& pair : watchedVariables)
+				{
+					std::cout << pair.first << ": " << pair.second << std::endl;
+				}
+			}
 
             // Flush the output buffer to ensure all debug messages are shown
             std::cout << std::flush;
@@ -257,6 +306,27 @@ namespace Duck {
             // Reset counters
             frameCount = 0;
             accumulateTime = 0.0;
+        }
+
+        //Key state debug info
+        if (debugState & DEBUG_KEY_ACTIVE)
+        {
+            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // W key pressed
+            {
+                std::cout << "W Pressed" << std::endl;
+            }
+            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // A key pressed
+            {
+                std::cout << "A Pressed" << std::endl;
+            }
+            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // S key pressed
+            {
+                std::cout << "S Pressed" << std::endl;
+            }
+            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // D key pressed
+            {
+                std::cout << "D Pressed" << std::endl;
+            }
         }
     }
 }

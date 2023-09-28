@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:      CoreManager.cpp
+// authors:	muhammad zikry bin zakaria
+// email:	muhammadzikry.b\@digipen.edu
+//
+// Brief:     Contains the implementation of the CoreManager class for managing core game systems
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "CoreManager.h"
 
@@ -17,6 +27,11 @@ namespace Duck {
     CoreManager* CoreManager::GetInstance() {
         if (!instance) {
             instance = new CoreManager();
+            if (!instance)
+            {
+                // Error handling if memory allocation fails.
+                throw std::runtime_error(std::string("Error in file ") + __FILE__ + " on line " + std::to_string(__LINE__));
+            }
         }
         return instance;
     }
@@ -32,7 +47,7 @@ namespace Duck {
         physicsManager->InitializeTestObjects();
     }
 
-    void CoreManager::Update(double deltaTime, GLFWwindow* window) {\
+    void CoreManager::Update(double deltaTime, GLFWwindow* window) {
         debugger->BeginSystemProfile("Debug");
         debugger->Update(deltaTime, window);
         debugger->EndSystemProfile("Debug");
@@ -41,5 +56,6 @@ namespace Duck {
         debugger->BeginSystemProfile("Physics");
         physicsManager->UpdateALL(deltaTime);
         debugger->EndSystemProfile("Physics");
+
     }
 }

@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// file:	Debug.h
+// authors:	muhammad zikry bin zakaria
+// email:	muhammadzikry.b\@digipen.edu
+//
+// brief:	Contains the declaration of the Debug class for handling debugging and profiling in console.
+//
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include <GLFW/glfw3.h>
 #include <string>
@@ -28,6 +39,10 @@ namespace Duck {
 		// Get the duration of the system's profiling
 		double GetSystemDuration(const std::string& systemName);
 
+		// Variable watching
+		template <typename T>
+		void WatchVariable(const std::string& name, const T& variable);
+
 	private:
 		int frameCount;
 		double accumulateTime;
@@ -35,6 +50,9 @@ namespace Duck {
 		// Variables for system profiling
 		std::map<std::string, double> systemProfileStartTime;
 		std::map<std::string, double> systemProfileDuration;
+
+		// Variable watching
+		std::map<std::string, std::string> watchedVariables;
 
 		int debugState = DEBUG_NONE;
 
@@ -46,7 +64,8 @@ namespace Duck {
 			DEBUG_SYS_ACTIVE = 1 << 1,
 			DEBUG_MOUSE_ACTIVE = 1 << 2,
 			DEBUG_PHYSICS_ACTIVE = 1 << 3,
-			DEBUG_KEY_ACTIVE = 1 << 4	
+			DEBUG_KEY_ACTIVE = 1 << 4,
+			DEBUG_VARIABLE_ACTIVE = 1 << 5
 		};
 
 		// Toggle the FPS debug state on/off
@@ -63,6 +82,9 @@ namespace Duck {
 
 		// Toggle key state debug info on/off
 		void ToggleKeyStateDebug();
+
+		// Toggle variable debug info on/off
+		void ToggleVariableDebug();
 
 		// Static instance to access the non-static members from the static function
 		static Debug* debugInstance;

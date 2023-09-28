@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:      CoreManager.cpp
+// authors:	muhammad zikry bin zakaria
+// email:	muhammadzikry.b\@digipen.edu
+//
+// Brief:     Contains the declaration of the CoreManager class for managing core game systems
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 
 #include "Debug.h"
