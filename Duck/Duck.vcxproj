@@ -111,6 +111,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h" />
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Audio\Audio.h" />
@@ -131,6 +132,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
     <ClInclude Include="src\Duck\Input.h" />
+    <ClInclude Include="src\Duck\Json.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
     <ClInclude Include="src\Duck\Layer.h" />
     <ClInclude Include="src\Duck\LayerStack.h" />
@@ -567,6 +569,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\Audio\Audio.cpp" />
     <ClCompile Include="src\Duck\CoreManager.cpp" />
@@ -577,6 +580,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
+    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />

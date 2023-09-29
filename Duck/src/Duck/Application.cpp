@@ -3,6 +3,8 @@
 #include "Events/ApplicationEvent.h"
 #include "Duck//Log.h"
 #include "Time.h"
+#include "Json.h"
+#include "../Player.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,9 +28,6 @@
 #include "CoreManager.h"
 
 
-GameObject player;
-bool loadFiles = false;
-
 
 namespace Duck {
     Application* Application::s_Instance = nullptr;
@@ -44,7 +43,6 @@ namespace Duck {
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-        
         m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 
         m_Graphics->SetGridSize(10);
@@ -52,9 +50,7 @@ namespace Duck {
 
         m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
         m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
-
-
-
+        
         //TESTING AUDIO
         m_Audio = std::shared_ptr<Audio>(new Audio);
         m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
@@ -97,6 +93,8 @@ namespace Duck {
         Time runtime;
 
         try {
+            Player player; // Create an instance of the Player class
+
             while (m_Running) {
                 runtime.update();
                 m_Audio->update();
@@ -110,9 +108,18 @@ namespace Duck {
                 m_Graphics->DrawBackground(m_BackgroundTexture);
                 m_Graphics->ShowGrid();
 
-                m_Graphics->DrawSquareObject(1.0f, 1.0f, 2.0f, 45.0f, m_CharacterTexture, true);
-                m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
-                m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
+                // Call LoadPlayerData to get the player's position data
+                std::vector<float> playerData = player.LoadPlayerData();
+
+                // Check if there's enough data in playerData
+                if (playerData.size() >= 2) {
+                    float playerXPosition = playerData[0];
+                    float playerYPosition = playerData[1];
+                    m_Graphics->DrawSquareObject(playerXPosition, playerYPosition, 1.0f, 0.0f, m_CharacterTexture, true);
+                }
+
+               // m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
+                //m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
 
 
                 Renderer::EndScene();                
