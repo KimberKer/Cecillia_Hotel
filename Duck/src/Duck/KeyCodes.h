@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    KeyCodes.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations related to key codes
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include <stdint.h>
 

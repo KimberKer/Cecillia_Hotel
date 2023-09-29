@@ -4,7 +4,7 @@
 // email:	s.ker\@digipen.edu
 // 
 //
-// Brief:     Contains the implementation for program logging
+// Brief:     Contains the definitions related to logging
 //
 // Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------

@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    WindowsInput.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the decalrations for windows input
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Duck/Input.h"
 

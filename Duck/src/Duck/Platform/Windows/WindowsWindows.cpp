@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    WindowsWindows.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementation for Windows windows
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Duck/Platform/Windows/WindowsWindows.h"
 //#include "Duck/Logging/Logging.h"
