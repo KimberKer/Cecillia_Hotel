@@ -43,7 +43,7 @@ const unsigned int	COLLISION_BOTTOM = 0x00000008;	//1000
 float const         WINDOW_COL = 10;
 float const         WINDOW_ROW = 10;
 
-const float         PLAYER_VELOCITY = 5.f;
+const float         PLAYER_VELOCITY = 0.1f;
 
 bool                loadFiles = false;
 bool                showImGuiWindow = false;
@@ -76,8 +76,12 @@ namespace Duck {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 
 		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
+		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 
         //TESTING AUDIO
         m_Audio = std::shared_ptr<Audio>(new Audio);
@@ -111,7 +115,7 @@ namespace Duck {
 
 		if (e.GetEventType() == EventType::KeyPressed) {
 			KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
-			if (keyEvent.GetKeyCode() == Key::A) {
+			if (keyEvent.GetKeyCode() == Key::I) {
 				showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
 			}
 
@@ -195,9 +199,19 @@ namespace Duck {
 				runtime.update(); // Call this at the beginning of each frame
 
 				float dt = runtime.getDeltaTime(); // Get delta time in seconds
+				std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
+				std::cout << "X Pos: " << m_obj.getX() << std::endl;
+				std::cout << "Velocity: " << m_obj.getVelocityX() << std::endl;
 
-				m_obj.SetPositionX(m_obj.getVelocityX() * dt + m_obj.getX());
-				m_obj.SetPositionY(m_obj.getVelocityY() * dt + m_obj.getY());                                                                                                     /////
+				float newX = m_obj.getVelocityX();
+				newX += m_obj.getVelocityX() * dt + m_obj.getX();
+
+				float newY = m_obj.getVelocityY();
+				newY += m_obj.getVelocityY() * dt + m_obj.getY();
+
+				m_obj.SetPositionX(newX);
+				m_obj.SetPositionY(newY);
+				std::cout << m_obj.getX() << std::endl;
 
 				RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 				RenderCommand::Clear();
@@ -233,7 +247,7 @@ namespace Duck {
 				m_Graphics->DrawBackground(m_BackgroundTexture);
 				m_Graphics->ShowGrid();
 
-				m_Graphics->DrawSquareObject((m_map.SnapToCellX(1.f, m_obj.getY())), (m_map.SnapToCellY(1.f, m_obj.getY())) , 2.0f, 45.0f, m_CharacterTexture, true);
+				m_Graphics->DrawSquareObject((m_map.SnapToCellX(1.f, m_obj.getX())), (m_map.SnapToCellY(1.f, m_obj.getY())) , 1.0f, 0, m_CharacterTexture, true);
 				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
 				m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
 
