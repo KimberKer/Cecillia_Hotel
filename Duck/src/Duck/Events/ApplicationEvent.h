@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:    ApplicationEvent.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations related to application events
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
 #pragma once
 #include "duckpch.h"
 #include "Event.h"

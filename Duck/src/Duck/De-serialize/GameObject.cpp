@@ -30,6 +30,25 @@ namespace Duck {
 	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, Duck::AABB boundingbox, STATE getstate, OBJ_TYPE obj_type)
 		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), boundingbox(boundingbox), state(getstate), obj_type(obj_type) {}
 
+	void GameObject::CreateObj(	float p_x,
+								float p_y,
+								float p_velocityX,
+								float p_velocityY,
+								int p_gridCollisionFlag,
+								Duck::AABB p_boundingbox,
+								STATE p_state,
+								OBJ_TYPE p_obj_type)
+	{
+		x = p_x;
+		y = p_y;
+		velocityX = p_velocityX;
+		velocityY = p_velocityY;
+		gridCollisionFlag = p_gridCollisionFlag;
+		boundingbox = p_boundingbox;
+		state = p_state;
+		obj_type = p_obj_type;
+
+	}
 	/******************************************************************************/
 	/*!
 		This function returns the current state of the GameObject.

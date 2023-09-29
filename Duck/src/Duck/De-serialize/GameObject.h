@@ -6,7 +6,7 @@
 // co-authors:	Rina Firdianna binte Raihan
 // email:		rinafirdiana.b\@digipen.edu
 //
-// Brief:     Contains the declarations of the GameObject class
+// Brief:     Contains the declarations related to GameObject class
 //
 // Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
@@ -69,6 +69,14 @@ namespace Duck {
 
 		void ReadState(std::string state);
 		void ReadObj(std::string obj);
+		void CreateObj(float x,
+			float y,
+			float velocityX,
+			float velocityY,
+			int gridCollisionFlag,
+			Duck::AABB boundingbox,
+			STATE state,
+			OBJ_TYPE obj_type);
 
 
 		// Load object properties from a .txt file

@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:		Matrix3x3.h
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This header file defines the classes aand functions
+//              related to 3x3 matrixes.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
+
 #pragma once
 #include "duckpch.h"
 #include "Vector2D.h"

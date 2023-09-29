@@ -89,19 +89,16 @@ namespace Duck {
 		if (vRel.x < 0) {
 			//no intersection
 			if (aabb1.minVec.x > aabb2.maxVec.x) {
-				std::cout << "player on the left" << std::endl;
 				return 0;
 			}
 
 			//| rect A | -> | rect B |
 			if (aabb1.maxVec.x < aabb2.minVec.x) {
-				std::cout << "player most right while moving" << std::endl;
 				tFirst.x = Max((aabb1.maxVec.x - aabb2.minVec.x) / vRel.x, tFirst.x);
 			}
 
 			//| rect A | <- | rect B |
 			else if (aabb1.minVec.x < aabb2.maxVec.x) {
-			//	std::cout << "object most right while moving" << std::endl;
 				tLast.x = Max((aabb1.minVec.x - aabb2.maxVec.x) / vRel.x, tLast.x);
 			}
 
@@ -114,7 +111,6 @@ namespace Duck {
 			}
 			//if player is collding at the right side
 			if (aabb1.maxVec.x > aabb2.minVec.x) {
-				//std::cout << aabb1.maxVec.x<< " "<< aabb2.minVec.x << std::endl;
 				tFirst.x = Max((aabb1.maxVec.x - aabb2.minVec.x) / vRel.x, tFirst.x);
 			}
 

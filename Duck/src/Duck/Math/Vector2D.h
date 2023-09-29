@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:		Vector2D.h
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This header file defines the classes aand functions
+//              related to 2D vectors.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
+
 #pragma once
 
 
