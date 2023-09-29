@@ -30,50 +30,119 @@ namespace Duck {
 	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, Duck::AABB boundingbox, STATE getstate, OBJ_TYPE obj_type)
 		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), boundingbox(boundingbox), state(getstate), obj_type(obj_type) {}
 
-
+	/******************************************************************************/
+	/*!
+		This function returns the current state of the GameObject.
+	 */
+	 /******************************************************************************/
 	STATE GameObject::getState() const {
 		return state;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the state of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetState(STATE getstate) {
 		state = getstate;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function gets X position
+	 */
+	 /******************************************************************************/
 	float GameObject::getX() const {
 		return x;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function returns the grid collision flag of the GameObject.
+	 */
+	 /******************************************************************************/
 	int GameObject::getgridCollisionFlag() const {
 		return gridCollisionFlag;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the X-axis velocity of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetVelocityX(float velx) {
 		velocityX = velx;
 	}
 
+	/******************************************************************************/
+	/*!
+		This function sets the Y-axis velocity of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetVelocityY(float vely) {
 		velocityY = vely;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the X-coordinate of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetPositionX(float posX) {
 		x = posX;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the Y-coordinate of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetPositionY(float posY) {
 		y = posY;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the grid collision flag of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::SetgridCollisionFlag(float posY) {
 		gridCollisionFlag = posY;
 	}
+
+	/******************************************************************************/
+	/*!
+		This function get the grid Y-coordinate of the GameObject.
+	 */
+	 /******************************************************************************/
 	float GameObject::getY() const {
 		return y;
 	}
 
+	/******************************************************************************/
+	/*!
+		This function get the X-axis velocity of the GameObject.
+	 */
+	 /******************************************************************************/
 	float GameObject::getVelocityX() const {
 		return velocityX;
 	}
 
+	/******************************************************************************/
+	/*!
+		This function get the Y-axis velocity of the GameObject.
+	 */
+	 /******************************************************************************/
 	float GameObject::getVelocityY() const {
 		return velocityY;
 	}
-	Duck::AABB GameObject::getBoundingBox() const {
-		return boundingbox;
-	}
 
+	/******************************************************************************/
+	/*!
+		This function loads GameObject data from a file.
+	 */
+	 /******************************************************************************/
 	bool GameObject::loadFromFile(const std::string& filename) {
 		std::string pos_x, pos_y, vel_x, vel_y, curr_state, bounding, type, getstate, getType, gridFlag;
 		// Specify the absolute path to "player.txt"
@@ -107,6 +176,11 @@ namespace Duck {
 		return true;
 	}
 
+	/******************************************************************************/
+	/*!
+		This function reads and sets the state of the GameObject.
+	 */
+	 /******************************************************************************/
 	void GameObject::ReadState(std::string state) {
 		if (state == "STATE_NONE") {
 			state = STATE_NONE;
@@ -125,6 +199,11 @@ namespace Duck {
 		}
 	}
 
+	/******************************************************************************/
+	/*!
+		This function reads and sets the object type.
+	 */
+	 /******************************************************************************/
 	void GameObject::ReadObj(std::string obj) {
 		if (obj == "OBJ_EMPTY") {
 			obj_type = OBJ_EMPTY;
@@ -140,6 +219,11 @@ namespace Duck {
 		}
 	}
 
+	/******************************************************************************/
+	/*!
+		This function loads player data from a file
+	 */
+	 /******************************************************************************/
 	void GameObject::loadPlayerData() {
 		if (loadFromFile("player.txt")) {
 			std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";

@@ -1,3 +1,16 @@
+//---------------------------------------------------------
+// File:		collision.cpp
+// 
+// authors:		Rina Firdianna binte Raihan
+// email:		rinafirdiana.b\@digipen.edu
+//
+// Brief:       This file contains function and classes
+//				related to collision detection and handling, 
+//				including AABB (Axis-Aligned Bounding Box) 
+//				calculations.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #include "duckpch.h"
 #include "collision.h"
 #include <GLFW/glfw3.h>
@@ -9,6 +22,11 @@ namespace Duck {
 	AABB::AABB(const MathLib::Vector2D& minVec, const MathLib::Vector2D& maxVec)
 		: minVec(minVec), maxVec(maxVec) {}
 
+	/******************************************************************************/
+	/*!
+		This function converts coordinates and dimensions to an AABB.
+	*/
+	/******************************************************************************/
 	AABB AABB::ConvertToAABB(float x, float y, float width, float height) {
 
 		AABB boundingBox;
@@ -18,12 +36,22 @@ namespace Duck {
 		boundingBox.maxVec.y = y + height;
 		return boundingBox;
 	}
+
+	/******************************************************************************/
+	/*!
+		Template function to return the maximum of two values.
+	*/
+	/******************************************************************************/
 	template <typename T>
 	T PhysicsLib::Max(const T& a, const T& b) {
 		return (a > b) ? a : b;
 	}
 
-
+	/******************************************************************************/
+	/*!
+		Template function checks for intersection between two AABBs with velocities.
+	*/
+	/******************************************************************************/
 	bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 		const AABB& aabb2, const MathLib::Vector2D& vel2)
 	{
@@ -147,52 +175,17 @@ namespace Duck {
 		return 1;
 
 	}
-	//bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
-	//	const AABB& aabb2, const MathLib::Vector2D& vel2)
-	//{
-	//	if ((aabb1.minVec.x < aabb2.maxVec.x) &&
-	//		(aabb1.maxVec.x > aabb2.minVec.x) &&
-	//		(aabb1.maxVec.y > aabb2.minVec.y) &&
-	//		(aabb1.minVec.y < aabb2.maxVec.y)
-	//		)
-	//	{
 
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		return false;
-	//	}
-	//}
-
-
+	/******************************************************************************/
+	/*!
+		Template function checks if an AABB is out of bounds compared to another AABB.
+	*/
+	/******************************************************************************/
 	bool PhysicsLib::IsOutOfBounds(const AABB& boundingBox, const AABB& other) const {
 		// Check for collision between the boundingBox and the other AABB
 		return  (other.maxVec.x > boundingBox.maxVec.x) || (other.minVec.x < boundingBox.minVec.x) ||
 				(boundingBox.minVec.y >other.minVec.y) || (other.maxVec.y > boundingBox.maxVec.y);
 
-	}
-
-	float PhysicsLib::CalculateXIntersectionDepth(const AABB& aabb1, const AABB& aabb2) {
-		// Calculate the half-widths of the AABBs
-		float halfWidth1 = 1.f;
-		float halfWidth2 = 1.f;
-
-		// Calculate the center positions of the AABBs
-		float center1 = aabb1.minVec.x + halfWidth1;
-		float center2 = aabb2.minVec.x + halfWidth2;
-
-		// Calculate the absolute difference in center positions
-		float centerDiff = fabs(center1 - center2);
-
-		// Calculate the sum of half-widths
-		float sumHalfWidths = halfWidth1 + halfWidth2;
-
-		// Calculate the depth of intersection
-		float intersectionDepthX = sumHalfWidths - centerDiff;
-
-		// Return the depth of intersection (may be negative if no overlap)
-		return intersectionDepthX;
 	}
 
 
