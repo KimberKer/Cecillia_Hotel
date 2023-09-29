@@ -1,9 +1,25 @@
+//---------------------------------------------------------
+// File:    Vertex.cpp
+//authors:	Ahmad Mahdi Bin Jamal
+// email:	ahmadmahdi.b@digipen.edu
+// 
+//
+// Brief:	This source file contains the implementation of 
+//          the VertexArray class and helper functions related 
+//          to OpenGL vertex attributes and types.
+// 
+// 
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Vertex.h"
 #include <glad/glad.h>
 
 namespace Duck {
 
+
+    // Helper function to map ShaderDataType to OpenGL data types.
     GLenum ShaderTypeToOpenGLType(ShaderDataType type) {
 
         switch (type) {
@@ -26,30 +42,34 @@ namespace Duck {
 
     }
 
+    // VertexArray constructor: Create a vertex array object.
     VertexArray::VertexArray() {
 
         glCreateVertexArrays(1, &m_RendererID);
 
     }
 
+    // VertexArray destructor : Clean up the vertex array object.
     VertexArray::~VertexArray() {
 
         glDeleteVertexArrays(1, &m_RendererID);
 
     }
 
-
+    // Bind the vertex array for rendering.
     void VertexArray::Bind() const {
 
         glBindVertexArray(m_RendererID);
     }
 
+    // Unbind any active vertex array.
     void VertexArray::Unbind() const {
 
         glBindVertexArray(0);
 
     }
 
+    // Add a vertex buffer to the vertex array.
     void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
 
         glBindVertexArray(m_RendererID);
@@ -69,8 +89,7 @@ namespace Duck {
 
     }
 
-
-
+    // Add an index buffer to the vertex array.
     void VertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) {
 
         glBindVertexArray(m_RendererID);
@@ -80,6 +99,7 @@ namespace Duck {
 
     }
 
+    // Set the primitive type for rendering(e.g., GL_TRIANGLES, GL_LINES).
     void VertexArray::SetPrimitiveType(const int32_t primitive) {
 
         m_PrimitiveType = primitive;

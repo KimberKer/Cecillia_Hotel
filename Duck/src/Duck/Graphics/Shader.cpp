@@ -1,3 +1,19 @@
+//---------------------------------------------------------
+// File:    Shader.cpp
+//authors:	Ahmad Mahdi Bin Jamal
+// email:	ahmadmahdi.b@digipen.edu
+// 
+//
+// Brief:	This file contains the implementation of the Shader 
+//			class, which is responsible for loading, compiling, 
+//			and managing OpenGL shaders. It also provides 
+//			functions to bind and unbind shaders, load textures, 
+//			and upload uniform values to shaders.
+// 
+// 
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Shader.h"
 
@@ -8,6 +24,8 @@
 
 namespace Duck {
 
+
+	// Constructor: Create and compile vertex and fragment shaders.
 	Shader::Shader(const std::string& VtxSrc, const std::string& FragSrc) {
 
 		m_rendererID = {};
@@ -129,7 +147,7 @@ namespace Duck {
 
 	}
 
-
+	// Destructor: Delete the shader program.
 	Shader::~Shader() {
 
 		glDeleteProgram(m_rendererID);
@@ -138,6 +156,8 @@ namespace Duck {
 	}
 
 	
+
+	// Bind the shader for rendering.
 	void Shader::Bind() const {
 
 		glUseProgram(m_rendererID);
@@ -145,7 +165,7 @@ namespace Duck {
 
 	}
 
-
+	// Unbind any active shader.
 	void Shader::Unbind() const {
 
 		glUseProgram(0);
@@ -184,8 +204,8 @@ namespace Duck {
 		return shaderCode;
 	}
 
-
-	// Would return the height and width. Is needed for Sprite images.
+	// NOT IN USE
+	// Load a texture from an image file and return its OpenGL texture ID.
 	uint32_t Shader::LoadTexture(const char* filePath, int& Width, int& Height ) {
 
 		uint32_t textureID;
@@ -230,6 +250,8 @@ namespace Duck {
 
 	}
 
+
+	// Load a texture from an image file and return its OpenGL texture ID.
 	uint32_t Shader::LoadTexture(const char* filePath) {
 
 		uint32_t textureID;
@@ -270,7 +292,7 @@ namespace Duck {
 
 	}
 
-
+	// Upload a 4x4 matrix uniform to the shader by its name.
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {
 
 		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
@@ -278,6 +300,7 @@ namespace Duck {
 
 	}
 
+	// Upload an integer uniform to the shader by its name.
 	void Shader::UploadUniformInt(const std::string& name, int value) {
 
 		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
@@ -285,6 +308,7 @@ namespace Duck {
 
 	}
 
+	// Upload a float uniform to the shader by its name.
 	void Shader::UploadUniformFloat(const std::string& name, float value) {
 
 		GLint location = glGetUniformLocation(m_rendererID, name.c_str());

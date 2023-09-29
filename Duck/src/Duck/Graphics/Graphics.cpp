@@ -1,3 +1,17 @@
+//---------------------------------------------------------
+// File:    Graphics.cpp
+//authors:	Ahmad Mahdi Bin Jamal
+// email:	ahmadmahdi.b@digipen.edu
+// 
+//
+// Brief:     This file contains the definitions of the 
+//          Graphics class, which handles rendering objects 
+//          in a 2D grid-based environment. It uses OpenGL 
+//          for rendering.
+// 
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Graphics.h"
 #include <glad/glad.h>
@@ -7,6 +21,7 @@
 namespace Duck {
 
 
+    // Constructor for the Graphics class. Initializes various graphics objects and shaders.
 	Graphics::Graphics() {
 
         // Default Grid Size
@@ -260,20 +275,21 @@ namespace Duck {
 
 	}
 
-
+    // Destructor for the Graphics class. Clean up resources if necessary.
     Graphics::~Graphics() {
 
 
 
     }
 
-
+    // Factory method to create an instance of the Graphics class.
     Graphics* Graphics::Create() {
 
         return new Graphics();
 
     }
 
+    // Set the grid size (number of rows and columns) for rendering.
     void Graphics::SetGridSize(int GridSize) {
 
         cols = GridSize;
@@ -293,6 +309,7 @@ namespace Duck {
 		
 	}
 
+    // Renders a grid overlay on the screen based on the current grid size.
 	void Graphics::ShowGrid() {
 
 
@@ -306,6 +323,7 @@ namespace Duck {
 		float yMax = (float)2.f / 2.f;
 		float yMin = -yMax;
 
+        // Creates all the Vertical Lines
 		for (float x = xMin; x <= (xMax + xOffset); x += xOffset) {
 
 			glm::vec3 LinePos{ x,0.0f,0.0f };
@@ -317,6 +335,7 @@ namespace Duck {
 			Renderer::Submit(m_LineVA, m_LineShader, transform);
 		}
 
+        // Creates all the Horizontal Lines
 		for (float y = yMin; y <= (yMax + yOffset); y += yOffset) {
 
 			glm::vec3 LinePos{ 0.0f, y, 0.0f };
@@ -330,7 +349,7 @@ namespace Duck {
 	}
 
 
-
+    // Draws a square object at the specified position with optional rotation and texture.
 	void Graphics::DrawSquareObject(const float PosX, const float PosY, const float Scale, const float angle, const uint32_t texture, const bool ShowBoundingBox) {
 
 		float TileWidth = 2.f / cols;
@@ -348,6 +367,7 @@ namespace Duck {
 		transform = glm::scale(transform, glm::vec3(TileWidth * scale, TileHeight * scale,1.0f));
 		Renderer::Submit(m_SquareImgVA, m_SquareImgShader, transform, texture);
 
+        // Draws the square bounding box if required.
 		if (ShowBoundingBox) {
 
             
@@ -404,18 +424,7 @@ namespace Duck {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // Draws a square animation frame at the specified position using the provided vertex array, shader, and texture.
 	void DrawSquareAnimation(float PosX, float PosY, std::shared_ptr<VertexArray> VA, std::shared_ptr<Shader> shader, uint32_t texture) {
 
 		float x = (PosX * 0.2f) - 0.9f;
@@ -430,8 +439,7 @@ namespace Duck {
 	}
 
 
-
-
+    // Draws a square animation frame at the specified position using the provided vertex array, shader, and texture.
 	void DrawAnimation(GLuint texture, int numRows, int numCols, float dt) {
 		static float frameTime = 0.1f; // Time in seconds per frame
 		static int currentFrame = 0;
@@ -457,9 +465,6 @@ namespace Duck {
 	}
 
 
-		
-		
-	
 
 }
 
