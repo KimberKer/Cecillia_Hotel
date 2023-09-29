@@ -70,7 +70,6 @@ namespace Duck {
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
-	Application::Application() {
 
     Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
