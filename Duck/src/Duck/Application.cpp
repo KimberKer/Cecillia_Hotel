@@ -25,7 +25,6 @@
 #include <Windows.h>
 #include "Application.h"
 #include "Physics/PhysicsManager.h"
-//#include "Audio/Audio.h"
 #include "Debug.h"
 #include "CoreManager.h"
 
@@ -80,25 +79,11 @@ namespace Duck {
 
 		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 
-		m_Graphics->SetGridSize(10);
-		//m_obj = std::unique_ptr<GameObject>(new GameObject());
-
-		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
-		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
-
-
-		//TESTING AUDIO
-		m_Audio = std::shared_ptr<Audio>(new Audio);
-		std::cout << "Create SoundInfo\n";
-		m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
-		m_Audio->init();
-		std::cout << "Load sound\n";
-		m_Audio->loadSound(m_SoundInfo);
-
-		coreManager->Init(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
-
-		m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+        //TESTING AUDIO
+        m_Audio = std::shared_ptr<Audio>(new Audio);
+        m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
+        m_Audio->init();
+        m_Audio->loadSound(m_SoundInfo);
 
 	}
 
