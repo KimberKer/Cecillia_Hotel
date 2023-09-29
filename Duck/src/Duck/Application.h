@@ -2,9 +2,11 @@
 #include "Core.h"
 #include <iostream>
 //#include <GLFW/glfw3.h>
-#include "De-serialize/GameObject.h"
+#include "Duck/De-serialize/GameObject.h"
 #include "Logging/Logging.h"
+#include "Duck/Events/KeyEvent.h"
 #include "Events/Event.h"
+#include "ImGui/ImGuiLayer.h"
 #include "Window.h"
 #include "Duck/LayerStack.h"
 #include "Duck/Events/ApplicationEvent.h"
@@ -13,12 +15,22 @@
 #include "Duck/Graphics/Vertex.h"
 #include "Duck/Graphics/Renderer.h"
 #include "Duck/Graphics/Graphics.h"
+#include "Duck/De-serialize/GameObject.h"
+#include "Duck/Map/map.h"
 #include "Audio/Audio.h"
+
+#include "Duck/Graphics/Shader.h"
+#include "Duck/Graphics/Buffer.h"
+#include "Duck/Graphics/Vertex.h"
+#include "Duck/Graphics/Renderer.h"
+
+
 
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
 	class Audio;
+	class GameObject;
 	class DUCK_API Application {
 	public:
 		Application();
@@ -29,6 +41,7 @@ namespace Duck {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
 		
@@ -38,6 +51,7 @@ namespace Duck {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
@@ -52,6 +66,10 @@ namespace Duck {
 
 	private:
 		static Application* s_Instance;
+		GameObject m_obj;
+		MapDataHandler m_map;
+		AABB aabb;
+		PhysicsLib m_phy;
 	};
 
 

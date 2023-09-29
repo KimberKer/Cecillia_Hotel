@@ -31,7 +31,7 @@ namespace Duck {
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
 	// Base class for all events
-	class DUCK_API Event {
+	class Event {
 	public:
 		friend class EventDispatcher;
 	public:

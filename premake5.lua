@@ -16,20 +16,22 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
 IncludeDir["Glad"] = "Duck/vendor/Glad/include"
 IncludeDir["glm"] = "Duck/vendor/glm"
-IncludeDir["IMGui"] = "Duck/vendor/imgui/include"
+IncludeDir["ImGui"] = "Duck/vendor/imgui"
 IncludeDir["FMODcore"] = "Duck/vendor/FMOD/api/core/inc"
 IncludeDir["FMODstudio"] = "Duck/vendor/FMOD/api/studio/inc"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
+include "Duck/vendor/imgui"
 
 
 -- Duck.dll
 project "Duck"
 	location "Duck"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -56,7 +58,7 @@ project "Duck"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.IMGui}",
+		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.FMODcore}",
 		"%{IncludeDir.FMODstudio}"
     }
@@ -72,24 +74,22 @@ project "Duck"
 	links {
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
         --"glfw3"
     }
 
 	filter "system:windows"
-		cppdialect "C++20"
-		systemversion "latest"
 
-		defines {
-			"DUCK_PLATFORM_WINDOWS",
-			"DUCK_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
+	systemversion "latest"
 
-		postbuildcommands {
-			-- Copy Duck.dll into Sandbox
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
+	defines {
+		"DUCK_PLATFORM_WINDOWS",
+		"DUCK_BUILD_DLL",
+		"GLFW_INCLUDE_NONE",
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
 
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
@@ -127,11 +127,17 @@ project "Duck"
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
 		}
 
+	filter "configurations:Dist"
+		defines "HZ_DIST"
+		runtime "Release"
+		optimize "On"
+
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	-- Output Directory
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -148,6 +154,7 @@ project "Sandbox"
 	-- Directories to Include
 	includedirs {
 		"Duck/src",
+		"Duck/vendor",
 		"Duck/vendor/spdlog/include",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.FMODcore}",
@@ -170,7 +177,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines {
@@ -180,9 +186,15 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "DUCK_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
+	
+	filter "configurations:Dist"
+		defines "DUCK_DIST"
+		runtime "Release"
+		optimize "on"
+

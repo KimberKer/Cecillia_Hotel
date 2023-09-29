@@ -5,7 +5,7 @@
 namespace Duck {
 
 	// Event for mouse movement
-	class DUCK_API MouseMovedEvent : public Event {
+	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(const float x, const float y)
 			: m_MouseX(x), m_MouseY(y) {}
@@ -31,7 +31,7 @@ namespace Duck {
 	};
 
 	// Event for mouse scrolling
-	class DUCK_API MouseScrolledEvent : public Event {
+	class MouseScrolledEvent : public Event {
 	public:
 		MouseScrolledEvent(const float xOffset, const float yOffset)
 			: m_XOffset(xOffset), m_YOffset(yOffset) {}
@@ -57,7 +57,7 @@ namespace Duck {
 	};
 
 	// Base class for mouse button events
-	class DUCK_API MouseButtonEvent : public Event {
+	class MouseButtonEvent : public Event {
 	public:
 		// Getter function for the mouse button code
 		MouseCode GetMouseButton() const { return m_Button; }
@@ -73,7 +73,7 @@ namespace Duck {
 	};
 
 	// Event for mouse button press
-	class DUCK_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(const MouseCode button)
@@ -92,7 +92,7 @@ namespace Duck {
 	};
 
 	// Event for mouse button release
-	class DUCK_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

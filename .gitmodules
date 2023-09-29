@@ -10,3 +10,6 @@
 [submodule "Duck/vendor/rapidjson"]
 	path = Duck/vendor/rapidjson
 	url = https://github.com/miloyip/rapidjson
+[submodule "Duck/vendor/imgui"]
+	path = Duck/vendor/imgui
+	url = https://github.com/ocornut/imgui

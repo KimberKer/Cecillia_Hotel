@@ -19,6 +19,9 @@
     <Filter Include="src\Duck\Graphics">
       <UniqueIdentifier>{4387E1B6-AF9D-DF4C-F814-6B6E646AB0D4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Duck\ImGui">
+      <UniqueIdentifier>{0DDB77B9-F9A8-6BBF-E23C-DCE5CEA94724}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Duck\Logging">
       <UniqueIdentifier>{394BAFE4-2544-CE36-4E76-B3BB3ACEAD42}</UniqueIdentifier>
     </Filter>
@@ -33,6 +36,9 @@
     </Filter>
     <Filter Include="src\Duck\Platform">
       <UniqueIdentifier>{57FB9B37-C311-9ACD-0C89-25EF78DE6A55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Duck\Platform\OpenGL">
+      <UniqueIdentifier>{AB9CAFF3-97C1-FE73-C00C-E403AC90FD91}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Duck\Platform\Windows">
       <UniqueIdentifier>{910CBFC1-FDCE-F24B-467F-81D8B280CB29}</UniqueIdentifier>
@@ -108,14 +114,14 @@
     <ClInclude Include="src\Duck\Graphics\Graphics.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Graphics\Renderer.h">
-      <Filter>src\Duck\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Shader.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Vertex.h">
       <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h">
+      <Filter>src\Duck\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
       <Filter>src\Duck</Filter>
@@ -156,6 +162,9 @@
     <ClInclude Include="src\Duck\Physics\collision.h">
       <Filter>src\Duck\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h">
+      <Filter>src\Duck\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClInclude>
@@ -166,9 +175,6 @@
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Window.h">
-      <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\stb_image.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\duckpch.h">
@@ -1451,14 +1457,17 @@
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Graphics\Renderer.cpp">
-      <Filter>src\Duck\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Shader.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp">
       <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp">
+      <Filter>src\Duck\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Layer.cpp">
       <Filter>src\Duck</Filter>
@@ -1490,11 +1499,17 @@
     <ClCompile Include="src\Duck\Physics\collision.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp">
+      <Filter>src\Duck\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp">
       <Filter>src\Duck\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Time.cpp">
+      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>

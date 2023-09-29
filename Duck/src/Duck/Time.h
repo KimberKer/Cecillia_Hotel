@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 namespace Duck
 {
 
@@ -9,46 +7,17 @@ namespace Duck
 	{
 
 	public:
-		Time(double fps = 60.0)
-		{
-			limitFPS = fps;
+		Time(double fps = 60.0);
 
-			frameTime = 1 / limitFPS;
-			lastFrameTime = glfwGetTime();
+		void update();
 
-			elapsedTime = 0.0;
-			deltaTime = 0.0;
-		}
+		double getElapsedTime() const;
 
-		void update()
-		{
-			double currFrameTime = glfwGetTime();
+		double getDeltaTime() const;
 
-			deltaTime = currFrameTime - lastFrameTime;
-			lastFrameTime = currFrameTime;
+		double getFPS() const;
 
-			elapsedTime += deltaTime;
-		}
-
-		double getElapsedTime() const
-		{
-			return elapsedTime;
-		}
-
-		double getDeltaTime() const
-		{
-			return deltaTime;
-		}
-
-		double getFPS() const
-		{
-			return limitFPS;
-		}
-
-		double getFrameTime() const
-		{
-			return frameTime;
-		}
+		double getFrameTime() const;
 
 	private:
 		double limitFPS;

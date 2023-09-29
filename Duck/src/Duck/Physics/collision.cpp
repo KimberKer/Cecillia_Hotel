@@ -1,29 +1,83 @@
+//---------------------------------------------------------
+// File:		collision.cpp
+// 
+// authors:		Rina Firdianna binte Raihan
+// email:		rinafirdiana.b\@digipen.edu
+//
+// Brief:       This file contains function and classes
+//				related to collision detection and handling, 
+//				including AABB (Axis-Aligned Bounding Box) 
+//				calculations.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #include "duckpch.h"
 #include "collision.h"
-
+#include <GLFW/glfw3.h>
+#include "Duck/Time.h"
 
 namespace Duck {
+	// Constructors
+	AABB::AABB() : minVec(0, 0), maxVec(0, 0) {}
+	AABB::AABB(const MathLib::Vector2D& minVec, const MathLib::Vector2D& maxVec)
+		: minVec(minVec), maxVec(maxVec) {}
 
+	/******************************************************************************/
+	/*!
+		This function converts coordinates and dimensions to an AABB.
+	*/
+	/******************************************************************************/
+	AABB AABB::ConvertToAABB(float x, float y, float width, float height) {
+
+		AABB boundingBox;
+		boundingBox.minVec.x = x;
+		boundingBox.minVec.y = y;
+		boundingBox.maxVec.x = x + width;
+		boundingBox.maxVec.y = y + height;
+		return boundingBox;
+	}
+
+	/******************************************************************************/
+	/*!
+		Template function to return the maximum of two values.
+	*/
+	/******************************************************************************/
 	template <typename T>
 	T PhysicsLib::Max(const T& a, const T& b) {
 		return (a > b) ? a : b;
 	}
 
+	/******************************************************************************/
+	/*!
+		Template function checks for intersection between two AABBs with velocities.
+	*/
+	/******************************************************************************/
 	bool PhysicsLib::CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
 		const AABB& aabb2, const MathLib::Vector2D& vel2)
 	{
+		Time time;
+		time.update(); // Call this at the beginning of each frame
+
+		float dt = time.getDeltaTime();
 		//No intersection
-		if (aabb1.max.x < aabb2.min.x || aabb1.min.x > aabb2.max.x ||
-			aabb1.max.y < aabb2.min.y || aabb1.min.y > aabb2.max.y) {
-			//nothing
+		if ((aabb1.minVec.x < aabb2.maxVec.x) &&
+			(aabb1.maxVec.x > aabb2.minVec.x) &&
+			(aabb1.maxVec.y > aabb2.minVec.y) &&
+			(aabb1.minVec.y < aabb2.maxVec.y)
+			)
+		{
+
+			return true;
 		}
 		//overlap
 		else
-			return 1;
+		{
+			return false;
+		}
 
 
 		MathLib::Vector2D tFirst{ 0, 0 };
-		MathLib::Vector2D tLast{ static_cast<float>(time.getDeltaTime()), static_cast<float>(time.getDeltaTime())};
+		MathLib::Vector2D tLast{ static_cast<float>(dt), static_cast<float>(dt) };
 
 		// Initialize and calculate the new velocity of Vb
 
@@ -34,35 +88,39 @@ namespace Duck {
 
 		if (vRel.x < 0) {
 			//no intersection
-			if (aabb1.min.x > aabb2.max.x) {
+			if (aabb1.minVec.x > aabb2.maxVec.x) {
+				std::cout << "player on the left" << std::endl;
 				return 0;
 			}
 
 			//| rect A | -> | rect B |
-			if (aabb1.max.x < aabb2.min.x) {
-
-				tFirst.x = max((aabb1.max.x - aabb2.min.x) / vRel.x, tFirst.x);
+			if (aabb1.maxVec.x < aabb2.minVec.x) {
+				std::cout << "player most right while moving" << std::endl;
+				tFirst.x = Max((aabb1.maxVec.x - aabb2.minVec.x) / vRel.x, tFirst.x);
 			}
 
 			//| rect A | <- | rect B |
-			else if (aabb1.min.x < aabb2.max.x) {
-				tLast.x = max((aabb1.min.x - aabb2.max.x) / vRel.x, tLast.x);
+			else if (aabb1.minVec.x < aabb2.maxVec.x) {
+			//	std::cout << "object most right while moving" << std::endl;
+				tLast.x = Max((aabb1.minVec.x - aabb2.maxVec.x) / vRel.x, tLast.x);
 			}
 
 		}
 		else {
-
 			//no intersection 
-			if (aabb1.max.x < aabb2.min.x)
+			if (aabb1.maxVec.x < aabb2.minVec.x)
 			{
 				return 0;
 			}
-
-			if (aabb1.max.x > aabb2.min.x) {
-				tFirst.x = max((aabb1.max.x - aabb2.min.x) / vRel.x, tFirst.x);
+			//if player is collding at the right side
+			if (aabb1.maxVec.x > aabb2.minVec.x) {
+				//std::cout << aabb1.maxVec.x<< " "<< aabb2.minVec.x << std::endl;
+				tFirst.x = Max((aabb1.maxVec.x - aabb2.minVec.x) / vRel.x, tFirst.x);
 			}
-			else if (aabb1.max.x > aabb2.min.x) {
-				tLast.x = max((aabb1.max.x - aabb2.min.x) / vRel.x, tLast.x);
+
+			else if (aabb1.minVec.x < aabb2.maxVec.x) {
+		
+				tLast.x = Max((aabb1.maxVec.x - aabb2.minVec.x) / vRel.x, tLast.x);
 			}
 
 		}
@@ -76,36 +134,35 @@ namespace Duck {
 
 		if (vRel.y < 0) {
 			//no intersection
-			if (aabb1.min.y > aabb2.max.y) {
+			if (aabb1.minVec.y > aabb2.maxVec.y) {
 				return 0;
 			}
 
 			//| rect A | -> | rect B |
-			if (aabb1.max.y < aabb2.min.y) {
-
-				tFirst.y = max((aabb1.max.y - aabb2.min.y) / vRel.y, tFirst.y);
+			if (aabb1.maxVec.y < aabb2.minVec.y) {
+				tFirst.y = Max((aabb1.maxVec.y - aabb2.minVec.y) / vRel.y, tFirst.y);
 			}
 
 			//| rect A | <- | rect B |
-			else if (aabb1.min.y < aabb2.max.y) {
-				tLast.y = max((aabb1.min.y - aabb2.max.y) / vRel.y, tLast.y);
+			else if (aabb1.minVec.y < aabb2.maxVec.y) {
+				tLast.y = Max((aabb1.minVec.y - aabb2.maxVec.y) / vRel.y, tLast.y);
 			}
 
 		}
 		else {
 
 			//no intersection 
-			if (aabb1.max.y < aabb2.min.y)
+			if (aabb1.maxVec.y < aabb2.minVec.y)
 			{
 				return false;
 			}
 
-			if (aabb1.max.y > aabb2.min.y) {
-				tFirst.y = max((aabb1.max.y - aabb2.min.y) / vRel.y, tFirst.y);
+			if (aabb1.maxVec.y > aabb2.minVec.y) {
+				tFirst.y = Max((aabb1.maxVec.y - aabb2.minVec.y) / vRel.y, tFirst.y);
 			}
-			else if (aabb1.max.x > aabb2.min.x) {
-				tLast.y = max((aabb1.max.y - aabb2.min.y) / vRel.y, tLast.y);
-			} 
+			else if (aabb1.maxVec.x > aabb2.minVec.x) {
+				tLast.y = Max((aabb1.maxVec.y - aabb2.minVec.y) / vRel.y, tLast.y);
+			}
 
 		}
 
@@ -119,45 +176,18 @@ namespace Duck {
 
 	}
 
-	//void PhysicsLib::PlayerMovement(bool keyPressed, int longPressedKey, MathLib::Vector2D player_current_position, MathLib::Vector2D player_current_Velocity) {
-	//	//----------sample data until GameObject has been created---------
-	//	const float				PLAYER_VELOCITY{ 4.0f };
-	//	const float				GRAVITY{ 0.0f };
-	//	//-----------------------------------------------------------------
-	//
-	//	if (keyPressed) {
-	//		switch (longPressedKey) {
-	//			// GLFW_KEY_A -> player moving left
-	//		case GLFW_KEY_A:
-	//
-	//			player_current_Velocity.x = -PLAYER_VELOCITY;
-	//			break;
-	//
-	//			// GLFW_KEY_D -> player moving right
-	//		case GLFW_KEY_D:
-	//			player_current_Velocity.x = PLAYER_VELOCITY;
-	//			break;
-	//
-	//			// GLFW_KEY_W -> player moving up
-	//		case GLFW_KEY_W:
-	//			player_current_Velocity.y = PLAYER_VELOCITY;
-	//			break;
-	//
-	//			// GLFW_KEY_S -> player moving down
-	//		case GLFW_KEY_S:
-	//			player_current_Velocity.y = -PLAYER_VELOCITY;
-	//			break;
-	//		}
-	//
-	//		//gravity
-	//		player_current_Velocity.y = player_current_Velocity.y - GRAVITY * deltaTime.count();
-	//
-	//		//movement
-	//		player_current_position.x = player_current_Velocity.x * deltaTime.count() + player_current_position.x;
-	//		player_current_position.y = player_current_Velocity.y * deltaTime.count() + player_current_position.y;
-	//
-	//	}
-	//}
-}
+	/******************************************************************************/
+	/*!
+		Template function checks if an AABB is out of bounds compared to another AABB.
+	*/
+	/******************************************************************************/
+	bool PhysicsLib::IsOutOfBounds(const AABB& boundingBox, const AABB& other) const {
+		// Check for collision between the boundingBox and the other AABB
+		return  (other.maxVec.x > boundingBox.maxVec.x) || (other.minVec.x < boundingBox.minVec.x) ||
+				(boundingBox.minVec.y >other.minVec.y) || (other.maxVec.y > boundingBox.maxVec.y);
 
+	}
+
+
+}
 

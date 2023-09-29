@@ -1,14 +1,18 @@
 #include "duckpch.h"
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
-#include "Duck//Log.h"
+#include "Map/Map.h"
+#include "Duck/Log.h"
 #include "Time.h"
 #include "Json.h"
 #include "../Player.h"
 
+#include "Physics/collision.h"
+#include "Duck/Graphics/Graphics.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Duck/stb_image.h"
+#include <GLFW/glfw3.h>
 
 // Headers for memory leak detection
 #define _CRTDBG_MAP_ALLOC  
@@ -27,14 +31,46 @@
 #include "Debug.h"
 #include "CoreManager.h"
 
+//Flags
+const unsigned int	FLAG_ACTIVE = 0x00000001;
+const unsigned int	FLAG_VISIBLE = 0x00000002;
+const unsigned int	FLAG_NON_COLLIDABLE = 0x00000004;
 
+//Collision flags
+const unsigned int	COLLISION_LEFT = 0x00000001;	//0001
+const unsigned int	COLLISION_RIGHT = 0x00000002;	//0010
+const unsigned int	COLLISION_TOP = 0x00000004;	//0100
+const unsigned int	COLLISION_BOTTOM = 0x00000008;	//1000
+
+//window
+float const         WINDOW_COL = 10;
+float const         WINDOW_ROW = 10;
+
+const float         PLAYER_VELOCITY = 0.1f;
+
+bool                loadFiles = false;
+bool                showImGuiWindow = false;
+
+
+// Function to handle errors
+void error_callback(int error, const char* description) {
+	std::cerr << "Error: " << description << std::endl;
+}
 
 namespace Duck {
-    Application* Application::s_Instance = nullptr;
-    CoreManager* coreManager = CoreManager::GetInstance();
+	Application* Application::s_Instance = nullptr;
+	CoreManager* coreManager = CoreManager::GetInstance();
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
-    
+	void Application::PushLayer(Layer* layer) {
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+	void Application::PushOverlay(Layer* layer) {
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
+	}
+	Application::Application() {
 
     Application::Application() {
         DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -42,6 +78,9 @@ namespace Duck {
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 
         m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 
@@ -57,142 +96,235 @@ namespace Duck {
         m_Audio->init();
         m_Audio->loadSound(m_SoundInfo);
 
-        coreManager->Init(static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 	}
 
-    void Application::PushLayer(Layer* layer) {
-        m_LayerStack.PushLayer(layer);
-    }
+	Application::~Application() {
+		coreManager->DestroyInstance();
+	}
 
-    void Application::PushOverlay(Layer* layer) {
-        m_LayerStack.PushOverlay(layer);
-    }
+	void Application::OnEvent(Event& e) {
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
-    Application::~Application() {
-        coreManager->DestroyInstance();
-    }
+		//DUCK_CORE_INFO("{0}", e);
 
-    void Application::OnEvent(Event& e) {
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+			(*--it)->OnEvent(e);
+			if (e.Handled) {
+				break;
+			}
+		}
 
-        //DUCK_CORE_INFO("{0}", e);
+		if (e.GetEventType() == EventType::KeyPressed) {
+			KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
+			if (keyEvent.GetKeyCode() == Key::I) {
+				showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
+			}
 
-        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
-            (*--it)->OnEvent(e);
-            if (e.Handled) {
-                break;
-            }
-        }
-    }
+			//Gameobject changing state
+			switch (keyEvent.GetKeyCode()) {
+				//GameObj go LEFT
+			case Key::A:
+				m_obj.SetState(STATE_GOING_LEFT);
+				break;
+			case Key::D:
+				m_obj.SetState(STATE_GOING_RIGHT);
+				break;
+			case Key::W:
+				m_obj.SetState(STATE_GOING_UP);
+				break;
+			case Key::S:
+				m_obj.SetState(STATE_GOING_DOWN);
+				break;
+			default:
+				m_obj.SetState(STATE_NONE);
+				break;
+			
+			}
+		}
+		else if (e.GetEventType() == EventType::KeyReleased) {
+			KeyReleasedEvent& keyEvent = dynamic_cast<KeyReleasedEvent&>(e);
+			// Reset the velocity when the 'D' key is released
+			switch (keyEvent.GetKeyCode()) {
+				//GameObj go LEFT
+			case Key::A:
+				m_obj.SetState(STATE_NONE);
+				break;
+			case Key::D:
+				m_obj.SetState(STATE_NONE);
+				break;
+			case Key::W:
+				m_obj.SetState(STATE_NONE);
+				break;
+			case Key::S:
+				m_obj.SetState(STATE_NONE);
+				break;
 
-    void Application::Run() {
-        // Enable memory leak detection
-        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+			}
+		}
+	}
+	void Application::Run() {
+		// Enable memory leak detection
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-        Time runtime;
+		Time runtime;
 
-        try {
-            Player player; // Create an instance of the Player class
-
-            while (m_Running) {
-                runtime.update();
-                m_Audio->update();
-              
-                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
-                /////                                                                                                                /////
-                Debug::GetInstance()->BeginSystemProfile("Graphics");
-                // Would be used for cameras
-                Renderer::BeginScene();
-
-                m_Graphics->DrawBackground(m_BackgroundTexture);
-                m_Graphics->ShowGrid();
-
-                // Call LoadPlayerData to get the player's position data
-                std::vector<float> playerData = player.LoadPlayerData();
-
-                // Check if there's enough data in playerData
-                if (playerData.size() >= 2) {
-                    float playerXPosition = playerData[0];
-                    float playerYPosition = playerData[1];
-                    m_Graphics->DrawSquareObject(playerXPosition, playerYPosition, 1.0f, 0.0f, m_CharacterTexture, true);
-                }
-
-               // m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
-                //m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
-
-
-                Renderer::EndScene();                
-           
-           
-                Debug::GetInstance()->EndSystemProfile("Graphics");
-                /////                                                                                                                /////
-                ////////////////////////////////////////////////// MAHDI /////////////////////////////////////////////////////////////////
-
-                for (Layer* layer : m_LayerStack) {
-                    layer->OnUpdate();
-                }
-
-                m_Window->OnUpdate();
-                //// Log Mouse Position to Console
-                //auto [x, y] = Input::GetMousePosition();
-                //DUCK_CORE_TRACE("{0}, {1}", x, y);
-
-                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-                
-                // Testing of variable watch
-                std::string deltatime = std::to_string(runtime.getDeltaTime());              
-                Debug::GetInstance()->WatchVariable("DT", deltatime);
-
-                Debug::GetInstance()->BeginSystemProfile("Audio");
-                //KRISTY - testing audio manager
-                m_Audio->playSound(m_SoundInfo);
-                Debug::GetInstance()->EndSystemProfile("Audio");
-
-                coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
-
-                ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-
-            }
-        }
-        catch (const std::exception& e)
-        {
-            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-            
-            // Define the directory for crash logs
-            const char* crashLogsDir = "CrashLogs/";
-
-            // Check if the directory exists, if not, create it
-            if (GetFileAttributesA(crashLogsDir) == INVALID_FILE_ATTRIBUTES)
-            {
-                CreateDirectoryA(crashLogsDir, NULL);
-            }
-
-            // Generate the filename based on current timestamp
-            struct tm newtime;
-            time_t now = time(0);
-            localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
-            std::ostringstream oss;
-            oss << std::put_time(&newtime, "/Crashlog [%d-%m-%Y].txt");   // format the date and time for the crashlog filename
-            std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
-
-            // Write the exception message to crash log
-            std::ofstream crashLog(crashLogFileName, std::ios::out);
-            crashLog << "Crash with message: " << e.what() << std::endl;
-            crashLog.close();
-
-            // Re-throw the exception to allow for external handling or just terminate the program
-            throw;
-
-            ////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
-        }
-    }
+		try {
+			while (m_Running) {
+				/* glClearColor(1, 0, 1, 1);
+				 glClear(GL_COLOR_BUFFER_BIT)*/
+				runtime.update();
+				m_Audio->update();
 
 
-    bool Application::OnWindowClose(WindowCloseEvent& e) {
+				//object
+				switch (m_obj.getState()) {
+				case STATE_GOING_LEFT:
+					m_obj.SetVelocityX(-PLAYER_VELOCITY);
+					break;
+				case STATE_GOING_RIGHT:
+					m_obj.SetVelocityX(PLAYER_VELOCITY);
+					break;
+				case STATE_GOING_DOWN:
+					m_obj.SetVelocityY(PLAYER_VELOCITY);
+					break;
+				case STATE_GOING_UP:
+					m_obj.SetVelocityY(-PLAYER_VELOCITY);
+					break;
+				case STATE_NONE:
+					m_obj.SetVelocityX(0);
+					m_obj.SetVelocityY(0);
+					break;
+				}
 
-        m_Running = false;
-        return true;
 
-    }
+				runtime.update(); // Call this at the beginning of each frame
+
+				float dt = runtime.getDeltaTime(); // Get delta time in seconds
+				std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
+				std::cout << "X Pos: " << m_obj.getX() << std::endl;
+				std::cout << "Velocity: " << m_obj.getVelocityX() << std::endl;
+
+				float newX = m_obj.getVelocityX();
+				newX += m_obj.getVelocityX() * dt + m_obj.getX();
+
+				float newY = m_obj.getVelocityY();
+				newY += m_obj.getVelocityY() * dt + m_obj.getY();
+
+				m_obj.SetPositionX(newX);
+				m_obj.SetPositionY(newY);
+				std::cout << m_obj.getX() << std::endl;
+
+				RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
+				RenderCommand::Clear();
+
+				// Would be used for cameras
+				Renderer::BeginScene();
+
+				Debug::GetInstance()->BeginSystemProfile("Graphics");
+				// Would be used for cameras
+				Renderer::BeginScene();
+
+
+				MathLib::Vector2D obj2(5.0, 5.0);
+				AABB windowAABB = aabb.ConvertToAABB(0, 0, 10 * 1, 10 * 1);
+				AABB playerAABB = aabb.ConvertToAABB(m_obj.getX(), m_obj.getY(), 0.9f, 0.9f);
+				AABB player2AABB = aabb.ConvertToAABB(obj2.x, obj2.y, 1.f, 1.f);
+
+				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, player2AABB, { 0,0 })) {
+					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX()));
+					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+					m_obj.SetVelocityX(0);
+				}
+
+				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
+				{
+					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX())); // Adjust as needed
+					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+					m_obj.SetVelocityX(0);
+					m_obj.SetVelocityY(0);
+
+				}
+
+				m_Graphics->DrawBackground(m_BackgroundTexture);
+				m_Graphics->ShowGrid();
+
+				m_Graphics->DrawSquareObject((m_map.SnapToCellX(1.f, m_obj.getX())), (m_map.SnapToCellY(1.f, m_obj.getY())) , 1.0f, 0, m_CharacterTexture, true);
+				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
+				m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
+
+	
+
+
+				Debug::GetInstance()->EndSystemProfile("Graphics");
+
+				for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate();
+				}
+
+				m_ImGuiLayer->Begin();
+				if (showImGuiWindow) {
+				for (Layer* layer : m_LayerStack) {
+					layer->OnImGuiRender();
+				}
+				}
+
+
+				m_ImGuiLayer->End();
+
+
+				// Testing of variable watch
+				std::string deltatime = std::to_string(runtime.getDeltaTime());
+				Debug::GetInstance()->WatchVariable("DT", deltatime);
+				
+
+				m_Window->OnUpdate();
+
+
+				Debug::GetInstance()->BeginSystemProfile("Audio");
+				//KRISTY - testing audio manager
+				m_Audio->playSound(m_SoundInfo);
+				Debug::GetInstance()->EndSystemProfile("Audio");
+
+				coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
+
+			}
+		}
+
+
+		catch (const std::exception& e)
+		{
+			////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+
+			// Define the directory for crash logs
+			const char* crashLogsDir = "CrashLogs/";
+
+			// Generate the filename based on current timestamp
+			struct tm newtime;
+			time_t now = time(0);
+			localtime_s(&newtime, &now);     // fills in the newtime struct with the date if not error
+			std::ostringstream oss;
+			oss << std::put_time(&newtime, "/Crashlog [%d-%m-%Y].txt");   // format the date and time for the crashlog filename
+			std::string crashLogFileName = std::string(crashLogsDir) + oss.str();
+
+			// Write the exception message to crash log
+			std::ofstream crashLog(crashLogFileName, std::ios::out);
+			crashLog << "Crash with message: " << e.what() << std::endl;
+			crashLog.close();
+
+			// Re-throw the exception to allow for external handling or just terminate the program
+			throw;
+
+			////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
+		}
+	}
+
+
+
+	bool Application::OnWindowClose(WindowCloseEvent& e) {
+
+		m_Running = false;
+		return true;
+
+	}
 }

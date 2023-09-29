@@ -21,7 +21,7 @@ namespace Duck {
     };
 
     // Interface representing a desktop system based Window
-    class DUCK_API Window {
+    class Window {
     public:
         // Define a callback function for handling events
         using EventCallbackFn = std::function<void(Event&)>;
@@ -48,5 +48,8 @@ namespace Duck {
 
         // Create a window with the specified properties
         static Window* Create(const WindowProps& props = WindowProps());
+ 
+    private:
+
     };
 }

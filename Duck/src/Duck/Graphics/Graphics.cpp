@@ -301,9 +301,6 @@ namespace Duck {
 		transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
 		Renderer::BackgroundSubmit(m_SquareImgVA, m_BackgroundImgShader, transform, texture, cols, rows);
 		
-
-
-
 	}
 
 	void Graphics::ShowGrid() {

@@ -7,7 +7,7 @@
 
 namespace Duck {
 	// Logger class for handling application logs
-	class DUCK_API Log {
+	class Log {
 	public:
 		// Initialize the logger
 		static void Init();
