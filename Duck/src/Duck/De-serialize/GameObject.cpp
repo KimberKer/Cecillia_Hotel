@@ -227,7 +227,7 @@ namespace Duck {
 	void GameObject::loadPlayerData() {
 		if (loadFromFile("player.txt")) {
 			std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
-			std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
+			//std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
 		}
 		else {
 			std::cerr << "Failed to load player data from file.\n";

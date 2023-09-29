@@ -85,6 +85,8 @@ namespace Duck {
 
         m_Graphics->SetGridSize(10);
 
+		// Load player data during application initialization
+		m_obj.loadPlayerData();
 
         m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
         m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
@@ -202,7 +204,9 @@ namespace Duck {
 				float dt = runtime.getDeltaTime(); // Get delta time in seconds
 				std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
 				std::cout << "X Pos: " << m_obj.getX() << std::endl;
-				std::cout << "Velocity: " << m_obj.getVelocityX() << std::endl;
+				std::cout << "Y Pos: " << m_obj.getY() << std::endl;
+				std::cout << "Velocity X: " << m_obj.getVelocityX() << std::endl;
+				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;
 
 				float newX = m_obj.getVelocityX();
 				newX += m_obj.getVelocityX() * dt + m_obj.getX();

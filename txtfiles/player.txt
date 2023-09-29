@@ -1,0 +1,8 @@
+pos_x 3.0
+pos_y 2.0
+vel_x 1.0
+vel_y 1.0
+grid_flag 0
+bounding_box 0.0 0.0 1.0 1.0
+state STATE_NONE
+object_type OBJ_PLAYER
