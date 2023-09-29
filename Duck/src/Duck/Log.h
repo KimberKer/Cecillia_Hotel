@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Log.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations for logging
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 
 #include "Core.h"

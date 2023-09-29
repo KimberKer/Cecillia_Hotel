@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    WindowsWindows.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations for Windows windows
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Duck/Window.h"
 #include <GLFW/glfw3.h>

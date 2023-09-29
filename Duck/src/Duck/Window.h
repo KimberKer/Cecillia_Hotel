@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Window.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementation for window
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 // Include necessary headers and precompiled header
 #pragma once
 #include "duckpch.h"

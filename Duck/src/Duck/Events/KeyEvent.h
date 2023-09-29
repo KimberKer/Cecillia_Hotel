@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    KeyEvent.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementations related to keyboard events
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Event.h"
 #include "../KeyCodes.h"

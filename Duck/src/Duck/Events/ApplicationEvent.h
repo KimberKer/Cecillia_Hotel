@@ -4,7 +4,7 @@
 // email:	s.ker\@digipen.edu
 // 
 //
-// Brief:     Contains the declarations related to application events
+// Brief:     Contains the implementations related to application events
 //
 // Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------

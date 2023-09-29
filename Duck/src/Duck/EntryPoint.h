@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    EntryPoint.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the main entry point
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 
 #ifdef DUCK_PLATFORM_WINDOWS

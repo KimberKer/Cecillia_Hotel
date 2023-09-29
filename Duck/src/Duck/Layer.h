@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Layer.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations related to layer
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Duck/Core.h"
 #include "Duck/Events/Event.h"

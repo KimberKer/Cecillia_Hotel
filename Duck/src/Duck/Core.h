@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:    Core.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:	Contains the fundamental macros and platform-specific 
+//			definitions for the Duck Engine project
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 
 #ifdef DUCK_PLATFORM_WINDOWS
