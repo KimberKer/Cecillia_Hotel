@@ -1,3 +1,30 @@
+-- Function to check if a command runs successfully
+function commandExists(cmd)
+    local handle = io.popen(cmd)
+    local result = handle:read("*a")
+    handle:close()
+    return result ~= ""
+end
+
+-- Automatically initialize and update submodules if they aren't already.
+if not os.isdir("Duck/vendor/GLFW/README.md") or 
+   not os.isfile("Duck/vendor/spdlog/README.md") or
+   not os.isfile("Duck/vendor/rapidjson/readme.md") or
+   not os.isfile("Duck/vendor/imgui/premake5.lua") or
+   not os.isfile("Duck/vendor/glm/readme.md") then
+    -- Re-initialize and update submodules
+    -- Try using WSL's git first
+	if commandExists("wsl git --version") then
+	os.execute("wsl git submodule update --init --recursive")
+	-- Fallback to Windows' git
+	elseif commandExists("git --version") then
+	os.execute("git submodule update --init --recursive")
+	else
+	-- Handle error: neither WSL's git nor Windows' git is available
+	print("Error: Git is not available in either WSL or Windows.")
+	end
+end
+
 -- Solution File
 workspace "Duck"
 	startproject "Sandbox"
