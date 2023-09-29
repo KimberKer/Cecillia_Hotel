@@ -72,7 +72,7 @@ namespace Duck {
 		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
 		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
-		m_Graphics->SetGridSize(NUM_GRIDS);
+		m_Graphics->SetGridSize(static_cast<int>(NUM_GRIDS));
 
         //TESTING AUDIO
         m_Audio = std::shared_ptr<Audio>(new Audio);
@@ -202,7 +202,7 @@ namespace Duck {
 
 				runtime.update(); // Call this at the beginning of each frame
 
-				float dt = runtime.getDeltaTime(); // Get delta time in seconds
+				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
 
 				float newX = m_obj.getVelocityX();
 				newX += m_obj.getVelocityX() * dt + m_obj.getX();
@@ -236,15 +236,15 @@ namespace Duck {
 					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() }, example2AABB, { 0,0 }))
 					)
 					 {
-					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX()));
-					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX())));
+					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
 				}
 
 				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
 				{
-					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX())); // Adjust as needed
-					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX()))); // Adjust as needed
+					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
 					m_obj.SetVelocityY(0);
 
@@ -258,7 +258,7 @@ namespace Duck {
 				m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 				m_Graphics->DrawSquareObject(m_example2.getX(), m_example2.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
-				m_Graphics->DrawSquareObject((m_map.SnapToCellX(1.f, m_obj.getX())), (m_map.SnapToCellY(1.f, m_obj.getY())) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
+				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_obj.getX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_obj.getY()))) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
 				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture2, showBB);
 
 

@@ -127,7 +127,7 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 	void GameObject::SetgridCollisionFlag(float posY) {
-		gridCollisionFlag = posY;
+		gridCollisionFlag = static_cast<float>(posY);
 	}
 
 	/******************************************************************************/
