@@ -123,6 +123,10 @@ namespace Duck {
 				PlayerOrientation = (PlayerOrientation + 90) % 360;
 			}
 
+			else if (keyEvent.GetKeyCode() == Key::Q) {
+				m_Running = false;
+			}
+
 			//Gameobject changing state
 			switch (keyEvent.GetKeyCode()) {
 				//GameObj go LEFT
@@ -177,6 +181,7 @@ namespace Duck {
 				 glClear(GL_COLOR_BUFFER_BIT)*/
 				runtime.update();
 				m_Audio->update();
+
 
 
 				//object
