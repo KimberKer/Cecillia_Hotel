@@ -22,7 +22,7 @@ namespace Duck {
 		y(0.0f),
 		velocityX(0.0f),
 		velocityY(0.0f),
-		gridCollisionFlag(0.0),
+		gridCollisionFlag(0),
 		boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
 		state(STATE_NONE),
 		obj_type(OBJ_EMPTY) {}

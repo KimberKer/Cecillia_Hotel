@@ -95,17 +95,9 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		links { "fmod_vc.lib" }
+		links { "fmod_vc.lib", "fmodstudio_vc.lib" }
 		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
-		}
-
-	filter "configurations:Debug"
-		defines "DUCK_DEBUG"
-		runtime "Debug"
-		symbols "On"
-		links { "fmodstudio_vc.lib" }
-		postbuildcommands {
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
 		}
 
@@ -113,24 +105,12 @@ project "Duck"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
-		links { "fmodL_vc.lib" }
+		links { "fmodL.lib", "fmodstudioL_vc.lib" }
 		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
-		}
-	
-	filter "configurations:Release"
-		defines "DUCK_RELEASE"
-		runtime "Release"
-		optimize "On"
-		links { "fmodstudioL_vc.lib" }
-		postbuildcommands {
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
 		}
 
-	filter "configurations:Dist"
-		defines "HZ_DIST"
-		runtime "Release"
-		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"

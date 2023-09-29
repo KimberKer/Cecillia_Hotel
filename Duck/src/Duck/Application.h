@@ -2,6 +2,7 @@
 #include "Core.h"
 #include <iostream>
 //#include <GLFW/glfw3.h>
+#include "Audio/Audio.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Logging/Logging.h"
 #include "Duck/Events/KeyEvent.h"
@@ -17,7 +18,7 @@
 #include "Duck/Graphics/Graphics.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Map/map.h"
-#include "Audio/Audio.h"
+
 
 #include "Duck/Graphics/Shader.h"
 #include "Duck/Graphics/Buffer.h"

@@ -58,7 +58,7 @@ namespace Duck {
 		Time time;
 		time.update(); // Call this at the beginning of each frame
 
-		float dt = time.getDeltaTime();
+		double dt = time.getDeltaTime();
 		//No intersection
 		if ((aabb1.minVec.x < aabb2.maxVec.x) &&
 			(aabb1.maxVec.x > aabb2.minVec.x) &&

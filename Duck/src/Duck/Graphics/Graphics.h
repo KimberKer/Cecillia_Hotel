@@ -17,7 +17,6 @@ namespace Duck {
 
 
 		virtual void SetGridSize(int GridSize);
-		virtual void SetTileWidth(int TileWidth);
 
 		virtual void DrawBackground(const uint32_t texture);
 		virtual void ShowGrid();
@@ -29,7 +28,6 @@ namespace Duck {
 
 		int cols;
 		int rows;
-		int tileWidth;
 
 		uint32_t m_RendererID{};
 

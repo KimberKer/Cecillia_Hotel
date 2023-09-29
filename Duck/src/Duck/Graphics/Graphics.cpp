@@ -281,16 +281,6 @@ namespace Duck {
 
     }
 
-    void Graphics::SetTileWidth(int TileWidth) {
-
-        tileWidth = TileWidth;
-
-    }
-
-
-
-
-
 
 	// Renders the background with a repeated image with the texture provided.
 	void Graphics::DrawBackground(const uint32_t texture) {
@@ -428,8 +418,8 @@ namespace Duck {
 
 	void DrawSquareAnimation(float PosX, float PosY, std::shared_ptr<VertexArray> VA, std::shared_ptr<Shader> shader, uint32_t texture) {
 
-		float x = (PosX * 0.2f) - 0.9;
-		float y = -(PosX * 0.2f) + 0.9;
+		float x = (PosX * 0.2f) - 0.9f;
+		float y = -(PosX * 0.2f) + 0.9f;
 
 
 		glm::vec3 Pos{ x,y ,0.0f };
