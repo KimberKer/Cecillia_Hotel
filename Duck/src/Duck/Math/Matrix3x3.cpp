@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:		Matrix3x3.cpp
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This source file defines the classes aand functions
+//              related to 3x3 matrixes.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
+
 #include "duckpch.h"
 #include "Matrix3x3.h"
 
@@ -6,6 +18,7 @@ constexpr float PI = 3.14159265358f;
 
 namespace MathLib
 {
+	
 	Matrix3x3::Matrix3x3(const float *pArr)
 	{
 		m00 = *pArr++;
@@ -44,6 +57,17 @@ namespace MathLib
 		return *this;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Overloaded compound multiplication assignment operator.
+		Multiplies the current 3x3 matrix with another 3x3 matrix.
+
+	\Param rhs
+		3x3 matrix to be used for multiplicaiton
+
+	\Return
+		Returns a reference to the modified 3x3 matrix
+	-----------------------------------------------------------*/
 	Matrix3x3& Matrix3x3::operator *= (const Matrix3x3& rhs)
 	{
 		float _m00, _m01, _m02, _m10, _m11, _m12, _m20, _m21, _m22;
@@ -76,6 +100,20 @@ namespace MathLib
 		return *this;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Overloaded multiplication operator.
+		Multiplies a 2 3x3 matrixes together.
+
+	\Param lhs
+		Left hand side 3x3 matrix
+
+	\Param rhs
+		Right hand side 3x3 matrix
+
+	\Return
+		Returns the result of the multiplication.
+	-----------------------------------------------------------*/
 	Matrix3x3 operator * (const Matrix3x3 &lhs, const Matrix3x3 &rhs)
 	{
 		Matrix3x3 result = lhs;
@@ -84,6 +122,20 @@ namespace MathLib
 		return result;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Overloaded multiplication operator.
+		Multiplies a 3x3 matrix with a 2D vector.
+
+	\Param lhs
+		3x3 matrix
+
+	\Param rhs
+		2D vector
+
+	\Return
+		Returns the result of the multiplication.
+	-----------------------------------------------------------*/
 	Vector2D  operator * (const Matrix3x3& pMtx, const Vector2D& rhs)
 	{
 		Vector2D result;
@@ -94,6 +146,10 @@ namespace MathLib
 		return result;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to make the current matrix an identify matrix.
+	-----------------------------------------------------------*/
 	void Mtx33Identity(Matrix3x3& pResult)
 	{
 		pResult.m00 = 1;
@@ -109,6 +165,22 @@ namespace MathLib
 		pResult.m22 = 1;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to translate the 3x3 matrix
+
+	\Param pResult
+		The translated 3x3 matrix
+
+	\Param x
+		Scalar value to translate x
+
+	\Param y
+		Scalar value to translate y
+
+	\Return
+		Returns the result of the translation.
+	-----------------------------------------------------------*/
 	void Mtx33Translate(Matrix3x3& pResult, float x, float y)
 	{
 		Mtx33Identity(pResult);
@@ -117,6 +189,22 @@ namespace MathLib
 		pResult.m12 = y;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to scale the 3x3 matrix
+
+	\Param pResult
+		The scaled 3x3 matrix
+
+	\Param x
+		Scalar value to scale x
+
+	\Param y
+		Scalar value to scale y
+
+	\Return
+		Returns the result of the scaling.
+	-----------------------------------------------------------*/
 	void Mtx33Scale(Matrix3x3& pResult, float x, float y)
 	{
 		Mtx33Identity(pResult);
@@ -125,6 +213,19 @@ namespace MathLib
 		pResult.m11 = y;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to roate the 3x3 matrix
+
+	\Param pResult
+		The rotated 3x3 matrix
+
+	\Param angle
+		Angle to rotate in radians
+
+	\Return
+		Returns the result of the rotation.
+	-----------------------------------------------------------*/
 	void Mtx33RotRad(Matrix3x3& pResult, float angle)
 	{
 		Mtx33Identity(pResult);
@@ -136,6 +237,19 @@ namespace MathLib
 		pResult.m11 = cosf(angle);
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to roate the 3x3 matrix
+
+	\Param pResult
+		The rotated 3x3 matrix
+
+	\Param angle
+		Angle to rotate in degrees
+
+	\Return
+		Returns the result of the rotation.
+	-----------------------------------------------------------*/
 	void Mtx33RotDeg(Matrix3x3& pResult, float angle)
 	{
 		Mtx33Identity(pResult);
@@ -146,6 +260,16 @@ namespace MathLib
 		pResult.m11 = cosf(angle * PI / 180);
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to transpose the 3x3 matrix
+
+	\Param pResult
+		The rotated 3x3 matrix
+
+	\Param pMtx
+		The 3x3 matrix to be transposed
+	-----------------------------------------------------------*/
 	void Mtx33Transpose(Matrix3x3& pResult, const Matrix3x3& pMtx)
 	{
 		pResult.m00 = pMtx.m00;
@@ -161,6 +285,22 @@ namespace MathLib
 		pResult.m22 = pMtx.m22;
 	}
 
+	/*-----------------------------------------------------------
+	\Brief
+		Function to find the inverse of the 3x3 matrix
+
+	\Param pResult
+		The 3x3 matrix after inversion
+
+	\Param determinant
+		The determinant of the matrix
+
+	\Param pMtx 
+		The 3x3 matrix that user wants to inverse.
+
+	\Return
+		Returns the result of the inversion.
+	-----------------------------------------------------------*/
 	void Mtx33Inverse(Matrix3x3* pResult, float* determinant, const Matrix3x3& pMtx)
 	{
 		// Calculate the determinant of the matrix

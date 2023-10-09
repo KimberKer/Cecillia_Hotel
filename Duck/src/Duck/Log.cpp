@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Log.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementation for logging
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"

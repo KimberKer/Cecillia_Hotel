@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Logging.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations related to logging
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "Duck/Core.h"
 #include <vector>
 

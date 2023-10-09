@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    KeyEvent.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementations related to keyboard events
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Event.h"
 #include "../KeyCodes.h"
@@ -15,7 +26,7 @@ namespace Duck {
 
 	protected:
 		// Constructor to initialize with a key code
-		KeyEvent(int keycode) : m_KeyCode(keycode) {}
+		KeyEvent(Duck::KeyCode keycode) : m_KeyCode(keycode) {}
 
 		KeyCode m_KeyCode;
 	};
@@ -24,7 +35,7 @@ namespace Duck {
 	class KeyPressedEvent : public KeyEvent {
 	public:
 		// Constructor to initialize with a key code and repeat count
-		KeyPressedEvent(int keycode, int repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+		KeyPressedEvent(KeyCode keycode, int repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
 		// Getter function for the repeat count
 		inline int GetRepeatCount() const { return m_RepeatCount; }
@@ -47,7 +58,7 @@ namespace Duck {
 	class KeyReleasedEvent : public KeyEvent {
 	public:
 		// Constructor to initialize with a key code
-		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
+		KeyReleasedEvent(int keycode) : KeyEvent(static_cast<KeyCode>(keycode)) {}
 
 		// String representation of the event
 		std::string ToString() const override {

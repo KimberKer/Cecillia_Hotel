@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Input.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the declarations related to input
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #pragma once
 #include "Duck/Core.h"
 

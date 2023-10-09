@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    WindowsInput.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the implementation for windows input
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "WindowsInput.h"
 

@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:		Audio.h
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This header file defines the classes aand functions
+//              related to the audio engine.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
+
 #pragma once
 
 #include "../FMOD/api/studio/inc/fmod_studio.hpp"

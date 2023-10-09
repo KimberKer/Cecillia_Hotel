@@ -22,7 +22,7 @@ namespace Duck {
 		y(0.0f),
 		velocityX(0.0f),
 		velocityY(0.0f),
-		gridCollisionFlag(0.0f),
+		gridCollisionFlag(0),
 		boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
 		state(STATE_NONE),
 		obj_type(OBJ_EMPTY) {}
@@ -30,6 +30,25 @@ namespace Duck {
 	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, Duck::AABB boundingbox, STATE getstate, OBJ_TYPE obj_type)
 		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), boundingbox(boundingbox), state(getstate), obj_type(obj_type) {}
 
+	void GameObject::CreateObj(	float p_x,
+								float p_y,
+								float p_velocityX,
+								float p_velocityY,
+								int p_gridCollisionFlag,
+								Duck::AABB p_boundingbox,
+								STATE p_state,
+								OBJ_TYPE p_obj_type)
+	{
+		x = p_x;
+		y = p_y;
+		velocityX = p_velocityX;
+		velocityY = p_velocityY;
+		gridCollisionFlag = p_gridCollisionFlag;
+		boundingbox = p_boundingbox;
+		state = p_state;
+		obj_type = p_obj_type;
+
+	}
 	/******************************************************************************/
 	/*!
 		This function returns the current state of the GameObject.
@@ -108,7 +127,7 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 	void GameObject::SetgridCollisionFlag(float posY) {
-		gridCollisionFlag = posY;
+		gridCollisionFlag = static_cast<int>(posY);
 	}
 
 	/******************************************************************************/

@@ -2,6 +2,7 @@
 #include "Core.h"
 #include <iostream>
 //#include <GLFW/glfw3.h>
+#include "Audio/Audio.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Logging/Logging.h"
 #include "Duck/Events/KeyEvent.h"
@@ -17,7 +18,7 @@
 #include "Duck/Graphics/Graphics.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Map/map.h"
-#include "Audio/Audio.h"
+
 
 #include "Duck/Graphics/Shader.h"
 #include "Duck/Graphics/Buffer.h"
@@ -61,12 +62,12 @@ namespace Duck {
 		std::unique_ptr<Graphics> m_Graphics;
 
 		uint32_t m_CharacterTexture;
-		uint32_t m_BackgroundTexture;
+		uint32_t m_BackgroundTexture, m_BackgroundTexture2;
 
 
 	private:
 		static Application* s_Instance;
-		GameObject m_obj;
+		GameObject m_obj, m_example, m_example2, m_example3;
 		MapDataHandler m_map;
 		AABB aabb;
 		PhysicsLib m_phy;

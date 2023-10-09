@@ -31,31 +31,20 @@
 #include "Debug.h"
 #include "CoreManager.h"
 
-//Flags
-const unsigned int	FLAG_ACTIVE = 0x00000001;
-const unsigned int	FLAG_VISIBLE = 0x00000002;
-const unsigned int	FLAG_NON_COLLIDABLE = 0x00000004;
 
-//Collision flags
-const unsigned int	COLLISION_LEFT = 0x00000001;	//0001
-const unsigned int	COLLISION_RIGHT = 0x00000002;	//0010
-const unsigned int	COLLISION_TOP = 0x00000004;	//0100
-const unsigned int	COLLISION_BOTTOM = 0x00000008;	//1000
 
-//window
-float const         WINDOW_COL = 10;
-float const         WINDOW_ROW = 10;
+
+const float         NUM_GRIDS = 10.f;
 
 const float         PLAYER_VELOCITY = 0.1f;
 
 bool                loadFiles = false;
 bool                showImGuiWindow = false;
+bool				showGrid = false;
+bool				showBB = false;
 
+int				PlayerOrientation = 0;
 
-// Function to handle errors
-void error_callback(int error, const char* description) {
-	std::cerr << "Error: " << description << std::endl;
-}
 
 namespace Duck {
 	Application* Application::s_Instance = nullptr;
@@ -81,7 +70,11 @@ namespace Duck {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-        m_Graphics = std::unique_ptr<Graphics>(new Graphics);
+		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
+		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
+		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
+		m_Graphics->SetGridSize(static_cast<int>(NUM_GRIDS));
 
         m_Graphics->SetGridSize(10);
 
@@ -96,6 +89,10 @@ namespace Duck {
         m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
         m_Audio->init();
         m_Audio->loadSound(m_SoundInfo);
+
+		m_example.CreateObj(6.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(6, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
+		m_example3.CreateObj(5.f, 5.f, 0, 0, 0, aabb.ConvertToAABB(5, 5, 1, 1), STATE_NONE, OBJ_EMPTY);
+		m_example2.CreateObj(7.f, 7.f, 0, 0, 0, aabb.ConvertToAABB(7, 7, 1, 1), STATE_NONE, OBJ_EMPTY);
 
 	}
 
@@ -120,6 +117,19 @@ namespace Duck {
 			KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
 			if (keyEvent.GetKeyCode() == Key::I) {
 				showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
+			}
+			else if (keyEvent.GetKeyCode() == Key::G) {
+				showGrid = !showGrid;
+			}
+			else if (keyEvent.GetKeyCode() == Key::B) {
+				showBB = !showBB;
+			}
+			else if (keyEvent.GetKeyCode() == Key::R) {
+				PlayerOrientation = (PlayerOrientation + 90) % 360;
+			}
+
+			else if (keyEvent.GetKeyCode() == Key::Q) {
+				m_Running = false;
 			}
 
 			//Gameobject changing state
@@ -178,6 +188,7 @@ namespace Duck {
 				m_Audio->update();
 
 
+
 				//object
 				switch (m_obj.getState()) {
 				case STATE_GOING_LEFT:
@@ -201,12 +212,13 @@ namespace Duck {
 
 				runtime.update(); // Call this at the beginning of each frame
 
-				float dt = runtime.getDeltaTime(); // Get delta time in seconds
+				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
 				std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
 				std::cout << "X Pos: " << m_obj.getX() << std::endl;
 				std::cout << "Y Pos: " << m_obj.getY() << std::endl;
 				std::cout << "Velocity X: " << m_obj.getVelocityX() << std::endl;
 				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;
+				
 
 				float newX = m_obj.getVelocityX();
 				newX += m_obj.getVelocityX() * dt + m_obj.getX();
@@ -216,7 +228,6 @@ namespace Duck {
 
 				m_obj.SetPositionX(newX);
 				m_obj.SetPositionY(newY);
-				std::cout << m_obj.getX() << std::endl;
 
 				RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 				RenderCommand::Clear();
@@ -229,32 +240,43 @@ namespace Duck {
 				Renderer::BeginScene();
 
 
-				MathLib::Vector2D obj2(5.0, 5.0);
-				AABB windowAABB = aabb.ConvertToAABB(0, 0, 10 * 1, 10 * 1);
-				AABB playerAABB = aabb.ConvertToAABB(m_obj.getX(), m_obj.getY(), 0.9f, 0.9f);
-				AABB player2AABB = aabb.ConvertToAABB(obj2.x, obj2.y, 1.f, 1.f);
+				
+				AABB windowAABB = aabb.ConvertToAABB(0, 0, NUM_GRIDS, NUM_GRIDS);
+				AABB playerAABB = aabb.ConvertToAABB(m_obj.getX(), m_obj.getY(), 1.f, 1.f);
+				AABB example3AABB = aabb.ConvertToAABB(m_example3.getX(), m_example3.getY(), 1.f, 1.f);
+				AABB exampleAABB = aabb.ConvertToAABB(m_example.getX(), m_example.getY(), 1.f, 1.f);
+				AABB example2AABB = aabb.ConvertToAABB(m_example2.getX(), m_example2.getY(), 1.f, 1.f);
 
-				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, player2AABB, { 0,0 })) {
-					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX()));
-					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example3AABB, { 0,0 }) ||
+					(m_phy.CollisionIntersection_RectRect(playerAABB, {m_example.getVelocityX(), m_example.getVelocityY() }, exampleAABB, {0,0})) ||
+					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() }, example2AABB, { 0,0 }))
+					)
+					 {
+					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX())));
+					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
 				}
 
 				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
 				{
-					m_obj.SetPositionX(m_map.SnapToCellX(1.f, m_obj.getX())); // Adjust as needed
-					m_obj.SetPositionY(m_map.SnapToCellY(1.f, m_obj.getY()));
+					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX()))); // Adjust as needed
+					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
 					m_obj.SetVelocityY(0);
 
 				}
 
 				m_Graphics->DrawBackground(m_BackgroundTexture);
-				m_Graphics->ShowGrid();
+				if (showGrid) {
+					m_Graphics->ShowGrid();
+				}
+		
+				m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
+				m_Graphics->DrawSquareObject(m_example2.getX(), m_example2.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
-				m_Graphics->DrawSquareObject((m_map.SnapToCellX(1.f, m_obj.getX())), (m_map.SnapToCellY(1.f, m_obj.getY())) , 1.0f, 0, m_CharacterTexture, true);
-				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 180.0f, m_CharacterTexture, true);
-				m_Graphics->DrawSquareObject(8.0f, 8.0f, 0.5f, 0.0f, m_CharacterTexture, true);
+				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_obj.getX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_obj.getY()))) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
+				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture2, showBB);
+
 
 	
 

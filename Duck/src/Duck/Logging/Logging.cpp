@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:    Logging.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:     Contains the definitions related to logging
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
 #include "duckpch.h"
 #include "Logging.h"
 

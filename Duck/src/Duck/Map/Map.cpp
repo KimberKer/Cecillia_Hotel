@@ -170,8 +170,8 @@ namespace Duck {
 	}
 	int MapDataHandler::SnapToCellX(float cellSize, float x) {
 		// Calculate the new x and y positions based on the cell size
-		x = static_cast<int>(std::round(x / cellSize));
-		return x;
+		x = static_cast<float>(std::round(x / cellSize));
+		return static_cast<int>(x);
 	}
 	float MapDataHandler::SnapToCellY(float cellSize, float y) {
 		// Calculate the new x and y positions based on the cell size
