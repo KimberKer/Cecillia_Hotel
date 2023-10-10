@@ -134,8 +134,11 @@ project "Duck"
 		optimize "On"
 		links { "fmodL.lib", "fmodstudioL_vc.lib" }
 		postbuildcommands {
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
+			-- ("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
+			-- ("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\""),
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
+
 		}
 
 
@@ -174,8 +177,7 @@ project "Sandbox"
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
+
     }
 
 	links {
