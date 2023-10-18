@@ -15,6 +15,7 @@
 #include "collision.h"
 #include <GLFW/glfw3.h>
 #include "Duck/Time.h"
+#include "Duck/Log.h"
 
 namespace Duck {
 	// Constructors
@@ -66,7 +67,6 @@ namespace Duck {
 			(aabb1.minVec.y < aabb2.maxVec.y)
 			)
 		{
-
 			return true;
 		}
 		//overlap
@@ -169,6 +169,7 @@ namespace Duck {
 
 
 		return 1;
+
 
 	}
 

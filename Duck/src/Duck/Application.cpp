@@ -72,6 +72,8 @@ namespace Duck {
 
 		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+		m_GhostTexture = Shader::LoadTexture("../images/Ghost.png");
+
 		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
 		m_Graphics->SetGridSize(static_cast<int>(NUM_GRIDS));
@@ -81,8 +83,14 @@ namespace Duck {
 		// Load player data during application initialization
 		m_obj.loadPlayerData();
 
-        m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
-        m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
+		// Load waypoint for Ghost
+		m_Ghost.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
+
+		// Create a Ghost object and initialize it with the player
+		
+
+        //m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
+        //m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
         
         //TESTING AUDIO
         m_Audio = std::shared_ptr<Audio>(new Audio);
@@ -90,10 +98,12 @@ namespace Duck {
         m_Audio->init();
         m_Audio->loadSound(m_SoundInfo);
 
-		m_example.CreateObj(6.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(6, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
-		m_example3.CreateObj(5.f, 5.f, 0, 0, 0, aabb.ConvertToAABB(5, 5, 1, 1), STATE_NONE, OBJ_EMPTY);
-		m_example2.CreateObj(7.f, 7.f, 0, 0, 0, aabb.ConvertToAABB(7, 7, 1, 1), STATE_NONE, OBJ_EMPTY);
+		m_example.CreateObj(3.f, 3.f, 0, 0, 0, aabb.ConvertToAABB(3, 3, 1, 1), STATE_NONE, OBJ_EMPTY);
+		m_example2.CreateObj(6.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(6, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
+		m_example3.CreateObj(3.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(3, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
 
+		//							x,  y	velX, velY, roam duration, idle duration, roam speed, max chase speed, waypoint threshold, bounding box
+		m_Ghost.SetGhostProperties(7.f, 7.f, 0.f, 0.f, 5.f, 0.f, 0.05f, 0.25f, 0.1f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));
 	}
 
 	Application::~Application() {
@@ -150,27 +160,19 @@ namespace Duck {
 			default:
 				m_obj.SetState(STATE_NONE);
 				break;
-			
 			}
 		}
 		else if (e.GetEventType() == EventType::KeyReleased) {
 			KeyReleasedEvent& keyEvent = dynamic_cast<KeyReleasedEvent&>(e);
-			// Reset the velocity when the 'D' key is released
+			// Reset the velocity when key is released
 			switch (keyEvent.GetKeyCode()) {
-				//GameObj go LEFT
 			case Key::A:
-				m_obj.SetState(STATE_NONE);
-				break;
 			case Key::D:
-				m_obj.SetState(STATE_NONE);
-				break;
 			case Key::W:
-				m_obj.SetState(STATE_NONE);
-				break;
 			case Key::S:
+			default:
 				m_obj.SetState(STATE_NONE);
 				break;
-
 			}
 		}
 	}
@@ -213,11 +215,11 @@ namespace Duck {
 				runtime.update(); // Call this at the beginning of each frame
 
 				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
-				std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
+				/*std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
 				std::cout << "X Pos: " << m_obj.getX() << std::endl;
 				std::cout << "Y Pos: " << m_obj.getY() << std::endl;
 				std::cout << "Velocity X: " << m_obj.getVelocityX() << std::endl;
-				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;
+				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;*/
 				
 
 				float newX = m_obj.getVelocityX();
@@ -239,22 +241,27 @@ namespace Duck {
 				// Would be used for cameras
 				Renderer::BeginScene();
 
-
 				
 				AABB windowAABB = aabb.ConvertToAABB(0, 0, NUM_GRIDS, NUM_GRIDS);
 				AABB playerAABB = aabb.ConvertToAABB(m_obj.getX(), m_obj.getY(), 1.f, 1.f);
-				AABB example3AABB = aabb.ConvertToAABB(m_example3.getX(), m_example3.getY(), 1.f, 1.f);
 				AABB exampleAABB = aabb.ConvertToAABB(m_example.getX(), m_example.getY(), 1.f, 1.f);
 				AABB example2AABB = aabb.ConvertToAABB(m_example2.getX(), m_example2.getY(), 1.f, 1.f);
+				AABB example3AABB = aabb.ConvertToAABB(m_example3.getX(), m_example3.getY(), 1.f, 1.f);
 
-				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example3AABB, { 0,0 }) ||
-					(m_phy.CollisionIntersection_RectRect(playerAABB, {m_example.getVelocityX(), m_example.getVelocityY() }, exampleAABB, {0,0})) ||
-					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() }, example2AABB, { 0,0 }))
+				AABB ghostAABB = aabb.ConvertToAABB(m_Ghost.GetGhostPositionX(), m_Ghost.GetGhostPositionY(), 1.f, 1.f);
+
+				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example3AABB, { m_example.getVelocityX(), m_example.getVelocityY() }) ||
+					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, exampleAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() })) ||
+					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example2AABB, { m_example3.getVelocityX(), m_example3.getVelocityY() }))
 					)
-					 {
+				{
+					DUCK_CORE_INFO("Collision Detected!");
 					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX())));
 					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
+				}
+				else if(m_obj.getState() != STATE_NONE ) {
+					DUCK_CORE_INFO("No Collision Detected!");
 				}
 
 				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
@@ -263,8 +270,10 @@ namespace Duck {
 					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
 					m_obj.SetVelocityX(0);
 					m_obj.SetVelocityY(0);
-
 				}
+
+				// Ghost
+				m_Ghost.Update(dt, m_obj);
 
 				m_Graphics->DrawBackground(m_BackgroundTexture);
 				if (showGrid) {
@@ -273,13 +282,11 @@ namespace Duck {
 		
 				m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 				m_Graphics->DrawSquareObject(m_example2.getX(), m_example2.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
+				m_Graphics->DrawSquareObject(m_example3.getX(), m_example3.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
 				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_obj.getX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_obj.getY()))) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
-				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture2, showBB);
-
-
-	
-
+				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_Ghost.GetGhostPositionX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_Ghost.GetGhostPositionY()))), 1.0f, (float)PlayerOrientation, m_GhostTexture, showBB);
+				//m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture, showBB);
 
 				Debug::GetInstance()->EndSystemProfile("Graphics");
 
@@ -293,7 +300,6 @@ namespace Duck {
 					layer->OnImGuiRender();
 				}
 				}
-
 
 				m_ImGuiLayer->End();
 

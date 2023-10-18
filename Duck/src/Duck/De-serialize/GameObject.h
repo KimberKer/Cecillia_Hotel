@@ -34,6 +34,8 @@ enum OBJ_TYPE
 	OBJ_PLAYER,
 	OBJ_GHOST,
 	OBJ_NPC,
+	OBJ_WALL,
+	OBJ_ERROR
 };
 namespace Duck {
 	class GameObject {
@@ -60,11 +62,11 @@ namespace Duck {
 		Duck::AABB getBoundingBox() const;
 
 
-		void  SetState(STATE state);
-		void  SetVelocityX(float velx);
-		void  SetVelocityY(float vely);
-		void  SetPositionX(float posX);
-		void  SetPositionY(float posY);
+		void SetState(STATE state);
+		void SetVelocityX(float velx);
+		void SetVelocityY(float vely);
+		void SetPositionX(float posX);
+		void SetPositionY(float posY);
 		void SetgridCollisionFlag(float posY);
 
 		void ReadState(std::string state);

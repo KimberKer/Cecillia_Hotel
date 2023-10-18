@@ -14,11 +14,11 @@
 #pragma once
 #include "duckpch.h"
 #include "GameObject.h"
-
+#include "Duck/Log.h"
 
 namespace Duck {
-	GameObject::GameObject()
-		: x(0.0f),
+	GameObject::GameObject() :
+		x(0.0f),
 		y(0.0f),
 		velocityX(0.0f),
 		velocityY(0.0f),
@@ -190,6 +190,9 @@ namespace Duck {
 		MathLib::Vector2D minVec(minx, miny);
 		MathLib::Vector2D maxVec(maxx, maxy);
 		boundingbox = { minVec, maxVec };
+		/*
+					How does boundingbox take its value?
+		*/
 
 		file.close();
 		return true;
@@ -227,15 +230,26 @@ namespace Duck {
 		if (obj == "OBJ_EMPTY") {
 			obj_type = OBJ_EMPTY;
 		}
-		else if (obj == "STATE_GOING_LEFT") {
+		else if (obj == "OBJ_PLAYER") {
 			obj_type = OBJ_PLAYER;
 		}
-		else if (obj == "STATE_GOING_RIGHT") {
+		else if (obj == "OBJ_GHOST") {
 			obj_type = OBJ_GHOST;
 		}
-		else if (obj == "STATE_GOING_UP") {
+		else if (obj == "OBJ_NPC") {
 			obj_type = OBJ_NPC;
 		}
+		else if (obj == "OBJ_WALL") {
+			obj_type = OBJ_WALL;
+		}
+		else {
+			obj_type = OBJ_ERROR;
+		}
+
+		static const char* objType[] = {
+			"OBJ_EMPTY", "OBJ_PLAYER", "OBJ_GHOST", "OBJ_NPC", "OBJ_ERROR"
+		};
+		//DUCK_CORE_INFO("Object Type: {0}", objType[obj_type]);
 	}
 
 	/******************************************************************************/
@@ -245,7 +259,8 @@ namespace Duck {
 	 /******************************************************************************/
 	void GameObject::loadPlayerData() {
 		if (loadFromFile("player.txt")) {
-			std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
+			DUCK_CORE_INFO("Player Position Loaded at (x, y): {0}, {1}", getX(), getY());
+			//std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
 			//std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
 		}
 		else {

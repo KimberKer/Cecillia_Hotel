@@ -18,7 +18,7 @@
 #include "Duck/Graphics/Graphics.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Map/map.h"
-
+#include "Duck/Ghost/AI.h"
 
 #include "Duck/Graphics/Shader.h"
 #include "Duck/Graphics/Buffer.h"
@@ -26,12 +26,12 @@
 #include "Duck/Graphics/Renderer.h"
 
 
-
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
 	class Audio;
 	class GameObject;
+	class Ghost;
 	class DUCK_API Application {
 	public:
 		Application();
@@ -62,21 +62,17 @@ namespace Duck {
 		std::unique_ptr<Graphics> m_Graphics;
 
 		uint32_t m_CharacterTexture;
+		uint32_t m_GhostTexture;
 		uint32_t m_BackgroundTexture, m_BackgroundTexture2;
-
 
 	private:
 		static Application* s_Instance;
 		GameObject m_obj, m_example, m_example2, m_example3;
+		Ghost m_Ghost;
 		MapDataHandler m_map;
 		AABB aabb;
 		PhysicsLib m_phy;
 	};
-
-
-
-
-
 
 	// To be defined in CLIENT
 	Application* CreateApplication();
