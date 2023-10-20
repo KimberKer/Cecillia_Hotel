@@ -245,7 +245,6 @@ private:
 	std::shared_ptr<Duck::GameObject> p_player;
 
 	Duck::AABB aabb;
-	
 	Duck::PhysicsLib m_phy;
 
 	uint32_t m_CharacterTexture;
@@ -255,7 +254,6 @@ private:
 	Duck::Ghost m_Jiangshi;
 
 	Duck::Time runtime;
-
 
 	int numOfObjects;
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
@@ -278,7 +276,7 @@ public:
 	}
 
 	~Sandbox() {
-
+		//m_map->FreeMapData();
 	}
 };
 

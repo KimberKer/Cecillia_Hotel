@@ -5,30 +5,21 @@
 #include "Duck/Log.h"
 #include "Time.h"
 #include "Physics/collision.h"
+#include "Physics/PhysicsManager.h"
 #include "Duck/Graphics/Graphics.h"
+#include "Duck/stb_image.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Duck/stb_image.h"
 #include <GLFW/glfw3.h>
+#include "Input.h"
+#include <Windows.h>
+#include "Debug.h"
+#include "CoreManager.h"
 
 // Headers for memory leak detection
 #define _CRTDBG_MAP_ALLOC  
 #include <stdlib.h>  
 #include <crtdbg.h>
-
-#include "Input.h"
-#include <fstream>
-#include <exception>
-#include <ctime>
-#include <sstream>
-#include <iomanip>
-#include <Windows.h>
-#include "Application.h"
-#include "Physics/PhysicsManager.h"
-#include "Debug.h"
-#include "CoreManager.h"
-
-
 
 namespace Duck {
 
@@ -54,7 +45,6 @@ namespace Duck {
 
 	Application::~Application() {
 		coreManager->DestroyInstance();
-		//m_map->FreeMapData();
 	}
 
 	void Application::PushLayer(Layer* layer) {
@@ -77,68 +67,11 @@ namespace Duck {
 				break;
 			}
 		}
-
-		////setting events based on inputs
-		//if (e.GetEventType() == EventType::KeyPressed) {
-		//	KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
-		//	if (keyEvent.GetKeyCode() == Key::I) {
-		//		showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
-		//	}
-		//	else if (keyEvent.GetKeyCode() == Key::G) {
-		//		showGrid = !showGrid;
-		//	}
-		//	else if (keyEvent.GetKeyCode() == Key::B) {
-		//		showBB = !showBB;
-		//	}
-		//	else if (keyEvent.GetKeyCode() == Key::R) {
-		//		PlayerOrientation = (PlayerOrientation + 90) % 360;
-		//	}
-		//	else if (keyEvent.GetKeyCode() == Key::Q) {
-		//		m_Running = false;
-		//	}
-		//}
-
-		////Gameobject changing state
-
-		//if (e.GetEventType() == EventType::KeyPressed) {
-		//	KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
-		//	switch (keyEvent.GetKeyCode()) {
-		//		//GameObj go LEFT
-		//	case Key::A:
-		//		p_player->SetState(STATE_GOING_LEFT);
-		//		break;
-		//	case Key::D:
-		//		p_player->SetState(STATE_GOING_RIGHT);
-		//		break;
-		//	case Key::W:
-		//		p_player->SetState(STATE_GOING_UP);
-		//		break;
-		//	case Key::S:
-		//		p_player->SetState(STATE_GOING_DOWN);
-		//		break;
-		//	default:
-		//		p_player->SetState(STATE_NONE);
-		//		break;
-		//	}
-		//}
-		//else if (e.GetEventType() == EventType::KeyReleased) {
-		//	KeyReleasedEvent& keyEvent = dynamic_cast<KeyReleasedEvent&>(e);
-		//	// Reset the velocity when key is released
-		//	switch (keyEvent.GetKeyCode()) {
-		//	case Key::A:
-		//	case Key::D:
-		//	case Key::W:
-		//	case Key::S:
-		//		p_player->SetState(STATE_NONE);
-		//	default:
-		//		p_player->SetState(STATE_NONE);
-		//		break;
-		//	}
-		//}
 	}
+
 	void Application::Run() {
 		// Enable memory leak detection
-		//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 		try {
 			while (m_Running) {
@@ -156,8 +89,7 @@ namespace Duck {
 				m_ImGuiLayer->End();*/
 				m_Window->OnUpdate();
 				
-
-			//	coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
+				//coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 			}
 		}
 		catch (const std::exception& e)
