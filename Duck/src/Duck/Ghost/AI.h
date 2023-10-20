@@ -37,7 +37,7 @@ namespace Duck {
         Ghost();
 
         // Update function for the Jiangshi Ghost
-        void Jiangshi(float deltaTime, GameObject& gameObject);
+        void Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject);
 
         // Load waypoints from a file
         std::vector<Vector2> ReadWaypointsFromFile(const std::string& filename);
@@ -49,10 +49,10 @@ namespace Duck {
         void Roam(float deltaTime);
 
         // Chase behavior for the Ghost
-        void Chase(float deltaTime, GameObject& gameObject);
+        void Chase(float deltaTime, std::shared_ptr<GameObject> gameObject);
 
         // Check if the player is nearby
-        bool IsPlayerNearby(GameObject& gameObject);
+        bool IsPlayerNearby(std::shared_ptr<GameObject> gameObject);
 
         void SetGhostProperties(float posX,
                                 float posY,
@@ -76,7 +76,6 @@ namespace Duck {
         void SetVelocityY(float vely);
 
     private:
-        Duck::GameObject player;        // Reference to the player GameObject
         std::vector<Vector2> waypoints; // Waypoints for roaming
         float ghostPositionX;           // X-coordinate of the ghost's position
         float ghostPositionY;           // Y-coordinate of the ghost's position

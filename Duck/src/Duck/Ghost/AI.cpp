@@ -35,7 +35,6 @@ Hachishakusama:
 #include "Duck/Log.h"
 #include "Duck/De-serialize/GameObject.h"
 
-
 namespace Duck {
     // Constructor for the Ghost class
     Ghost::Ghost() :
@@ -69,13 +68,14 @@ namespace Duck {
     }
 
     // Update function for the Ghost class
-    void Ghost::Jiangshi(float deltaTime, GameObject& gameObject) {
+    void Ghost::Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject) {
         timeInCurrentState += deltaTime;
 
         switch (state) {
         case State::Idle:
             Idle();
             if (timeInCurrentState >= idleDuration) {
+                DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
                 state = State::Roaming;
                 DUCK_CORE_INFO("Switched to Roaming state!");
                 timeInCurrentState = 0;
@@ -85,6 +85,7 @@ namespace Duck {
         case State::Roaming:
             Roam(deltaTime);
             if (timeInCurrentState >= roamDuration) {
+                DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
                 state = State::Idle;
                 DUCK_CORE_INFO("Switched to Idle state!");
                 timeInCurrentState = 0;
@@ -181,7 +182,7 @@ namespace Duck {
     }
 
     // Chase behavior for the Ghost class
-    void Ghost::Chase(float deltaTime, GameObject& gameObject) {
+    void Ghost::Chase(float deltaTime, std::shared_ptr<GameObject> gameObject) {
         // Gradually increase chasing speed
         timeElapsed += deltaTime;
 
@@ -195,8 +196,8 @@ namespace Duck {
         }
 
         // Get the player's position from the GameObject (player)
-        float playerPositionX = gameObject.getX();
-        float playerPositionY = gameObject.getY();
+        float playerPositionX = gameObject->getX();
+        float playerPositionY = gameObject->getY();
 
         // Calculate direction vector towards the player
         directionX = static_cast<float>(playerPositionX - ghostPositionX);
@@ -211,10 +212,10 @@ namespace Duck {
     }
 
     // Check if the player is nearby
-    bool Ghost::IsPlayerNearby(GameObject& gameObject) {
+    bool Ghost::IsPlayerNearby(std::shared_ptr<GameObject> gameObject) {
         // Get the player's position from the GameObject (player)
-        float playerPositionX = gameObject.getX();
-        float playerPositionY = gameObject.getY();
+        float playerPositionX = gameObject->getX();
+        float playerPositionY = gameObject->getY();
 
         // Calculate the distance between the ghost and the player
         float distance = std::sqrt((ghostPositionX - playerPositionX) * (ghostPositionX - playerPositionX) +

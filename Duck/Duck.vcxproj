@@ -109,7 +109,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Audio\Audio.h" />
@@ -150,6 +149,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
+    <ClInclude Include="src\Duck\Player\Player.h" />
     <ClInclude Include="src\Duck\Time.h" />
     <ClInclude Include="src\Duck\Window.h" />
     <ClInclude Include="src\Duck\stb_image.h" />
@@ -572,7 +572,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="src\Duck\Application.cpp" />
     <ClCompile Include="src\Duck\Audio\Audio.cpp" />
     <ClCompile Include="src\Duck\CoreManager.cpp" />
@@ -602,6 +601,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />
+    <ClCompile Include="src\Duck\Player\Player.cpp" />
     <ClCompile Include="src\Duck\Time.cpp" />
     <ClCompile Include="src\duckpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
