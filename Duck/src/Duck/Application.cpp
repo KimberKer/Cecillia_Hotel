@@ -36,7 +36,7 @@
 
 const float         NUM_GRIDS = 10.f;
 
-const float         PLAYER_VELOCITY = 0.1f;
+const float         PLAYER_VELOCITY = 0.15f;
 
 bool                loadFiles = false;
 bool                showImGuiWindow = false;
@@ -83,11 +83,8 @@ namespace Duck {
 		// Load player data during application initialization
 		m_obj.loadPlayerData();
 
-		// Load waypoint for Ghost
-		m_Ghost.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-
-		// Create a Ghost object and initialize it with the player
-		
+		// Load waypoint coordinates for Ghost
+		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 
         //m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
         //m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
@@ -102,8 +99,16 @@ namespace Duck {
 		m_example2.CreateObj(6.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(6, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
 		m_example3.CreateObj(3.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(3, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
 
-		//							x,  y	velX, velY, roam duration, idle duration, roam speed, max chase speed, waypoint threshold, bounding box
-		m_Ghost.SetGhostProperties(7.f, 7.f, 0.f, 0.f, 5.f, 0.f, 0.05f, 0.25f, 0.1f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));
+		m_Jiangshi.SetGhostProperties(	7.f,	// Position x
+										7.f,	// Position y
+										0.f,	// Velocity x
+										0.f,	// Velocity y
+										5.f,	// Roam duration
+										0.f,	// Idle duration
+										0.2f,	// Roam speed
+										0.0f,	// Chase speed
+										1.0f,	// Max chase speed
+										aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));	// Bounding box
 	}
 
 	Application::~Application() {
@@ -212,16 +217,16 @@ namespace Duck {
 				}
 
 
-				runtime.update(); // Call this at the beginning of each frame
+				//runtime.update(); // Call this at the beginning of each frame
 
 				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
+
 				/*std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
 				std::cout << "X Pos: " << m_obj.getX() << std::endl;
 				std::cout << "Y Pos: " << m_obj.getY() << std::endl;
 				std::cout << "Velocity X: " << m_obj.getVelocityX() << std::endl;
 				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;*/
 				
-
 				float newX = m_obj.getVelocityX();
 				newX += m_obj.getVelocityX() * dt + m_obj.getX();
 
@@ -248,8 +253,6 @@ namespace Duck {
 				AABB example2AABB = aabb.ConvertToAABB(m_example2.getX(), m_example2.getY(), 1.f, 1.f);
 				AABB example3AABB = aabb.ConvertToAABB(m_example3.getX(), m_example3.getY(), 1.f, 1.f);
 
-				AABB ghostAABB = aabb.ConvertToAABB(m_Ghost.GetGhostPositionX(), m_Ghost.GetGhostPositionY(), 1.f, 1.f);
-
 				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example3AABB, { m_example.getVelocityX(), m_example.getVelocityY() }) ||
 					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, exampleAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() })) ||
 					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example2AABB, { m_example3.getVelocityX(), m_example3.getVelocityY() }))
@@ -261,7 +264,7 @@ namespace Duck {
 					m_obj.SetVelocityX(0);
 				}
 				else if(m_obj.getState() != STATE_NONE ) {
-					DUCK_CORE_INFO("No Collision Detected!");
+					//DUCK_CORE_INFO("No Collision Detected!");
 				}
 
 				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
@@ -273,7 +276,7 @@ namespace Duck {
 				}
 
 				// Ghost
-				m_Ghost.Update(dt, m_obj);
+				m_Jiangshi.Jiangshi(dt, m_obj);
 
 				m_Graphics->DrawBackground(m_BackgroundTexture);
 				if (showGrid) {
@@ -285,7 +288,7 @@ namespace Duck {
 				m_Graphics->DrawSquareObject(m_example3.getX(), m_example3.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
 				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_obj.getX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_obj.getY()))) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
-				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_Ghost.GetGhostPositionX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_Ghost.GetGhostPositionY()))), 1.0f, (float)PlayerOrientation, m_GhostTexture, showBB);
+				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), 1.0f, (float)PlayerOrientation, m_GhostTexture, showBB);
 				//m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture, showBB);
 
 				Debug::GetInstance()->EndSystemProfile("Graphics");

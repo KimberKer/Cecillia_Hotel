@@ -68,7 +68,7 @@ namespace Duck {
 	private:
 		static Application* s_Instance;
 		GameObject m_obj, m_example, m_example2, m_example3;
-		Ghost m_Ghost;
+		Ghost m_Jiangshi;
 		MapDataHandler m_map;
 		AABB aabb;
 		PhysicsLib m_phy;

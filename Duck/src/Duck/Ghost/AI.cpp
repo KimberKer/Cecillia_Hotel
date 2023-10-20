@@ -1,10 +1,40 @@
+//---------------------------------------------------------
+// File:    AI.cpp
+// Authors: Kimber Ker Soon Kiat
+// Email:   s.ker\@digipen.edu
+//
+// Brief:   
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
+
+/*---------------------------------------------------------
+Jiangshi:
+- Able to move through all rooms and levels.
+- Movement speed is slow.
+- Only able to travel laterally.
+
+Pontianak:
+- Roams in one of the levels only.
+- Able to enter rooms.
+- Movement speed is same as player.
+- Able to travel laterally and diagonally.
+
+Hachishakusama:
+- Roams in all levels.
+- Not able to enter any rooms.
+- Movement speed is slightly faster than player.
+- Able to travel laterally and diagonally.
+
+
+!! Ghost will begin chase when player is 3 grids near the ghost.
+!! Ghost will increase its chasing speed exponentially over a period of time.
+---------------------------------------------------------*/
 #include "duckpch.h"
 #include "AI.h"
 #include "Duck/Log.h"
 #include "Duck/De-serialize/GameObject.h"
 
-int gridCellSize = 10;
-static float moveTimer = 0.0f;
 
 namespace Duck {
     // Constructor for the Ghost class
@@ -12,34 +42,34 @@ namespace Duck {
         state(State::Idle),
         ghostPositionX(0.0f),
         ghostPositionY(0.0f),
-        roamDuration(0), // Initialize with appropriate default values
-        idleDuration(0), // Initialize with appropriate default values
+        roamDuration(0),
+        idleDuration(0),
         timeInCurrentState(0),
-        roamSpeed(0.0f), // Initialize with appropriate default values
-        maxChaseSpeed(0.0f), // Initialize with appropriate default values
-        waypointThreshold(0.0f), // Initialize with appropriate default values
+        roamSpeed(0.0f),
+        maxChaseSpeed(0.0f),
         waypoints(ReadWaypointsFromFile("../txtfiles/waypoints.txt")),
         boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
+        timeElapsed(0.0f),
         isMovingToWaypoint(false)
     {
         srand(static_cast<unsigned int>(time(nullptr)));
     }
 
-    void Ghost::SetGhostProperties(float posX, float posY, float velX, float velY, float roamDur, float idleDur, float roamSpd, float maxChaseSpd, float wpThreshold, Duck::AABB p_boundingbox) {
+    void Ghost::SetGhostProperties(float posX, float posY, float dirX, float dirY, float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingbox) {
         ghostPositionX = posX;
         ghostPositionY = posY;
-        velocityX = velX;
-        velocityY = velY;
+        directionX = dirX;
+        directionY = dirY;
         roamDuration = roamDur;
         idleDuration = idleDur;
         roamSpeed = roamSpd;
+        chaseSpeed = chaseSpd;
         maxChaseSpeed = maxChaseSpd;
-        waypointThreshold = wpThreshold;
         boundingbox = p_boundingbox;
     }
 
     // Update function for the Ghost class
-    void Ghost::Update(float deltaTime, GameObject& gameObject) {
+    void Ghost::Jiangshi(float deltaTime, GameObject& gameObject) {
         timeInCurrentState += deltaTime;
 
         switch (state) {
@@ -58,13 +88,13 @@ namespace Duck {
                 state = State::Idle;
                 DUCK_CORE_INFO("Switched to Idle state!");
                 timeInCurrentState = 0;
-                chaseSpeed = 0.1f; // Reset chasing speed when transitioning to "Idle"
+                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
             }
             if (IsPlayerNearby(gameObject)) {
                 state = State::Chasing;
                 DUCK_CORE_INFO("Switched to Chasing state!");
                 timeInCurrentState = 0;
-                chaseSpeed = 0.1f; // Reset chasing speed when transitioning to "Chasing"
+                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
             }
             break;
 
@@ -81,13 +111,13 @@ namespace Duck {
 
     // Idle behavior for the Ghost class
     void Ghost::Idle() {
-        // Implement "Idle" behavior here
         DUCK_CORE_INFO("Ghost is idle.");
     }
 
     // Roam behavior for the Ghost class
     void Ghost::Roam(float deltaTime) {
         // Check if there are waypoints to roam
+        timeElapsed = 0.0;
         if (waypoints.empty()) {
             DUCK_CORE_ERROR("No waypoints available for roaming.");
             return;
@@ -103,12 +133,14 @@ namespace Duck {
 
                 // Remove the reached waypoint from the list
                 waypoints.erase(waypoints.begin() + randomIndex);
-                DUCK_CORE_ERROR("Reached!");
+                DUCK_CORE_INFO("Waypoint reached!");
 
-                isMovingToWaypoint = false; // Set the flag to indicate waiting
+                // Set the flag to indicate waiting
+                isMovingToWaypoint = false;
 
                 // If all waypoints have been visited, reset the list to start over
                 if (waypoints.empty()) {
+                    DUCK_CORE_INFO("All waypoints reached!");
                     waypoints = ReadWaypointsFromFile("../txtfiles/waypoints.txt");
                 }
             }
@@ -118,26 +150,14 @@ namespace Duck {
                 currentGridY = std::ceil(ghostPositionY);
 
                 // Calculate direction vector towards the selected waypoint
-                velocityX = targetGridX - currentGridX;
-                velocityY = targetGridY - currentGridY;
+                directionX = static_cast<float>(targetGridX - currentGridX);
+                directionY = static_cast<float>(targetGridY - currentGridY);
 
-                // Movement of the Ghost
-                moveTimer += 0.05f;
-                if (moveTimer >= 1.0f) { // Adjust 1.0f to control the delay
-                    moveTimer = 0.0f;
-
-                    if (currentGridX < targetGridX) {
-                        ghostPositionX += roamSpeed * velocityX;
-                    }
-                    else if (currentGridX > targetGridX) {
-                        ghostPositionX += roamSpeed * velocityX;
-                    }
-                    else if (currentGridY < targetGridY) {
-                        ghostPositionY += roamSpeed * velocityY;
-                    }
-                    else if (currentGridY > targetGridY) {
-                        ghostPositionY += roamSpeed * velocityY;
-                    }
+                if (currentGridX < targetGridX || currentGridX > targetGridX) {
+                    ghostPositionX += roamSpeed * directionX * deltaTime;
+                }
+                else if (currentGridY < targetGridY || currentGridY > targetGridY) {
+                    ghostPositionY += roamSpeed * directionY * deltaTime;
                 }
             }
         }
@@ -149,21 +169,28 @@ namespace Duck {
             // Calculate the target grid cell based on the waypoint
             targetGridX = static_cast<int>(targetWaypoint.x);
             targetGridY = static_cast<int>(targetWaypoint.y);
+            
+            DUCK_CORE_INFO("Target Grid X: {0}, Target Grid Y: {1}", targetGridX, targetGridY);
 
             // Set the flag to indicate movement
             isMovingToWaypoint = true;
         }
 
-        // Print Target and Current position of Ghost
-        //DUCK_CORE_INFO("Target Grid X: {0}, Target Grid Y: {1}", targetGridX, targetGridY);
+        // Print Current position of Ghost
         //DUCK_CORE_INFO("Current Grid X: {0}, Current Grid Y: {1}", currentGridX, currentGridY);
     }
 
     // Chase behavior for the Ghost class
     void Ghost::Chase(float deltaTime, GameObject& gameObject) {
         // Gradually increase chasing speed
-        chaseSpeed += roamSpeed;
-        if (chaseSpeed > maxChaseSpeed) {
+        timeElapsed += deltaTime;
+
+        if (chaseSpeed < maxChaseSpeed) {
+            chaseSpeed += (maxChaseSpeed - chaseSpeed) * (timeElapsed / 10.0f);
+            DUCK_CORE_INFO("Chase Speed: {0}", chaseSpeed);
+            DUCK_CORE_INFO("Time: {0}", timeElapsed);
+        }
+        else {
             chaseSpeed = maxChaseSpeed; // Cap the speed at the maximum limit
         }
 
@@ -172,18 +199,12 @@ namespace Duck {
         float playerPositionY = gameObject.getY();
 
         // Calculate direction vector towards the player
-        float directionX = playerPositionX - ghostPositionX;
-        float directionY = playerPositionY - ghostPositionY;
+        directionX = static_cast<float>(playerPositionX - ghostPositionX);
+        directionY = static_cast<float>(playerPositionY - ghostPositionY);
 
-        // Movement of the Ghost
-        moveTimer += 0.05f;
-        if (moveTimer >= (1.0f - chaseSpeed)) {
-            moveTimer = 0.0f;
-
-            // Move towards the player with the gradually increasing speed
-            ghostPositionX += directionX * chaseSpeed;
-            ghostPositionY += directionY * chaseSpeed;
-        }
+        // Move towards the player with the gradually increasing speed
+        ghostPositionX += chaseSpeed * directionX * deltaTime;
+        ghostPositionY += chaseSpeed * directionY * deltaTime;
         
         // Print ghost's position (replace with actual rendering)
         //DUCK_CORE_INFO("Ghost is chasing at: {0}, {1}", ghostPositionX, ghostPositionY);
@@ -199,7 +220,7 @@ namespace Duck {
         float distance = std::sqrt((ghostPositionX - playerPositionX) * (ghostPositionX - playerPositionX) +
             (ghostPositionY - playerPositionY) * (ghostPositionY - playerPositionY));
 
-        // Check if the distance is less than 2 grid cells wide
+        // Check if the distance is less than 3 grid cells wide
         float gridCellSize = 1.0f;
 
         return distance <= 3.0f * gridCellSize;
@@ -221,22 +242,6 @@ namespace Duck {
 
     void Ghost::SetGhostPositionY(float y) {
         ghostPositionX = y;
-    }
-
-    float Ghost::getVelocityX() const {
-        return velocityX;
-    }
-
-    float Ghost::getVelocityY() const {
-        return velocityY;
-    }
-
-    void Ghost::SetVelocityX(float velx) {
-        velocityX = velx;
-    }
-
-    void Ghost::SetVelocityY(float vely) {
-        velocityY = vely;
     }
 
     // Load waypoints from a file

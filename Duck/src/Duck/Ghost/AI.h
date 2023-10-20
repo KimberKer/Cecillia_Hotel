@@ -1,3 +1,12 @@
+//---------------------------------------------------------
+// File:    AI.h
+// Authors: Kimber Ker Soon Kiat
+// Email:   s.ker\@digipen.edu
+//
+// Brief:   
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
 #pragma once
 
 #ifndef AI_H
@@ -27,8 +36,8 @@ namespace Duck {
         // Constructor for the Ghost class
         Ghost();
 
-        // Update function for the Ghost AI
-        void Update(float deltaTime, GameObject& gameObject);
+        // Update function for the Jiangshi Ghost
+        void Jiangshi(float deltaTime, GameObject& gameObject);
 
         // Load waypoints from a file
         std::vector<Vector2> ReadWaypointsFromFile(const std::string& filename);
@@ -39,7 +48,6 @@ namespace Duck {
         // Roam behavior for the Ghost
         void Roam(float deltaTime);
 
-
         // Chase behavior for the Ghost
         void Chase(float deltaTime, GameObject& gameObject);
 
@@ -48,14 +56,14 @@ namespace Duck {
 
         void SetGhostProperties(float posX,
                                 float posY,
-                                float velocityX,
-                                float velocityY,
+                                float dirX,
+                                float dirY,
                                 float roamDur,
                                 float idleDur,
                                 float roamSpd,
+                                float chaseSpd,
                                 float maxChaseSpd,
-                                float wpThreshold,
-                                Duck::AABB p_boundingbox);
+                                Duck::AABB p_boundgingbox);
         
         float GetGhostPositionX() const;
         float GetGhostPositionY() const;
@@ -68,19 +76,19 @@ namespace Duck {
         void SetVelocityY(float vely);
 
     private:
-        Duck::GameObject player; // Reference to the player GameObject
+        Duck::GameObject player;        // Reference to the player GameObject
         std::vector<Vector2> waypoints; // Waypoints for roaming
-        float waypointThreshold; // Threshold for waypoint reaching
-        float ghostPositionX; // X-coordinate of the ghost's position
-        float ghostPositionY; // Y-coordinate of the ghost's position
-        float velocityX;
-        float velocityY;
-        float roamDuration; // Duration of the "Roaming" state
-        float idleDuration; // Duration of the "Idle" state
-        float timeInCurrentState; // Time elapsed in the current state
-        float roamSpeed; // Speed while roaming
-        float chaseSpeed; // Speed while chasing
-        float maxChaseSpeed; // Maximum chasing speed
+        float ghostPositionX;           // X-coordinate of the ghost's position
+        float ghostPositionY;           // Y-coordinate of the ghost's position
+        float directionX;
+        float directionY;
+        float roamDuration;             // Duration of the "Roaming" state
+        float idleDuration;             // Duration of the "Idle" state
+        float timeInCurrentState;       // Time elapsed in the current state
+        float roamSpeed;                // Speed while roaming
+        float chaseSpeed;               // Speed while chasing
+        float maxChaseSpeed;            // Maximum chasing speed
+        float timeElapsed;
         bool isMovingToWaypoint;
 
         int randomIndex;
@@ -91,11 +99,10 @@ namespace Duck {
         int targetGridY;
 
         Duck::AABB boundingbox;
-        State state; // Current AI state
+        State state;                    // Current AI state
 
         AABB aabb;
         PhysicsLib m_phy;
-
     };
 }
 #endif
