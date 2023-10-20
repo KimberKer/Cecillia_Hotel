@@ -15,12 +15,14 @@
 #include "Duck/Events/ApplicationEvent.h"
 #include "Duck/Events/KeyEvent.h"
 #include "Duck/Events/MouseEvent.h"
+#include "Duck/De-serialize/GameObject.h"
+#include "Duck/Map/Map.h"
 
 namespace Duck {
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
+		ImGuiLayer(std::shared_ptr<MapDataHandler> map);
 		~ImGuiLayer();
 
 		virtual void OnAttach() override;
@@ -30,12 +32,22 @@ namespace Duck {
 
 		void Begin();
 		void End();
+		void CreateObjects();
 		
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
+
+		void HandleDragAndDropTarget(); //drag and drop functionality
+
+		void InitiateDragAndDropSource(); //drag and drop functionality
+
+
+
 	private:
 		bool m_BlockEvents = true;
 		float m_time = 0.0f;
+		std::shared_ptr<MapDataHandler> m_map;
+		const char* filename;
 	};
 }

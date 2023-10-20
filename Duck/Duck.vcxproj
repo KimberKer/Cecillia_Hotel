@@ -104,8 +104,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /
       <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
-IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
+IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -128,7 +128,9 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
+    <ClInclude Include="src\Duck\ImGui\FrameBuffer.h" />
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Duck\ImGui\OpenGlFrameBuffer.h" />
     <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
     <ClInclude Include="src\Duck\Layer.h" />
@@ -584,8 +586,10 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /
     <ClCompile Include="src\Duck\Log.cpp" />
     <ClCompile Include="src\Duck\Logging\Logging.cpp" />
     <ClCompile Include="src\Duck\Map\Map.cpp" />
+    <ClCompile Include="src\Duck\Map\MapLayer.cpp" />
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
+    <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp" />
     <ClCompile Include="src\Duck\Physics\Physics.cpp" />
     <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Duck\Physics\collision.cpp" />

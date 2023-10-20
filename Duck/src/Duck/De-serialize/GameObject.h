@@ -32,8 +32,9 @@ enum OBJ_TYPE
 {
 	OBJ_EMPTY,
 	OBJ_PLAYER,
+	OBJ_OBJ,
 	OBJ_GHOST,
-	OBJ_NPC,
+	OBJ_NPC
 };
 namespace Duck {
 	class GameObject {
@@ -46,7 +47,6 @@ namespace Duck {
 			float velocityX,
 			float velocityY,
 			int gridCollisionFlag,
-			Duck::AABB boundingbox,
 			STATE state,
 			OBJ_TYPE obj_type);
 
@@ -57,7 +57,7 @@ namespace Duck {
 		float getVelocityY() const;
 		STATE getState() const;
 		int getgridCollisionFlag() const;
-		Duck::AABB getBoundingBox() const;
+		OBJ_TYPE getObj() const;
 
 
 		void  SetState(STATE state);
@@ -69,14 +69,11 @@ namespace Duck {
 
 		void ReadState(std::string state);
 		void ReadObj(std::string obj);
-		void CreateObj(float x,
+		std::shared_ptr<GameObject> CreateObj(float x,
 			float y,
-			float velocityX,
-			float velocityY,
-			int gridCollisionFlag,
-			Duck::AABB boundingbox,
 			STATE state,
 			OBJ_TYPE obj_type);
+
 
 
 		// Load object properties from a .txt file
@@ -92,7 +89,7 @@ namespace Duck {
 		float velocityX;
 		float velocityY;
 		int gridCollisionFlag;
-		Duck::AABB boundingbox;
+		Duck::AABB boundingBox;
 		MapDataHandler m_map;
 		STATE state;
 		OBJ_TYPE obj_type;
