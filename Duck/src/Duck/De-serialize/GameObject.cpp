@@ -8,7 +8,7 @@
 //
 // Brief:     Contains the implementation of the GameObject class
 //
-// Copyright © 2023 DigiPen, All rights reserved.
+// Copyright ï¿½ 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 
 #pragma once
@@ -17,38 +17,35 @@
 #include "Duck/Log.h"
 
 namespace Duck {
+
 	GameObject::GameObject() :
 		x(0.0f),
 		y(0.0f),
 		velocityX(0.0f),
 		velocityY(0.0f),
 		gridCollisionFlag(0),
-		boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
 		state(STATE_NONE),
 		obj_type(OBJ_EMPTY) {}
 
-	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, Duck::AABB boundingbox, STATE getstate, OBJ_TYPE obj_type)
-		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), boundingbox(boundingbox), state(getstate), obj_type(obj_type) {}
+	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type) :
+		x(x),
+		y(y),
+		velocityX(velocityX),
+		velocityY(velocityY),
+		gridCollisionFlag(gridCollisionFlag),
+		state(getstate),
+		obj_type(obj_type)
+		{}
 
-	void GameObject::CreateObj(	float p_x,
-								float p_y,
-								float p_velocityX,
-								float p_velocityY,
-								int p_gridCollisionFlag,
-								Duck::AABB p_boundingbox,
-								STATE p_state,
-								OBJ_TYPE p_obj_type)
+	std::shared_ptr<GameObject> GameObject::CreateObj(
+		float p_x,
+		float p_y,
+		STATE p_state,
+		OBJ_TYPE p_obj_type)
 	{
-		x = p_x;
-		y = p_y;
-		velocityX = p_velocityX;
-		velocityY = p_velocityY;
-		gridCollisionFlag = p_gridCollisionFlag;
-		boundingbox = p_boundingbox;
-		state = p_state;
-		obj_type = p_obj_type;
-
+		return std::make_shared<GameObject>(p_x, p_y, 0, 0, 0, p_state, p_obj_type);
 	}
+
 	/******************************************************************************/
 	/*!
 		This function returns the current state of the GameObject.
@@ -58,6 +55,9 @@ namespace Duck {
 		return state;
 	}
 
+	OBJ_TYPE GameObject::getObj() const {
+		return obj_type;
+	}
 	/******************************************************************************/
 	/*!
 		This function sets the state of the GameObject.
@@ -157,6 +157,7 @@ namespace Duck {
 		return velocityY;
 	}
 
+
 	/******************************************************************************/
 	/*!
 		This function loads GameObject data from a file.
@@ -189,10 +190,7 @@ namespace Duck {
 
 		MathLib::Vector2D minVec(minx, miny);
 		MathLib::Vector2D maxVec(maxx, maxy);
-		boundingbox = { minVec, maxVec };
-		/*
-					How does boundingbox take its value?
-		*/
+		boundingBox = { minVec, maxVec };
 
 		file.close();
 		return true;

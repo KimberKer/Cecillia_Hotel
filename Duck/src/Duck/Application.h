@@ -32,6 +32,7 @@ namespace Duck {
 	class Audio;
 	class GameObject;
 	class Ghost;
+
 	class DUCK_API Application {
 	public:
 		Application();
@@ -58,6 +59,8 @@ namespace Duck {
 
 		std::shared_ptr<SoundInfo> m_SoundInfo;
 		std::shared_ptr<Audio> m_Audio;
+		std::shared_ptr<MapDataHandler> m_map;
+
 
 		std::unique_ptr<Graphics> m_Graphics;
 
@@ -70,8 +73,30 @@ namespace Duck {
 		GameObject m_obj, m_example, m_example2, m_example3;
 		Ghost m_Jiangshi;
 		MapDataHandler m_map;
+
 		AABB aabb;
 		PhysicsLib m_phy;
+		std::vector<std::shared_ptr<GameObject>> objectlist;
+		std::shared_ptr<GameObject> m_gameobjList;
+		std::shared_ptr<GameObject> p_player;
+		//static GameObject* p_object;
+		int numOfObjects;
+
+
+		unsigned const int MAX_NUMBER_OF_OBJ = 30;
+		unsigned const int CELL_SIZE = 1.f;
+
+
+
+
+		const float         PLAYER_VELOCITY = 0.1f;
+
+		bool                loadFiles = false;
+		bool                showImGuiWindow = false;
+		bool				showGrid = false;
+		bool				showBB = false;
+
+		int					PlayerOrientation = 0;
 	};
 
 	// To be defined in CLIENT

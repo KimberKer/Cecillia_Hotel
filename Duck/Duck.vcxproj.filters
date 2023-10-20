@@ -123,7 +123,13 @@
     <ClInclude Include="src\Duck\Graphics\Vertex.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\FrameBuffer.h">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\OpenGlFrameBuffer.h">
       <Filter>src\Duck\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
@@ -1494,11 +1500,17 @@
     <ClCompile Include="src\Duck\Map\Map.cpp">
       <Filter>src\Duck\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Map\MapLayer.cpp">
+      <Filter>src\Duck\Map</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
       <Filter>src\Duck\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Math\Vector2D.cpp">
       <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp">
+      <Filter>src\Duck\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics\Physics.cpp">
       <Filter>src\Duck\Physics</Filter>

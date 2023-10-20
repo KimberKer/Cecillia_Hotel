@@ -47,14 +47,15 @@ int				PlayerOrientation = 0;
 
 
 namespace Duck {
+
 	Application* Application::s_Instance = nullptr;
+	//GameObject* Application::p_object = nullptr;
+	//GameObject* Application::p_player = nullptr;
+	//GameObject* Application::m_gameobjList = nullptr;
 	CoreManager* coreManager = CoreManager::GetInstance();
+	MapDataHandler Object;
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
-	void Application::PushLayer(Layer* layer) {
-		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
-	}
 	void Application::PushOverlay(Layer* layer) {
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
@@ -66,8 +67,13 @@ namespace Duck {
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		m_map = std::shared_ptr<MapDataHandler>(new MapDataHandler);
 
-		m_ImGuiLayer = new ImGuiLayer();
+		//getting information from the file.
+		if (!m_map->GetMapData("map.txt")) { //--------------------need to be fix
+			m_Running = false;
+		}
+		m_ImGuiLayer = new ImGuiLayer(m_map);
 		PushOverlay(m_ImGuiLayer);
 
 		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
@@ -76,28 +82,56 @@ namespace Duck {
 
 		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
-		m_Graphics->SetGridSize(static_cast<int>(NUM_GRIDS));
 
-        m_Graphics->SetGridSize(10);
+		//setting number of squares
+		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
 
-		// Load player data during application initialization
-		m_obj.loadPlayerData();
+		//TESTING AUDIO
+		m_Audio = std::shared_ptr<Audio>(new Audio);
+		m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
+		m_Audio->init();
+		m_Audio->loadSound(m_SoundInfo);
 
 		// Load waypoint coordinates for Ghost
 		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 
-        //m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
-        //m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
-        
-        //TESTING AUDIO
-        m_Audio = std::shared_ptr<Audio>(new Audio);
-        m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
-        m_Audio->init();
-        m_Audio->loadSound(m_SoundInfo);
+		//create a list of game objects
+		numOfObjects = 0;
+		//m_gameobjList = new GameObject[MAX_NUMBER_OF_OBJ];
+		//m_map->printMapData();
+		//creating the objects based on the map 
 
-		m_example.CreateObj(3.f, 3.f, 0, 0, 0, aabb.ConvertToAABB(3, 3, 1, 1), STATE_NONE, OBJ_EMPTY);
-		m_example2.CreateObj(6.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(6, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
-		m_example3.CreateObj(3.f, 6.f, 0, 0, 0, aabb.ConvertToAABB(3, 6, 1, 1), STATE_NONE, OBJ_EMPTY);
+		for (int i{}; i < m_map->GetWidth(); i++) {
+			for (int j{}; j < m_map->GetHeight(); j++) {
+				if (numOfObjects < MAX_NUMBER_OF_OBJ) {
+					int cellValue = m_map->GetCellValue(i, j);
+					switch (cellValue) {
+					case 0:
+						break;
+						//player
+					case 1:
+						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_PLAYER));
+						numOfObjects++;
+						break;
+					case 2:
+						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
+						numOfObjects++;
+						break;
+					default:
+						break;
+					}
+
+				}
+
+			}
+		}
+
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		}
 
 		m_Jiangshi.SetGhostProperties(	7.f,	// Position x
 										7.f,	// Position y
@@ -113,6 +147,8 @@ namespace Duck {
 
 	Application::~Application() {
 		coreManager->DestroyInstance();
+		m_map->FreeMapData();
+
 	}
 
 	void Application::OnEvent(Event& e) {
@@ -128,6 +164,7 @@ namespace Duck {
 			}
 		}
 
+		//setting events based on inputs
 		if (e.GetEventType() == EventType::KeyPressed) {
 			KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
 			if (keyEvent.GetKeyCode() == Key::I) {
@@ -142,28 +179,31 @@ namespace Duck {
 			else if (keyEvent.GetKeyCode() == Key::R) {
 				PlayerOrientation = (PlayerOrientation + 90) % 360;
 			}
-
 			else if (keyEvent.GetKeyCode() == Key::Q) {
 				m_Running = false;
 			}
+		}
 
-			//Gameobject changing state
+		//Gameobject changing state
+
+		if (e.GetEventType() == EventType::KeyPressed) {
+			KeyPressedEvent& keyEvent = dynamic_cast<KeyPressedEvent&>(e);
 			switch (keyEvent.GetKeyCode()) {
 				//GameObj go LEFT
 			case Key::A:
-				m_obj.SetState(STATE_GOING_LEFT);
+				p_player->SetState(STATE_GOING_LEFT);
 				break;
 			case Key::D:
-				m_obj.SetState(STATE_GOING_RIGHT);
+				p_player->SetState(STATE_GOING_RIGHT);
 				break;
 			case Key::W:
-				m_obj.SetState(STATE_GOING_UP);
+				p_player->SetState(STATE_GOING_UP);
 				break;
 			case Key::S:
-				m_obj.SetState(STATE_GOING_DOWN);
+				p_player->SetState(STATE_GOING_DOWN);
 				break;
 			default:
-				m_obj.SetState(STATE_NONE);
+				p_player->SetState(STATE_NONE);
 				break;
 			}
 		}
@@ -194,47 +234,38 @@ namespace Duck {
 				runtime.update();
 				m_Audio->update();
 
-
-
 				//object
-				switch (m_obj.getState()) {
-				case STATE_GOING_LEFT:
-					m_obj.SetVelocityX(-PLAYER_VELOCITY);
-					break;
-				case STATE_GOING_RIGHT:
-					m_obj.SetVelocityX(PLAYER_VELOCITY);
-					break;
-				case STATE_GOING_DOWN:
-					m_obj.SetVelocityY(PLAYER_VELOCITY);
-					break;
-				case STATE_GOING_UP:
-					m_obj.SetVelocityY(-PLAYER_VELOCITY);
-					break;
-				case STATE_NONE:
-					m_obj.SetVelocityX(0);
-					m_obj.SetVelocityY(0);
-					break;
+				for (int i{}; i < objectlist.size(); i++) {
+					switch (objectlist[i]->getState()) {
+					case STATE_GOING_LEFT:
+						objectlist[i]->SetVelocityX(-PLAYER_VELOCITY);
+						break;
+					case STATE_GOING_RIGHT:
+						objectlist[i]->SetVelocityX(PLAYER_VELOCITY);
+						break;
+					case STATE_GOING_DOWN:
+						objectlist[i]->SetVelocityY(PLAYER_VELOCITY);
+						break;
+					case STATE_GOING_UP:
+						objectlist[i]->SetVelocityY(-PLAYER_VELOCITY);
+						break;
+					case STATE_NONE:
+						objectlist[i]->SetVelocityX(0);
+						objectlist[i]->SetVelocityY(0);
+						break;
+					}
 				}
-
-
-				//runtime.update(); // Call this at the beginning of each frame
 
 				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
 
-				/*std::cout << "Delta Time: " << dt * m_obj.getVelocityX() << std::endl;
-				std::cout << "X Pos: " << m_obj.getX() << std::endl;
-				std::cout << "Y Pos: " << m_obj.getY() << std::endl;
-				std::cout << "Velocity X: " << m_obj.getVelocityX() << std::endl;
-				std::cout << "Velocity Y: " << m_obj.getVelocityY() << std::endl;*/
-				
-				float newX = m_obj.getVelocityX();
-				newX += m_obj.getVelocityX() * dt + m_obj.getX();
+				float newX = p_player->getVelocityX();
+				newX += p_player->getVelocityX() * dt + p_player->getX();
 
-				float newY = m_obj.getVelocityY();
-				newY += m_obj.getVelocityY() * dt + m_obj.getY();
+				float newY = p_player->getVelocityY();
+				newY += p_player->getVelocityY() * dt + p_player->getY();
 
-				m_obj.SetPositionX(newX);
-				m_obj.SetPositionY(newY);
+				p_player->SetPositionX(newX);
+				p_player->SetPositionY(newY);
 
 				RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 				RenderCommand::Clear();
@@ -246,50 +277,51 @@ namespace Duck {
 				// Would be used for cameras
 				Renderer::BeginScene();
 
-				
-				AABB windowAABB = aabb.ConvertToAABB(0, 0, NUM_GRIDS, NUM_GRIDS);
-				AABB playerAABB = aabb.ConvertToAABB(m_obj.getX(), m_obj.getY(), 1.f, 1.f);
-				AABB exampleAABB = aabb.ConvertToAABB(m_example.getX(), m_example.getY(), 1.f, 1.f);
-				AABB example2AABB = aabb.ConvertToAABB(m_example2.getX(), m_example2.getY(), 1.f, 1.f);
-				AABB example3AABB = aabb.ConvertToAABB(m_example3.getX(), m_example3.getY(), 1.f, 1.f);
+				// Ghost Function
+				m_Jiangshi.Jiangshi(dt, m_obj);
 
-				if (m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example3AABB, { m_example.getVelocityX(), m_example.getVelocityY() }) ||
-					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, exampleAABB, { m_example2.getVelocityX(), m_example2.getVelocityY() })) ||
-					(m_phy.CollisionIntersection_RectRect(playerAABB, { m_obj.getVelocityX(), m_obj.getVelocityY() }, example2AABB, { m_example3.getVelocityX(), m_example3.getVelocityY() }))
-					)
-				{
-					DUCK_CORE_INFO("Collision Detected!");
-					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX())));
-					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
-					m_obj.SetVelocityX(0);
-				}
-				else if(m_obj.getState() != STATE_NONE ) {
-					//DUCK_CORE_INFO("No Collision Detected!");
-				}
+				AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
+				AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
 
 				if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
 				{
-					m_obj.SetPositionX(static_cast<float>(m_map.SnapToCellX(1, m_obj.getX()))); // Adjust as needed
-					m_obj.SetPositionY(static_cast<float>(m_map.SnapToCellY(1, m_obj.getY())));
-					m_obj.SetVelocityX(0);
-					m_obj.SetVelocityY(0);
+					p_player->SetPositionX(static_cast<float>(m_map->SnapToCellX(CELL_SIZE, p_player->getX()))); // Adjust as needed
+					p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(CELL_SIZE, p_player->getY())));
+					p_player->SetVelocityX(0);
+					p_player->SetVelocityY(0);
+
 				}
 
-				// Ghost
-				m_Jiangshi.Jiangshi(dt, m_obj);
-
+				//draw objects
 				m_Graphics->DrawBackground(m_BackgroundTexture);
 				if (showGrid) {
 					m_Graphics->ShowGrid();
 				}
-		
-				m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
-				m_Graphics->DrawSquareObject(m_example2.getX(), m_example2.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
-				m_Graphics->DrawSquareObject(m_example3.getX(), m_example3.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
-				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_obj.getX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_obj.getY()))) , 1.0f, (float) PlayerOrientation, m_CharacterTexture, showBB);
-				m_Graphics->DrawSquareObject(static_cast<float>((m_map.SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map.SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), 1.0f, (float)PlayerOrientation, m_GhostTexture, showBB);
-				//m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture, showBB);
+				for (int i{}; i < objectlist.size(); i++) {
+					if (objectlist[i]->getObj() == OBJ_OBJ) {
+						AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
+
+						if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() })) {
+							DUCK_CORE_INFO("Collision Detected!");
+							p_player->SetPositionX(static_cast<float>(m_map->SnapToCellX(1, p_player->getX())));
+							p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(1, p_player->getY())));
+							p_player->SetVelocityX(0);
+							p_player->SetVelocityY(0);
+						}
+						else if(m_obj.getState() != STATE_NONE ) {
+							//DUCK_CORE_INFO("No Collision Detected!");
+						}
+
+						m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
+					}
+				}
+
+				//m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
+				//m_Graphics->DrawSquareObject(p_object->getX(), p_object->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
+
+				m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
+				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture2, showBB);
 
 				Debug::GetInstance()->EndSystemProfile("Graphics");
 
@@ -299,21 +331,17 @@ namespace Duck {
 
 				m_ImGuiLayer->Begin();
 				if (showImGuiWindow) {
-				for (Layer* layer : m_LayerStack) {
-					layer->OnImGuiRender();
+					for (Layer* layer : m_LayerStack) {
+						layer->OnImGuiRender();
+					}
 				}
-				}
-
 				m_ImGuiLayer->End();
-
 
 				// Testing of variable watch
 				std::string deltatime = std::to_string(runtime.getDeltaTime());
 				Debug::GetInstance()->WatchVariable("DT", deltatime);
-				
 
 				m_Window->OnUpdate();
-
 
 				Debug::GetInstance()->BeginSystemProfile("Audio");
 				//KRISTY - testing audio manager
@@ -321,11 +349,8 @@ namespace Duck {
 				Debug::GetInstance()->EndSystemProfile("Audio");
 
 				coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
-
 			}
 		}
-
-
 		catch (const std::exception& e)
 		{
 			////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
@@ -352,8 +377,6 @@ namespace Duck {
 			////////////////////////////////////////////////// ZIKRY /////////////////////////////////////////////////////////////////
 		}
 	}
-
-
 
 	bool Application::OnWindowClose(WindowCloseEvent& e) {
 
