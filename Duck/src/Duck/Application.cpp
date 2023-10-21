@@ -32,12 +32,17 @@
 
 namespace Duck {
 
+	//ecs
+	Coordinator ecs;
+	Time runtime;
+
 	Application* Application::s_Instance = nullptr;
 	//GameObject* Application::p_object = nullptr;
 	//GameObject* Application::p_player = nullptr;
 	//GameObject* Application::m_gameobjList = nullptr;
 	CoreManager* coreManager = CoreManager::GetInstance();
 	MapDataHandler Object;
+
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	void Application::PushLayer(Layer* layer) {
@@ -59,7 +64,15 @@ namespace Duck {
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		m_map = std::shared_ptr<MapDataHandler>(new MapDataHandler);
 
+		/*--------------------------------------
+			ecs stuff - kristy
+		--------------------------------------*/
+		//init ecs
+		ecs.Init();
+
 		
+
+
 
 		//getting information from the file.
 		if (!m_map->GetMapData("map.txt")) { //--------------------need to be fix
@@ -75,12 +88,6 @@ namespace Duck {
 
 		//setting number of squares
 		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
-
-		//TESTING AUDIO
-		m_Audio = std::shared_ptr<Audio>(new Audio);
-		m_SoundInfo = std::shared_ptr<SoundInfo>(new SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
-		m_Audio->init();
-		m_Audio->loadSound(m_SoundInfo);
 
 
 		//create a list of game objects
@@ -211,15 +218,43 @@ namespace Duck {
 		// Enable memory leak detection
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-		Time runtime;
+		
+		/*--------------------------------------
+			ecs stuff - kristy
+		--------------------------------------*/
+		//register components
+		ecs.RegisterComponent<Duck::AudioComponent>();
+
+
+		//register systems -> init system
+		auto audioSystem = ecs.RegisterSystem<AudioSystem>();
+		{
+			Signature signature;
+			signature.set(ecs.GetComponentType<AudioComponent>());
+			ecs.SetSystemSignature<AudioSystem>(signature);
+		}
+		audioSystem->init();
+
+
+		//create entities
+		Entity audio1 = ecs.CreateEntity();
+
+		ecs.AddComponent<AudioComponent>(
+			audio1,
+			{ "oof", "../Duck/src/Duck/Audio/assets/oof.wav" }
+		);
 
 		try {
 			while (m_Running) {
 				/* glClearColor(1, 0, 1, 1);
 				 glClear(GL_COLOR_BUFFER_BIT)*/
 				runtime.update();
-				m_Audio->update();
-
+				
+				/*--------------------------------------
+					ecs stuff - kristy
+				--------------------------------------*/
+				//updating systems
+				audioSystem->update();
 
 				//object
 				for (int i{}; i < objectlist.size(); i++) {
@@ -350,12 +385,6 @@ namespace Duck {
 
 
 				m_Window->OnUpdate();
-
-
-				Debug::GetInstance()->BeginSystemProfile("Audio");
-				//KRISTY - testing audio manager
-				m_Audio->playSound(m_SoundInfo);
-				Debug::GetInstance()->EndSystemProfile("Audio");
 
 				coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 

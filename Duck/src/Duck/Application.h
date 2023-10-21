@@ -2,35 +2,39 @@
 #include "Core.h"
 #include <iostream>
 //#include <GLFW/glfw3.h>
-#include "Audio/Audio.h"
+#include "Duck/Audio/Audio.h"
+
 #include "Duck/De-serialize/GameObject.h"
-#include "Logging/Logging.h"
+#include "Duck/De-serialize/GameObject.h"
+
+#include "Duck/ECS/Entity.h"
+
 #include "Duck/Events/KeyEvent.h"
-#include "Events/Event.h"
-#include "ImGui/ImGuiLayer.h"
-#include "Window.h"
-#include "Duck/LayerStack.h"
+#include "Duck/Events/Event.h"
+
+#include "Duck/ImGui/ImGuiLayer.h"
+
 #include "Duck/Events/ApplicationEvent.h"
+
 #include "Duck/Graphics/Shader.h"
 #include "Duck/Graphics/Buffer.h"
 #include "Duck/Graphics/Vertex.h"
 #include "Duck/Graphics/Renderer.h"
 #include "Duck/Graphics/Graphics.h"
-#include "Duck/De-serialize/GameObject.h"
+
 #include "Duck/Map/map.h"
 
+#include "Logging/Logging.h"
+#include "Window.h"
+#include "Duck/LayerStack.h"
 
-#include "Duck/Graphics/Shader.h"
-#include "Duck/Graphics/Buffer.h"
-#include "Duck/Graphics/Vertex.h"
-#include "Duck/Graphics/Renderer.h"
 
 
 
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
-	class Audio;
+	//class Audio;
 	class GameObject;
 
 	class DUCK_API Application {
@@ -58,7 +62,7 @@ namespace Duck {
 		LayerStack m_LayerStack;
 
 		std::shared_ptr<SoundInfo> m_SoundInfo;
-		std::shared_ptr<Audio> m_Audio;
+		//std::shared_ptr<Audio> m_Audio;
 		std::shared_ptr<MapDataHandler> m_map;
 
 
