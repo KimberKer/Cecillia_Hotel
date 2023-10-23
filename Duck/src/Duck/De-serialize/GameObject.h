@@ -50,7 +50,8 @@ namespace Duck {
 			float velocityY,
 			int gridCollisionFlag,
 			STATE state,
-			OBJ_TYPE obj_type);
+			OBJ_TYPE obj_type
+		);
 
 		// Getters
 		float getX() const;
@@ -60,7 +61,6 @@ namespace Duck {
 		STATE getState() const;
 		int getgridCollisionFlag() const;
 		OBJ_TYPE getObj() const;
-
 
 		void SetState(STATE state);
 		void SetVelocityX(float velx);
@@ -85,7 +85,6 @@ namespace Duck {
 		void loadPlayerData();
 
 	private:
-
 		float x;
 		float y;
 		float velocityX;

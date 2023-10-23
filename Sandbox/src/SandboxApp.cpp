@@ -75,9 +75,7 @@ public:
 					default:
 						break;
 					}
-
 				}
-
 			}
 		}
 
@@ -95,21 +93,21 @@ public:
 
 		//float newTime = timeStep.getDeltaTime();
 		m_Audio->update();
-
-		//object
+		
+		// Calculate the target grid position based on the character's speed
 		for (int i{}; i < objectlist.size(); i++) {
 			switch (objectlist[i]->getState()) {
 			case STATE_GOING_LEFT:
-				objectlist[i]->SetVelocityX(-PLAYER_VELOCITY);
+				objectlist[i]->SetVelocityX(-1.0f); // Adjust the velocity as needed
 				break;
 			case STATE_GOING_RIGHT:
-				objectlist[i]->SetVelocityX(PLAYER_VELOCITY);
+				objectlist[i]->SetVelocityX(1.0f); // Adjust the velocity as needed
 				break;
 			case STATE_GOING_DOWN:
-				objectlist[i]->SetVelocityY(PLAYER_VELOCITY);
+				objectlist[i]->SetVelocityY(1.0f); // Adjust the velocity as needed
 				break;
 			case STATE_GOING_UP:
-				objectlist[i]->SetVelocityY(-PLAYER_VELOCITY);
+				objectlist[i]->SetVelocityY(-1.0f); // Adjust the velocity as needed
 				break;
 			case STATE_NONE:
 				objectlist[i]->SetVelocityX(0);
@@ -118,15 +116,50 @@ public:
 			}
 		}
 
+		if (isMoving == false) {
+			if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
+				initialPosition = std::make_pair(p_player->getX(), p_player->getY());
+				isMoving = true;
+			}
+		}
+		else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f) {
+			isMoving = true;
+			percentMove += PLAYER_VELOCITY * dt;
+			
+			if (percentMove >= 1.0) {
+				float newXpos = initialPosition.first + (CELL_SIZE * p_player->getVelocityX());
+				percentMove = 0.0f;
+				isMoving = false;
+				p_player->SetPositionX(newXpos);
+				//p_player->SetPositionX((m_map->SnapToCellX(1, p_player->getX())));
+			}
+			else {
+				float newXpos = initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * percentMove);
+				p_player->SetPositionX(newXpos);
+				DUCK_TRACE("newXpos: {0}", newXpos);
 
-		float newX = p_player->getVelocityX();
-		newX += p_player->getVelocityX() * dt + p_player->getX();
+			}
+		}
+		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
+			isMoving = true;
+			percentMove += PLAYER_VELOCITY * dt;
 
-		float newY = p_player->getVelocityY();
-		newY += p_player->getVelocityY() * dt + p_player->getY();
-
-		p_player->SetPositionX(newX);
-		p_player->SetPositionY(newY);
+			if (percentMove >= 1.0) {
+				float newYpos = initialPosition.second+ (CELL_SIZE * p_player->getVelocityY());
+				percentMove = 0.0f;
+				isMoving = false;
+				p_player->SetPositionX(newYpos);
+				//p_player->SetPositionY((m_map->SnapToCellX(1, p_player->getY())));
+			}
+			else {
+				float newYpos = initialPosition.second+ (CELL_SIZE * p_player->getVelocityY() * percentMove);
+				p_player->SetPositionY(newYpos);
+			}
+		}
+		else {
+			isMoving = false;
+		}
+		//DUCK_TRACE("PercentMove: {0}", percentMove);
 
 		Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 		Duck::RenderCommand::Clear();
@@ -139,7 +172,7 @@ public:
 		Duck::Renderer::BeginScene();
 
 		// Ghost Function
-		m_Jiangshi.Jiangshi(dt, p_player);
+		//m_Jiangshi.Jiangshi(dt, p_player);
 
 		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
 		Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
@@ -150,7 +183,6 @@ public:
 			p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(CELL_SIZE, p_player->getY())));
 			p_player->SetVelocityX(0);
 			p_player->SetVelocityY(0);
-
 		}
 
 		//draw objects
@@ -177,8 +209,10 @@ public:
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 			}
 		}
+		
+		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 
-		m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
+		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 		m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 
 		//Debug::GetInstance()->EndSystemProfile("Graphics");
@@ -197,6 +231,22 @@ public:
 	}
 
 	void OnEvent(Duck::Event& event) override {
+		if (event.GetEventType() == Duck::EventType::KeyPressed) {
+			Duck::KeyPressedEvent& keyEvent = dynamic_cast<Duck::KeyPressedEvent&>(event);
+			if (keyEvent.GetKeyCode() == Duck::Key::I) {
+				showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
+			}
+			else if (keyEvent.GetKeyCode() == Duck::Key::G) {
+				showGrid = !showGrid;
+			}
+			else if (keyEvent.GetKeyCode() == Duck::Key::B) {
+				showBB = !showBB;
+			}
+			else if (keyEvent.GetKeyCode() == Duck::Key::R) {
+				PlayerOrientation = (PlayerOrientation + 90) % 360;
+			}
+		}
+
 		//Gameobject changing state
 		if (event.GetEventType() == Duck::EventType::KeyPressed) {
 			Duck::KeyPressedEvent& keyEvent = dynamic_cast<Duck::KeyPressedEvent&>(event);
@@ -257,9 +307,9 @@ private:
 
 	int numOfObjects;
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
-	unsigned const int CELL_SIZE = 1.f;
+	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 0.1f;
+	const float         PLAYER_VELOCITY = 4.0f;
 
 	bool                loadFiles = false;
 	bool                showImGuiWindow = false;
@@ -267,6 +317,10 @@ private:
 	bool				showBB = false;
 
 	int					PlayerOrientation = 0;
+	
+	bool				isMoving = false;
+	float				percentMove = 0.0f;
+	std::pair<float, float>	initialPosition{};
 };
 
 class Sandbox : public Duck::Application {

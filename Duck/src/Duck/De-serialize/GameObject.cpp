@@ -25,7 +25,8 @@ namespace Duck {
 		velocityY(0.0f),
 		gridCollisionFlag(0),
 		state(STATE_NONE),
-		obj_type(OBJ_EMPTY) {}
+		obj_type(OBJ_EMPTY)
+	{}
 
 	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type) :
 		x(x),
@@ -158,6 +159,7 @@ namespace Duck {
 	}
 
 
+
 	/******************************************************************************/
 	/*!
 		This function loads GameObject data from a file.
@@ -258,8 +260,6 @@ namespace Duck {
 	void GameObject::loadPlayerData() {
 		if (loadFromFile("player.txt")) {
 			DUCK_CORE_INFO("Player Position Loaded at (x, y): {0}, {1}", getX(), getY());
-			//std::cout << "Player Position(x, y): (" << getX() << ", " << getY() << ")\n";
-			//std::cout << "Player Velocity(x, y): (" << getVelocityX() << ", " << getVelocityY() << ")\n";
 		}
 		else {
 			std::cerr << "Failed to load player data from file.\n";
