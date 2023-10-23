@@ -16,6 +16,7 @@
 #include "../FMOD/api/core/inc/fmod.hpp"
 #include "../FMOD/api/core/inc/fmod_errors.h"
 
+#include "../ECS/Entity.h"
 
 #include <iostream>
 #include <map>
@@ -29,54 +30,21 @@ namespace Duck
     void ERRCHECK_fn(FMOD_RESULT result, const char* file, int line);
     #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
-    class SoundInfo 
-    {
-
-    public:
-        SoundInfo(const char* fileName, const char* filePath);
-
-        const char* getFileName();
-        const char* getFilePath();
-        float getVolume();
-
-        bool isLoaded();
-        bool isPlaying();
-        bool isLoop();
-
-        void setVol(float newVol);
-        void setLoaded(bool load);
-        void setPlaying(bool play);
-        void setLoop(bool loop);
-        
-
-    private:
-        const char* fileName;
-        const char* filePath;
-        float vol = 1.0f; //defaut volume
-
-        bool loaded = false;
-        bool playing = false;
-        bool looping = false;
-
-    };
-
-
-
-	class Audio 
+	class AudioSystem : public System
     {
 
 	public:
-        Audio();
-        ~Audio();
+        AudioSystem();
+        ~AudioSystem();
 
         void init();
         void deactivate();
         void update();
 
-        void loadSound(std::shared_ptr<SoundInfo> soundInfo);
-        void playSound(std::shared_ptr<SoundInfo> soundInfo);
-        void stopSound(std::shared_ptr<SoundInfo> soundInfo);
-        void updateVol(std::shared_ptr< SoundInfo> soundInfo, float vol);
+        void loadSound(std::shared_ptr<AudioComponent> soundInfo);
+        void playSound(std::shared_ptr<AudioComponent> soundInfo);
+        void stopSound(std::shared_ptr<AudioComponent> soundInfo);
+        void updateVol(std::shared_ptr< AudioComponent> soundInfo, float vol);
 
         // The audio sampling rate of the audio engine
         static const int AUDIO_SAMPLE_RATE = 44100;
