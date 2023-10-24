@@ -1,5 +1,7 @@
 #include <Duck.h>
 
+bool isGamePlaying = true;
+
 class ExampleLayer : public Duck::Layer
 {
 public:
@@ -16,6 +18,7 @@ public:
 	
 
 	void OnEvent(Duck::Event& event) override {
+			
 		//DUCK_TRACE("{0}", event);
 
 		if (event.GetEventType() == Duck::EventType::KeyPressed) {

@@ -8,7 +8,7 @@
 //
 // Brief:     Contains the implementation of the GameObject class
 //
-// Copyright © 2023 DigiPen, All rights reserved.
+// Copyright   2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 
 #pragma once
@@ -17,38 +17,31 @@
 
 
 namespace Duck {
+
 	GameObject::GameObject()
 		: x(0.0f),
 		y(0.0f),
 		velocityX(0.0f),
 		velocityY(0.0f),
 		gridCollisionFlag(0),
-		boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
 		state(STATE_NONE),
 		obj_type(OBJ_EMPTY) {}
 
-	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, Duck::AABB boundingbox, STATE getstate, OBJ_TYPE obj_type)
-		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), boundingbox(boundingbox), state(getstate), obj_type(obj_type) {}
+	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type)
+		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), state(getstate), obj_type(obj_type) {}
 
-	void GameObject::CreateObj(	float p_x,
-								float p_y,
-								float p_velocityX,
-								float p_velocityY,
-								int p_gridCollisionFlag,
-								Duck::AABB p_boundingbox,
-								STATE p_state,
-								OBJ_TYPE p_obj_type)
+
+
+	std::shared_ptr<GameObject> GameObject::CreateObj(
+		float p_x,
+		float p_y,
+		STATE p_state,
+		OBJ_TYPE p_obj_type)
 	{
-		x = p_x;
-		y = p_y;
-		velocityX = p_velocityX;
-		velocityY = p_velocityY;
-		gridCollisionFlag = p_gridCollisionFlag;
-		boundingbox = p_boundingbox;
-		state = p_state;
-		obj_type = p_obj_type;
 
+		return std::make_shared<GameObject>(p_x, p_y, 0, 0, 0, p_state, p_obj_type);
 	}
+
 	/******************************************************************************/
 	/*!
 		This function returns the current state of the GameObject.
@@ -60,11 +53,28 @@ namespace Duck {
 
 	/******************************************************************************/
 	/*!
+		This function get the state of the GameObject.
+	 */
+	 /******************************************************************************/
+	OBJ_TYPE GameObject::getObj() const {
+		return obj_type;
+	}
+	/******************************************************************************/
+	/*!
 		This function sets the state of the GameObject.
 	 */
 	 /******************************************************************************/
 	void GameObject::SetState(STATE getstate) {
 		state = getstate;
+	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the state of the GameObject.
+	 */
+	 /******************************************************************************/
+	void GameObject::SetType(OBJ_TYPE getType) {
+		obj_type = getType;
 	}
 
 	/******************************************************************************/
@@ -157,6 +167,7 @@ namespace Duck {
 		return velocityY;
 	}
 
+
 	/******************************************************************************/
 	/*!
 		This function loads GameObject data from a file.
@@ -189,7 +200,7 @@ namespace Duck {
 
 		MathLib::Vector2D minVec(minx, miny);
 		MathLib::Vector2D maxVec(maxx, maxy);
-		boundingbox = { minVec, maxVec };
+		boundingBox = { minVec, maxVec };
 
 		file.close();
 		return true;
@@ -224,19 +235,23 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 	void GameObject::ReadObj(std::string obj) {
-		if (obj == "OBJ_EMPTY") {
-			obj_type = OBJ_EMPTY;
-		}
-		else if (obj == "STATE_GOING_LEFT") {
+		if (obj == "OBJ_PLAYER") {
 			obj_type = OBJ_PLAYER;
 		}
-		else if (obj == "STATE_GOING_RIGHT") {
+		else if (obj == "OBJ_GHOST") {
 			obj_type = OBJ_GHOST;
 		}
-		else if (obj == "STATE_GOING_UP") {
+		else if (obj == "OBJ_NPC") {
 			obj_type = OBJ_NPC;
 		}
+		else if (obj == "OBJ_OBJ") {
+			obj_type = OBJ_OBJ;
+		}
+		else {
+			obj_type = OBJ_EMPTY;
+		}
 	}
+
 
 	/******************************************************************************/
 	/*!
@@ -252,4 +267,6 @@ namespace Duck {
 			std::cerr << "Failed to load player data from file.\n";
 		}
 	}
+
 }
+

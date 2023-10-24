@@ -35,7 +35,7 @@ namespace Duck {
 		// Called when an event is dispatched to the layer
 		virtual void OnEvent(Event& event) {}
 
-		virtual void OnImGuiRender() {}
+		virtual void OnImGuiRender(double &fps) {}
 
 		// Get the name of the layer
 		inline const std::string& GetName() const { return m_DebugName; }

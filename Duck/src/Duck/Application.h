@@ -32,6 +32,7 @@ namespace Duck {
 	class SoundInfo;
 	class Audio;
 	class GameObject;
+
 	class DUCK_API Application {
 	public:
 		Application();
@@ -42,10 +43,11 @@ namespace Duck {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		void ReadMapData(std::string filename);
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
-		
+
 		inline static Application& Get() { return *s_Instance; }
 
 	private:
@@ -58,6 +60,8 @@ namespace Duck {
 
 		std::shared_ptr<SoundInfo> m_SoundInfo;
 		std::shared_ptr<Audio> m_Audio;
+		std::shared_ptr<MapDataHandler> m_map;
+
 
 		std::unique_ptr<Graphics> m_Graphics;
 
@@ -67,10 +71,28 @@ namespace Duck {
 
 	private:
 		static Application* s_Instance;
-		GameObject m_obj, m_example, m_example2, m_example3;
-		MapDataHandler m_map;
+
 		AABB aabb;
 		PhysicsLib m_phy;
+		std::vector<std::shared_ptr<GameObject>> objectlist;
+		std::shared_ptr<GameObject> m_gameobjList;
+		std::shared_ptr<GameObject> p_player;
+		//static GameObject* p_object;
+
+
+		unsigned const int CELL_SIZE = 1.f;
+
+
+
+
+		const float         PLAYER_VELOCITY = 0.1f;
+
+		bool                loadFiles = false;
+		bool                showImGuiWindow = false;
+		bool				showGrid = false;
+		bool				showBB = false;
+
+		int					PlayerOrientation = 0;
 	};
 
 
@@ -83,5 +105,4 @@ namespace Duck {
 }
 
 
- //GLFWwindow* window;
- 
+//GLFWwindow* window;
