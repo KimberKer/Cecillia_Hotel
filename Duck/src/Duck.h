@@ -15,7 +15,9 @@
 #include "Duck/Time.h"
 #include "Duck/Map/Map.h"
 #include "Duck/De-serialize/GameObject.h"
-#include "Duck/Ghost/AI.h"
+
+// -- ECS --
+#include "Duck/ECS/Entity.h"
 
 // -- Renderer --
 #include "Duck/Graphics/Shader.h"

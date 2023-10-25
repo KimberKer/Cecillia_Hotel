@@ -5,5 +5,5 @@
 #include "../Input.h"
 
 namespace Duck {
-	
+    
 }

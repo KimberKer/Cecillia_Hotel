@@ -19,7 +19,6 @@
 #include "../Physics/collision.h"
 #include "../Map/map.h"
 
-
 enum STATE
 {
 	STATE_NONE,
@@ -40,7 +39,6 @@ enum OBJ_TYPE
 };
 namespace Duck {
 	class GameObject {
-
 	public:
 		GameObject();
 		GameObject(
@@ -75,8 +73,6 @@ namespace Duck {
 			float y,
 			STATE state,
 			OBJ_TYPE obj_type);
-
-
 
 		// Load object properties from a .txt file
 		bool loadFromFile(const std::string& filename);

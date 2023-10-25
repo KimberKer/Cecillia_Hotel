@@ -4,6 +4,30 @@ class ExampleLayer : public Duck::Layer
 {
 public:
 	ExampleLayer() : Layer("Example") {
+		///* ---------- ECS ---------- */
+		//ecs.Init();
+
+		///* ---------- Register Components ---------- */
+		//ecs.RegisterComponent<Duck::AudioComponent>();
+
+		///* ---------- Register Systems -> init system ---------- */
+		//audioSystem = ecs.RegisterSystem<Duck::AudioSystem>();
+		//{
+		//	Duck::Signature signature;
+		//	signature.set(ecs.GetComponentType<Duck::AudioComponent>());
+		//	ecs.SetSystemSignature<Duck::AudioSystem>(signature);
+		//}
+		//audioSystem->init();
+
+		///* ---------- Create Entities ---------- */
+		//Duck::Entity audio1 = ecs.CreateEntity();
+
+		//ecs.AddComponent<Duck::AudioComponent>(
+		//	audio1,
+		//	{ "oof", "../Duck/src/Duck/Audio/assets/oof.wav" }
+		//);
+		/* ---------- ---------- ---------- */
+
 		/* ---------- Map Functions ---------- */
 		m_map = std::shared_ptr<Duck::MapDataHandler>(new Duck::MapDataHandler);
 		
@@ -27,18 +51,20 @@ public:
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Audio ---------- */
-		m_Audio = std::shared_ptr<Duck::Audio>(new Duck::Audio);
+		/*m_Audio = std::shared_ptr<Duck::Audio>(new Duck::Audio);
 		m_SoundInfo = std::shared_ptr<Duck::SoundInfo>(new Duck::SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
 		m_Audio->init();
-		m_Audio->loadSound(m_SoundInfo);
+		m_Audio->loadSound(m_SoundInfo);*/
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Ghost Functions ---------- */
 		// Load waypoint coordinates for Ghost
+		//m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 
 		// Initialize Jiangshi Ghost
-		m_Jiangshi.SetGhostProperties(7.f,	// Position x
+		m_Jiangshi.SetGhostProperties(
+			7.f,	// Position x
 			7.f,	// Position y
 			0.f,	// Velocity x
 			0.f,	// Velocity y
@@ -72,6 +98,10 @@ public:
 						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
 						numOfObjects++;
 						break;
+					case 3:
+						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
+						numOfObjects++;
+						break;
 					default:
 						break;
 					}
@@ -91,9 +121,9 @@ public:
 		runtime.update();
 		float dt = static_cast<float>(runtime.getDeltaTime());
 
-		//float newTime = timeStep.getDeltaTime();
-		m_Audio->update();
-		
+		//updating systems
+		//audioSystem->update();
+
 		// Calculate the target grid position based on the character's speed
 		for (int i{}; i < objectlist.size(); i++) {
 			switch (objectlist[i]->getState()) {
@@ -116,7 +146,8 @@ public:
 			}
 		}
 
-		if (isMoving == false) {
+		if (!isMoving) {
+			percentMove = 0.0f;
 			if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
 				initialPosition = std::make_pair(p_player->getX(), p_player->getY());
 				isMoving = true;
@@ -126,40 +157,31 @@ public:
 			isMoving = true;
 			percentMove += PLAYER_VELOCITY * dt;
 			
-			if (percentMove >= 1.0) {
-				float newXpos = initialPosition.first + (CELL_SIZE * p_player->getVelocityX());
+			if (percentMove <= 1.0f) {
+				p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * PLAYER_VELOCITY));
 				percentMove = 0.0f;
 				isMoving = false;
-				p_player->SetPositionX(newXpos);
-				//p_player->SetPositionX((m_map->SnapToCellX(1, p_player->getX())));
 			}
 			else {
-				float newXpos = initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * percentMove);
-				p_player->SetPositionX(newXpos);
-				DUCK_TRACE("newXpos: {0}", newXpos);
-
+				p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * percentMove));
 			}
 		}
 		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
 			isMoving = true;
 			percentMove += PLAYER_VELOCITY * dt;
 
-			if (percentMove >= 1.0) {
-				float newYpos = initialPosition.second+ (CELL_SIZE * p_player->getVelocityY());
+			if (percentMove <= 1.0f) {
+				p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY()* PLAYER_VELOCITY));
 				percentMove = 0.0f;
 				isMoving = false;
-				p_player->SetPositionX(newYpos);
-				//p_player->SetPositionY((m_map->SnapToCellX(1, p_player->getY())));
 			}
 			else {
-				float newYpos = initialPosition.second+ (CELL_SIZE * p_player->getVelocityY() * percentMove);
-				p_player->SetPositionY(newYpos);
+				p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY() * percentMove));
 			}
 		}
 		else {
 			isMoving = false;
 		}
-		//DUCK_TRACE("PercentMove: {0}", percentMove);
 
 		Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 		Duck::RenderCommand::Clear();
@@ -172,13 +194,12 @@ public:
 		Duck::Renderer::BeginScene();
 
 		// Ghost Function
-		//m_Jiangshi.Jiangshi(dt, p_player);
+		m_Jiangshi.Jiangshi(dt, p_player);
 
 		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
 		Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
 
-		if (m_phy.IsOutOfBounds(windowAABB, playerAABB))
-		{
+		if (m_phy.IsOutOfBounds(windowAABB, playerAABB)) {
 			p_player->SetPositionX(static_cast<float>(m_map->SnapToCellX(CELL_SIZE, p_player->getX()))); // Adjust as needed
 			p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(CELL_SIZE, p_player->getY())));
 			p_player->SetVelocityX(0);
@@ -192,28 +213,26 @@ public:
 		}
 
 		for (int i{}; i < objectlist.size(); i++) {
+			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
 			if (objectlist[i]->getObj() == OBJ_OBJ) {
-				Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
-
 				if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY()}, dt)) {
-					DUCK_CORE_INFO("Collision Detected!");
+					DUCK_CORE_INFO("Player: Collision Detected!");
 					p_player->SetPositionX(static_cast<float>(m_map->SnapToCellX(1, p_player->getX())));
 					p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(1, p_player->getY())));
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
 				}
 				else if (p_player->getState() != STATE_NONE) {
-					//DUCK_CORE_INFO("No Collision Detected!");
+					//DUCK_CORE_INFO("Player: No Collision Detected!");
 				}
-
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 			}
+			
 		}
-		
-		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
-
-		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 		m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
+
+		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
+		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 
 		//Debug::GetInstance()->EndSystemProfile("Graphics");
 
@@ -221,11 +240,9 @@ public:
 		//std::string deltatime = std::to_string(runtime.getDeltaTime());
 		//Debug::GetInstance()->WatchVariable("DT", deltatime);
 
-		
-
 		//Debug::GetInstance()->BeginSystemProfile("Audio");
 		//KRISTY - testing audio manager
-		m_Audio->playSound(m_SoundInfo);
+		//m_Audio->playSound(m_SoundInfo);
 		//Debug::GetInstance()->EndSystemProfile("Audio");
 
 	}
@@ -247,11 +264,9 @@ public:
 			}
 		}
 
-		//Gameobject changing state
 		if (event.GetEventType() == Duck::EventType::KeyPressed) {
 			Duck::KeyPressedEvent& keyEvent = dynamic_cast<Duck::KeyPressedEvent&>(event);
 			switch (keyEvent.GetKeyCode()) {
-				//GameObj go LEFT
 			case Duck::Key::A:
 				p_player->SetState(STATE_GOING_LEFT);
 				break;
@@ -284,15 +299,21 @@ public:
 			}
 		}
 	}
+
 private:
+	//Duck::Coordinator ecs;
+
+	//std::shared_ptr<Duck::AudioSystem> audioSystem;
+
 	std::shared_ptr<Duck::SoundInfo> m_SoundInfo;
-	std::shared_ptr<Duck::Audio> m_Audio;
+	//std::shared_ptr<Duck::Audio> m_Audio;
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
 
 	std::vector<std::shared_ptr<Duck::GameObject>> objectlist;
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
+	//std::shared_ptr<Duck::GameObject> p_Jiangshi;
 
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
@@ -309,7 +330,7 @@ private:
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 4.0f;
+	const float         PLAYER_VELOCITY = .5f;
 
 	bool                loadFiles = false;
 	bool                showImGuiWindow = false;
@@ -317,7 +338,6 @@ private:
 	bool				showBB = false;
 
 	int					PlayerOrientation = 0;
-	
 	bool				isMoving = false;
 	float				percentMove = 0.0f;
 	std::pair<float, float>	initialPosition{};

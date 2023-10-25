@@ -56,31 +56,41 @@ namespace Duck {
 
         void SetGhostProperties(float posX,
                                 float posY,
-                                float dirX,
-                                float dirY,
+                                float velX,
+                                float velY,
                                 float roamDur,
                                 float idleDur,
                                 float roamSpd,
                                 float chaseSpd,
                                 float maxChaseSpd,
-                                Duck::AABB p_boundgingbox);
-        
+                                Duck::AABB p_boundingBox);
+
         float GetGhostPositionX() const;
         float GetGhostPositionY() const;
         float getVelocityX() const;
         float getVelocityY() const;
-
+        STATE getState() const;
+        int getgridCollisionFlag() const;
+        OBJ_TYPE getObj() const;
+       
         void SetGhostPositionX(float x);
         void SetGhostPositionY(float y);
         void SetVelocityX(float velx);
         void SetVelocityY(float vely);
+        void SetState(STATE state);
+        void SetgridCollisionFlag(float posY);
+
+        void ReadState(std::string state);
+        void ReadObj(std::string obj);
+        bool loadFromFile(const std::string& filename);
 
     private:
         std::vector<Vector2> waypoints; // Waypoints for roaming
         float ghostPositionX;           // X-coordinate of the ghost's position
         float ghostPositionY;           // Y-coordinate of the ghost's position
-        float directionX;
-        float directionY;
+        float velocityX;
+        float velocityY;
+        int gridCollisionFlag;
         float roamDuration;             // Duration of the "Roaming" state
         float idleDuration;             // Duration of the "Idle" state
         float timeInCurrentState;       // Time elapsed in the current state
@@ -97,8 +107,9 @@ namespace Duck {
         int targetGridX;
         int targetGridY;
 
-        Duck::AABB boundingbox;
+        Duck::AABB boundingBox;
         State state;                    // Current AI state
+        OBJ_TYPE obj_type;
 
         AABB aabb;
         PhysicsLib m_phy;

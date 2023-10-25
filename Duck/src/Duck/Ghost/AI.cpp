@@ -19,6 +19,7 @@ Pontianak:
 - Able to enter rooms.
 - Movement speed is same as player.
 - Able to travel laterally and diagonally.
+- Teleport infront of the player distance between player and ghost reaches a certain distance
 
 Hachishakusama:
 - Roams in all levels.
@@ -31,9 +32,9 @@ Hachishakusama:
 !! Ghost will increase its chasing speed exponentially over a period of time.
 ---------------------------------------------------------*/
 #include "duckpch.h"
-#include "AI.h"
 #include "Duck/Log.h"
 #include "Duck/De-serialize/GameObject.h"
+#include "AI.h"
 
 namespace Duck {
     // Constructor for the Ghost class
@@ -47,24 +48,24 @@ namespace Duck {
         roamSpeed(0.0f),
         maxChaseSpeed(0.0f),
         waypoints(ReadWaypointsFromFile("../txtfiles/waypoints.txt")),
-        boundingbox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
+        boundingBox({ 0.0f, 0.0f }, { 0.0f, 0.0f }),
         timeElapsed(0.0f),
         isMovingToWaypoint(false)
     {
         srand(static_cast<unsigned int>(time(nullptr)));
     }
 
-    void Ghost::SetGhostProperties(float posX, float posY, float dirX, float dirY, float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingbox) {
+    void Ghost::SetGhostProperties(float posX, float posY, float velX, float velY, float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingBox) {
         ghostPositionX = posX;
         ghostPositionY = posY;
-        directionX = dirX;
-        directionY = dirY;
+        velocityX = velX;
+        velocityX = velY;
         roamDuration = roamDur;
         idleDuration = idleDur;
         roamSpeed = roamSpd;
         chaseSpeed = chaseSpd;
         maxChaseSpeed = maxChaseSpd;
-        boundingbox = p_boundingbox;
+        boundingBox = p_boundingBox;
     }
 
     // Update function for the Ghost class
@@ -112,7 +113,7 @@ namespace Duck {
 
     // Idle behavior for the Ghost class
     void Ghost::Idle() {
-        DUCK_CORE_INFO("Ghost is idle.");
+        DUCK_CORE_INFO("Ghost is idling.");
     }
 
     // Roam behavior for the Ghost class
@@ -151,14 +152,14 @@ namespace Duck {
                 currentGridY = std::ceil(ghostPositionY);
 
                 // Calculate direction vector towards the selected waypoint
-                directionX = static_cast<float>(targetGridX - currentGridX);
-                directionY = static_cast<float>(targetGridY - currentGridY);
+                velocityX = static_cast<float>(targetGridX - currentGridX);
+                velocityY = static_cast<float>(targetGridY - currentGridY);
 
                 if (currentGridX < targetGridX || currentGridX > targetGridX) {
-                    ghostPositionX += roamSpeed * directionX * deltaTime;
+                    ghostPositionX += roamSpeed * velocityX * deltaTime;
                 }
                 else if (currentGridY < targetGridY || currentGridY > targetGridY) {
-                    ghostPositionY += roamSpeed * directionY * deltaTime;
+                    ghostPositionY += roamSpeed * velocityY * deltaTime;
                 }
             }
         }
@@ -171,28 +172,22 @@ namespace Duck {
             targetGridX = static_cast<int>(targetWaypoint.x);
             targetGridY = static_cast<int>(targetWaypoint.y);
             
-            DUCK_CORE_INFO("Target Grid X: {0}, Target Grid Y: {1}", targetGridX, targetGridY);
-
             // Set the flag to indicate movement
             isMovingToWaypoint = true;
         }
-
-        // Print Current position of Ghost
-        //DUCK_CORE_INFO("Current Grid X: {0}, Current Grid Y: {1}", currentGridX, currentGridY);
     }
 
     // Chase behavior for the Ghost class
     void Ghost::Chase(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        // Gradually increase chasing speed
         timeElapsed += deltaTime;
 
         if (chaseSpeed < maxChaseSpeed) {
-            chaseSpeed += (maxChaseSpeed - chaseSpeed) * (timeElapsed / 10.0f);
-            DUCK_CORE_INFO("Chase Speed: {0}", chaseSpeed);
-            DUCK_CORE_INFO("Time: {0}", timeElapsed);
+            // Increase chaseSpeed to maxChaseSpeed over 5 seconds
+            chaseSpeed += (maxChaseSpeed / 5.0f) * timeElapsed;
         }
         else {
-            chaseSpeed = maxChaseSpeed; // Cap the speed at the maximum limit
+            // Cap the speed at the maximum limit
+            chaseSpeed = maxChaseSpeed;
         }
 
         // Get the player's position from the GameObject (player)
@@ -200,15 +195,12 @@ namespace Duck {
         float playerPositionY = gameObject->getY();
 
         // Calculate direction vector towards the player
-        directionX = static_cast<float>(playerPositionX - ghostPositionX);
-        directionY = static_cast<float>(playerPositionY - ghostPositionY);
+        velocityX = static_cast<float>(playerPositionX - ghostPositionX);
+        velocityY = static_cast<float>(playerPositionY - ghostPositionY);
 
         // Move towards the player with the gradually increasing speed
-        ghostPositionX += chaseSpeed * directionX * deltaTime;
-        ghostPositionY += chaseSpeed * directionY * deltaTime;
-        
-        // Print ghost's position (replace with actual rendering)
-        //DUCK_CORE_INFO("Ghost is chasing at: {0}, {1}", ghostPositionX, ghostPositionY);
+        ghostPositionX += chaseSpeed * velocityX * deltaTime;
+        ghostPositionY += chaseSpeed * velocityY * deltaTime;
     }
 
     // Check if the player is nearby
@@ -221,10 +213,7 @@ namespace Duck {
         float distance = std::sqrt((ghostPositionX - playerPositionX) * (ghostPositionX - playerPositionX) +
             (ghostPositionY - playerPositionY) * (ghostPositionY - playerPositionY));
 
-        // Check if the distance is less than 3 grid cells wide
-        float gridCellSize = 1.0f;
-
-        return distance <= 3.0f * gridCellSize;
+        return distance <= 3.0f;
     }
 
     // Getter for ghostPosition
@@ -268,4 +257,40 @@ namespace Duck {
         file.close();
         return waypoints;
     }
+
+   /* bool Ghost::loadFromFile(const std::string& filename) {
+        std::string pos_x, pos_y, vel_x, vel_y, roamDur, idleDur, roamSpd, chaseSpd, maxChaseSpd, gridFlag, bounding, curr_state, getstate, type, getType;
+        const std::string path = "../txtfiles/" + filename;
+
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            std::cerr << "Error: Unable to open file " << path << std::endl;
+            return false;
+        }
+
+        float minx, miny, maxx, maxy;
+        file >> pos_x >> ghostPositionX
+            >> pos_y >> ghostPositionY
+            >> vel_x >> velocityX
+            >> vel_y >> velocityX
+            >> roamDur >> roamDuration
+            >> idleDur >> idleDuration
+            >> roamSpd >> roamSpeed
+            >> chaseSpd >> chaseSpeed
+            >> maxChaseSpd >> maxChaseSpeed
+            >> gridFlag >> gridCollisionFlag
+            >> bounding >> minx >> miny >> maxx >> maxy
+            >> curr_state >> getstate
+            >> type >> getType;
+
+        ReadState(getstate);
+        ReadObj(getType);
+
+        MathLib::Vector2D minVec(minx, miny);
+        MathLib::Vector2D maxVec(maxx, maxy);
+        boundingBox = { minVec, maxVec };
+
+        file.close();
+        return true;
+    }*/
 }

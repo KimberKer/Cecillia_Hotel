@@ -1,0 +1,13 @@
+pos_x 7.0
+pos_y 7.0
+vel_x 0.0
+vel_y 0.0
+roam_Duration 6.0
+idle_Duration 3.0
+roam_Speed 0.2
+chase_Speed 0.0
+max_Chase_Speed 1.0
+grid_flag 0
+bounding_box 1.0 1.0 1.0 1.0
+state STATE_NONE
+object_type OBJ_GHOST
