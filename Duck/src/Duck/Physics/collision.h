@@ -25,7 +25,7 @@ namespace Duck {
 
     public:
         bool CollisionIntersection_RectRect(const AABB& aabb1, const MathLib::Vector2D& vel1,
-            const AABB& aabb2, const MathLib::Vector2D& vel2);
+            const AABB& aabb2, const MathLib::Vector2D& vel2, float dt);
         bool IsOutOfBounds(const AABB& boundingBox, const AABB& other) const;
     private:
 

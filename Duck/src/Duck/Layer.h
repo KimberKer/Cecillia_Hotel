@@ -12,6 +12,7 @@
 #pragma once
 #include "Duck/Core.h"
 #include "Duck/Events/Event.h"
+#include "Duck/Time.h"
 
 namespace Duck {
 	// Base class for application layers

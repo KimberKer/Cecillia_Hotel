@@ -1,3 +1,9 @@
+project "ImGui"
+    kind "StaticLib"
+    staticruntime "on"
+    
+    language "C++"
+    cppdialect "C++17"
 -- Function to check if a command runs successfully
 function commandExists(cmd)
     local handle = io.popen(cmd)
@@ -30,80 +36,42 @@ workspace "Duck"
 	startproject "Sandbox"
 	architecture "x64"
 
-	configurations {
-		"Debug",
-		"Release"
-	}
+    systemversion "latest"
 
--- Output Directory Shortcut
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+  
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
--- Include directories relative to root folder (solution directory)
-IncludeDir = {}
-IncludeDir["GLFW"] = "Duck/vendor/GLFW/include"
-IncludeDir["Glad"] = "Duck/vendor/Glad/include"
-IncludeDir["glm"] = "Duck/vendor/glm"
-IncludeDir["ImGui"] = "Duck/vendor/imgui"
-IncludeDir["FMODcore"] = "Duck/vendor/FMOD/api/core/inc"
-IncludeDir["FMODstudio"] = "Duck/vendor/FMOD/api/studio/inc"
-
-include "Duck/vendor/GLFW"
-include "Duck/vendor/Glad"
-include "Duck/vendor/imgui"
-
-
--- Duck.dll
-project "Duck"
-	location "Duck"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++20"
-	staticruntime "on"
-
-	-- Output Directory
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-
-	-- Intermediates Directory
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	pchheader "duckpch.h"
-	pchsource "Duck/src/duckpch.cpp"
-
-	-- Files to Generate
-	files {
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
-	}
-
-	-- Directories to Include
-    includedirs {
-		"%{prj.name}/src",
-		"Duck/vendor/spdlog/include",
-        --"lib/glfw-3.3.8.bin.WIN64/include",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.FMODcore}",
-		"%{IncludeDir.FMODstudio}"
+    files
+    {
+        "imconfig.h",
+        "imgui.h",
+        "imgui.cpp",
+        "imgui_draw.cpp",
+        "imgui_internal.h",
+        "imgui_widgets.cpp",
+        "imgui_tables.cpp",
+        "imstb_rectpack.h",
+        "imstb_textedit.h",
+        "imstb_truetype.h",
+        "imgui_demo.cpp",
+        "imgui_impl_glfw.h",
+        "imgui_impl_opengl3.h",
+        "imgui_impl_opengl3_loader.h",
+        "imgui_impl_glfw.cpp",
+        "imgui_impl_opengl3.cpp"
     }
 
-	-- Libs to Include, ".lib" files
-	libdirs {
-        --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
+    
+    --directories to include
+    includedirs
+    {
+        "$(SolutionDir)extern/glfw-3.3.8.bin.WIN64/include",
+        "%{IncludeDir.GLFW}"
     }
 
-	-- Link Input .dll
-	links {
-		"GLFW",
-		"Glad",
-		"ImGui",
-		"opengl32.lib"
-        --"glfw3"
+    links {
+		    "GLFW"
     }
 
 	filter "system:windows"
@@ -134,11 +102,8 @@ project "Duck"
 		optimize "On"
 		links { "fmodL.lib", "fmodstudioL_vc.lib" }
 		postbuildcommands {
-			-- ("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
-			-- ("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\""),
-			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
-
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
+			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
 		}
 
 
@@ -177,7 +142,8 @@ project "Sandbox"
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-
+		"Duck/vendor/FMOD/api/core/lib",
+		"Duck/vendor/FMOD/api/studio/lib"
     }
 
 	links {
@@ -188,22 +154,10 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines {
-			"DUCK_PLATFORM_WINDOWS"
-		}
+    filter "configurations:Debug"
+        runtime "Debug"
+        symbols "on"
 
-	filter "configurations:Debug"
-		defines "DUCK_DEBUG"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "DUCK_RELEASE"
-		runtime "Release"
-		optimize "on"
-	
-	filter "configurations:Dist"
-		defines "DUCK_DIST"
-		runtime "Release"
-		optimize "on"
-
+    filter "configurations:Release"
+        runtime "Release"
+        optimize "on"

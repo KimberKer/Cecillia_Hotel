@@ -19,7 +19,6 @@
 #include "../Physics/collision.h"
 #include "../Map/map.h"
 
-
 enum STATE
 {
 	STATE_NONE,
@@ -36,10 +35,11 @@ enum OBJ_TYPE
 	OBJ_GHOST,
 	OBJ_NPC,
 	OBJ_COUNT
+	OBJ_WALL,
+	OBJ_ERROR
 };
 namespace Duck {
 	class GameObject {
-
 	public:
 		GameObject();
 		GameObject(
@@ -49,7 +49,8 @@ namespace Duck {
 			float velocityY,
 			int gridCollisionFlag,
 			STATE state,
-			OBJ_TYPE obj_type);
+			OBJ_TYPE obj_type
+		);
 
 		// Getters
 		float getX() const;
@@ -83,7 +84,6 @@ namespace Duck {
 		void loadPlayerData();
 
 	private:
-
 		float x;
 		float y;
 		float velocityX;

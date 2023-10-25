@@ -101,6 +101,24 @@ namespace Duck {
 		This function gets the width
 	 */
 	 /******************************************************************************/
+	int MapDataHandler::GetWidth() const{
+		return MapWidth;
+	}
+
+	/******************************************************************************/
+	/*!
+		This function returns file
+	 */
+	 /******************************************************************************/
+	std::string MapDataHandler::GetFile() const {
+		return file;
+	}
+
+	/******************************************************************************/
+	/*!
+		This function gets the width
+	 */
+	 /******************************************************************************/
 	int MapDataHandler::GetWidth() const {
 		return MapWidth;
 	}

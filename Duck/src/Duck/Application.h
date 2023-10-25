@@ -2,35 +2,40 @@
 #include "Core.h"
 #include <iostream>
 //#include <GLFW/glfw3.h>
-#include "Audio/Audio.h"
+#include "Duck/Audio/Audio.h"
+
 #include "Duck/De-serialize/GameObject.h"
-#include "Logging/Logging.h"
+
+#include "Duck/ECS/Entity.h"
+
 #include "Duck/Events/KeyEvent.h"
-#include "Events/Event.h"
-#include "ImGui/ImGuiLayer.h"
-#include "Window.h"
-#include "Duck/LayerStack.h"
+#include "Duck/Events/Event.h"
+
+#include "Duck/ImGui/ImGuiLayer.h"
+
 #include "Duck/Events/ApplicationEvent.h"
+
 #include "Duck/Graphics/Shader.h"
 #include "Duck/Graphics/Buffer.h"
 #include "Duck/Graphics/Vertex.h"
 #include "Duck/Graphics/Renderer.h"
 #include "Duck/Graphics/Graphics.h"
-#include "Duck/De-serialize/GameObject.h"
+
 #include "Duck/Map/map.h"
+#include "Duck/Ghost/AI.h"
+#include "Duck/Time.h"
 
+#include "Logging/Logging.h"
+#include "Window.h"
+#include "Duck/LayerStack.h"
 
-#include "Duck/Graphics/Shader.h"
-#include "Duck/Graphics/Buffer.h"
-#include "Duck/Graphics/Vertex.h"
-#include "Duck/Graphics/Renderer.h"
 
 
 
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
-	class Audio;
+	//class Audio;
 	class GameObject;
 
 	class DUCK_API Application {
@@ -55,14 +60,17 @@ namespace Duck {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
+	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		float m_LastFrameTime = 0.0f;
 
 		std::shared_ptr<SoundInfo> m_SoundInfo;
-		std::shared_ptr<Audio> m_Audio;
+		//std::shared_ptr<Audio> m_Audio;
 		std::shared_ptr<MapDataHandler> m_map;
+
 
 
 		std::unique_ptr<Graphics> m_Graphics;
@@ -73,34 +81,7 @@ namespace Duck {
 
 	private:
 		static Application* s_Instance;
-
-		AABB aabb;
-		PhysicsLib m_phy;
-		std::vector<std::shared_ptr<GameObject>> objectlist;
-		std::shared_ptr<GameObject> m_gameobjList;
-		std::shared_ptr<GameObject> p_player;
-		//static GameObject* p_object;
-
-
-		unsigned const int CELL_SIZE = 1.f;
-
-
-
-
-		const float         PLAYER_VELOCITY = 0.1f;
-
-		bool                loadFiles = false;
-		bool                showImGuiWindow = false;
-		bool				showGrid = false;
-		bool				showBB = false;
-
-		int					PlayerOrientation = 0;
 	};
-
-
-
-
-
 
 	// To be defined in CLIENT
 	Application* CreateApplication();

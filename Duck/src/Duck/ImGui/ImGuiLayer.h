@@ -41,6 +41,13 @@ namespace Duck {
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
+
+		void HandleDragAndDropTarget(); //drag and drop functionality
+
+		void InitiateDragAndDropSource(); //drag and drop functionality
+
+
+
 	private:
 		float  const additionalSpacing = 20.0f; // Set desired additional spacing
 		double lastFrameTime = 0.0;

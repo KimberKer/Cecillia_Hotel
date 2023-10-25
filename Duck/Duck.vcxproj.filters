@@ -64,6 +64,9 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Duck\ECS">
+      <UniqueIdentifier>{3b38e792-c6a9-40f8-bafc-6d8aae35d248}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Duck.h">
@@ -71,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="src\Duck\Application.h">
       <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Audio\Audio.h">
-      <Filter>src\Duck\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Components.h">
       <Filter>src\Duck</Filter>
@@ -123,7 +123,13 @@
     <ClInclude Include="src\Duck\Graphics\Vertex.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\FrameBuffer.h">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h">
+      <Filter>src\Duck\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\ImGui\OpenGlFrameBuffer.h">
       <Filter>src\Duck\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
@@ -1434,13 +1440,24 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Json.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Ghost\AI.h" />
+    <ClInclude Include="src\Duck\Player\Player.h" />
+    <ClInclude Include="src\Duck\ECS\Entity.h">
+      <Filter>src\Duck\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\Audio.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\AudioComponent.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
       <Filter>src\Duck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Audio\Audio.cpp">
-      <Filter>src\Duck\Audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\CoreManager.cpp">
       <Filter>src\Duck</Filter>
@@ -1487,11 +1504,17 @@
     <ClCompile Include="src\Duck\Map\Map.cpp">
       <Filter>src\Duck\Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Map\MapLayer.cpp">
+      <Filter>src\Duck\Map</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp">
       <Filter>src\Duck\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Math\Vector2D.cpp">
       <Filter>src\Duck\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp">
+      <Filter>src\Duck\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics\Physics.cpp">
       <Filter>src\Duck\Physics</Filter>
@@ -1516,6 +1539,14 @@
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Json.cpp">
+      <Filter>src\Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Ghost\AI.cpp" />
+    <ClCompile Include="src\Duck\Player\Player.cpp" />
+    <ClCompile Include="src\Duck\Audio\Audio.cpp">
+      <Filter>src\Duck\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
