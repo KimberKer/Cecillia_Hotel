@@ -12,8 +12,8 @@
 #ifndef AI_H
 #define AI_H
 
-#include "Duck/De-serialize/GameObject.h"
 #include "duckpch.h"
+#include "Duck/De-serialize/GameObject.h"
 
 struct Vector2 {
     float x;
@@ -111,7 +111,7 @@ namespace Duck {
         State state;                    // Current AI state
         OBJ_TYPE obj_type;
 
-        AABB aabb;
+        Duck::AABB aabb;
         PhysicsLib m_phy;
     };
 }

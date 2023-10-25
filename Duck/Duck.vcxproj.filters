@@ -1452,6 +1452,21 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="src\Duck\Ghost\AI.h" />
+    <ClInclude Include="src\Duck\Player\Player.h" />
+    <ClInclude Include="src\Duck\ECS\Entity.h">
+      <Filter>src\Duck\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\Audio.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\AudioComponent.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Ghost\JiangShi.h" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1550,5 +1565,14 @@
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="src\Duck\Ghost\AI.cpp" />
+    <ClCompile Include="src\Duck\Player\Player.cpp" />
+    <ClCompile Include="src\Duck\Audio\Audio.cpp">
+      <Filter>src\Duck\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

@@ -1,7 +1,5 @@
 #include <Duck.h>
 
-
-
 class ExampleLayer : public Duck::Layer
 {
 public:
@@ -36,8 +34,7 @@ public:
 		/* ---------- Ghost Functions ---------- */
 		// Load waypoint coordinates for Ghost
 		//m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-
+		//p_Jiangshi->ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 		// Initialize Jiangshi Ghost
 		m_Jiangshi.SetGhostProperties(
 			7.f,	// Position x
@@ -166,39 +163,17 @@ public:
 		}
 
 		if (!isMoving) {
-			percentMove = 0.0f;
 			if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
 				initialPosition = std::make_pair(p_player->getX(), p_player->getY());
 				isMoving = true;
 			}
 		}
-		else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f) {
-			isMoving = true;
-			percentMove += PLAYER_VELOCITY * dt;
-			
-			if (percentMove <= 1.0f) {
-				p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * PLAYER_VELOCITY));
-				percentMove = 0.0f;
-				isMoving = false;
-			}
-			else {
-				p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX() * percentMove));
-			}
+		else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
+			p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX()));
+			isMoving = false;
 		}
-		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
-			isMoving = true;
-			percentMove += PLAYER_VELOCITY * dt;
-
-			if (percentMove <= 1.0f) {
-				p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY()* PLAYER_VELOCITY));
-				percentMove = 0.0f;
-				isMoving = false;
-			}
-			else {
-				p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY() * percentMove));
-			}
-		}
-		else {
+		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
+			p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY()));
 			isMoving = false;
 		}
 
@@ -240,6 +215,7 @@ public:
 					p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(1, p_player->getY())));
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
+					isMoving = false;
 				}
 				else if (p_player->getState() != STATE_NONE) {
 					//DUCK_CORE_INFO("Player: No Collision Detected!");
@@ -315,7 +291,7 @@ public:
 	}
 
 private:
-	//Duck::Coordinator ecs;
+	Duck::Coordinator ecs;
 
 	//std::shared_ptr<Duck::AudioSystem> audioSystem;
 
@@ -326,7 +302,7 @@ private:
 	std::vector<std::shared_ptr<Duck::GameObject>> objectlist;
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
-	//std::shared_ptr<Duck::GameObject> p_Jiangshi;
+	std::shared_ptr<Duck::GameObject> p_Jiangshi;
 
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
@@ -343,7 +319,7 @@ private:
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = .5f;
+	const float         PLAYER_VELOCITY = 10.f;
 
 	bool                loadFiles = false;
 	bool                showImGuiWindow = false;
