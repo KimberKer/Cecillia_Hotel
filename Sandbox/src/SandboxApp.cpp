@@ -1,32 +1,14 @@
 #include <Duck.h>
 
+
+
 class ExampleLayer : public Duck::Layer
 {
 public:
-	ExampleLayer() : Layer("Example") {
+	ExampleLayer() : Layer("Example") 
+	{
 		///* ---------- ECS ---------- */
-		//ecs.Init();
-
-		///* ---------- Register Components ---------- */
-		//ecs.RegisterComponent<Duck::AudioComponent>();
-
-		///* ---------- Register Systems -> init system ---------- */
-		//audioSystem = ecs.RegisterSystem<Duck::AudioSystem>();
-		//{
-		//	Duck::Signature signature;
-		//	signature.set(ecs.GetComponentType<Duck::AudioComponent>());
-		//	ecs.SetSystemSignature<Duck::AudioSystem>(signature);
-		//}
-		//audioSystem->init();
-
-		///* ---------- Create Entities ---------- */
-		//Duck::Entity audio1 = ecs.CreateEntity();
-
-		//ecs.AddComponent<Duck::AudioComponent>(
-		//	audio1,
-		//	{ "oof", "../Duck/src/Duck/Audio/assets/oof.wav" }
-		//);
-		/* ---------- ---------- ---------- */
+		Duck::ecs.Init();
 
 		/* ---------- Map Functions ---------- */
 		m_map = std::shared_ptr<Duck::MapDataHandler>(new Duck::MapDataHandler);
@@ -40,22 +22,16 @@ public:
 
 		/* ---------- Load Texture ---------- */
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics);
-		m_CharacterTexture = Duck::Shader::LoadTexture("../images/Character1.png");
-		m_GhostTexture = Duck::Shader::LoadTexture("../images/Ghost.png");
-		m_BackgroundTexture = Duck::Shader::LoadTexture("../images/FloorTile1.png");
-		m_BackgroundTexture2 = Duck::Shader::LoadTexture("../images/FloorTile2.png");
+		m_CharacterTexture = Duck::Shader::LoadTexture("../assets/images/Character1.png");
+		m_GhostTexture = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
+		m_BackgroundTexture = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
+		m_BackgroundTexture2 = Duck::Shader::LoadTexture("../assets/images/FloorTile2.png");
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Set Gridsize of Game ---------- */
 		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
 		/* ---------- ---------- ---------- */
 
-		/* ---------- Audio ---------- */
-		/*m_Audio = std::shared_ptr<Duck::Audio>(new Duck::Audio);
-		m_SoundInfo = std::shared_ptr<Duck::SoundInfo>(new Duck::SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
-		m_Audio->init();
-		m_Audio->loadSound(m_SoundInfo);*/
-		/* ---------- ---------- ---------- */
 
 		/* ---------- Ghost Functions ---------- */
 		// Load waypoint coordinates for Ghost
@@ -117,12 +93,55 @@ public:
 		/* ---------- ---------- ---------- */
 	}
 
-	void OnUpdate() override {
+	void OnUpdate() override 
+	{
 		runtime.update();
 		float dt = static_cast<float>(runtime.getDeltaTime());
 
-		//updating systems
-		//audioSystem->update();
+		///* ---------- Register Components ---------- */
+		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
+		/* ---------- ---------- ---------- */
+
+		///* ---------- Register Systems -> init system ---------- */
+		auto audioSystem = Duck::ecs.RegisterSystem<Duck::AudioSystem>();
+		{
+			Duck::Signature signature;
+			signature.set(Duck::ecs.GetComponentType<Duck::AudioComponent>());
+			Duck::ecs.SetSystemSignature<Duck::AudioSystem>(signature);
+		}
+		audioSystem->init();
+		/* ---------- ---------- ---------- */
+
+		///* ---------- Create Entities ---------- */
+		Duck::Entity bgm = Duck::ecs.CreateEntity();
+		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			bgm,
+			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx1,
+			{ "oof", "../assets/audio/oof.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx2,
+			{ "ooz", "../assets/audio/ooz.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx3,
+			{ "pew", "../assets/audio/pew.wav" }
+		);
+		/* ---------- ---------- ---------- */
+
+		///* ---------- Updating Systems ---------- */
+		audioSystem->update();
+		/* ---------- ---------- ---------- */
 
 		// Calculate the target grid position based on the character's speed
 		for (int i{}; i < objectlist.size(); i++) {
@@ -240,11 +259,6 @@ public:
 		//std::string deltatime = std::to_string(runtime.getDeltaTime());
 		//Debug::GetInstance()->WatchVariable("DT", deltatime);
 
-		//Debug::GetInstance()->BeginSystemProfile("Audio");
-		//KRISTY - testing audio manager
-		//m_Audio->playSound(m_SoundInfo);
-		//Debug::GetInstance()->EndSystemProfile("Audio");
-
 	}
 
 	void OnEvent(Duck::Event& event) override {
@@ -306,7 +320,6 @@ private:
 	//std::shared_ptr<Duck::AudioSystem> audioSystem;
 
 	std::shared_ptr<Duck::SoundInfo> m_SoundInfo;
-	//std::shared_ptr<Duck::Audio> m_Audio;
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
 

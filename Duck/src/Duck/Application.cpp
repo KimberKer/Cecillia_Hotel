@@ -21,7 +21,10 @@
 #include <stdlib.h>  
 #include <crtdbg.h>
 
+
 namespace Duck {
+
+	Coordinator ecs;
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 	Application* Application::s_Instance = nullptr;

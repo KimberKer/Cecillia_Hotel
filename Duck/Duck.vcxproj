@@ -113,13 +113,11 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Application.h" />
     <ClInclude Include="src\Duck\Audio\Audio.h" />
     <ClInclude Include="src\Duck\Audio\AudioComponent.h" />
-    <ClInclude Include="src\Duck\Components.h" />
     <ClInclude Include="src\Duck\Core.h" />
     <ClInclude Include="src\Duck\CoreManager.h" />
     <ClInclude Include="src\Duck\De-serialize\GameObject.h" />
     <ClInclude Include="src\Duck\Debug.h" />
     <ClInclude Include="src\Duck\ECS\Entity.h" />
-    <ClInclude Include="src\Duck\Entity.h" />
     <ClInclude Include="src\Duck\EntryPoint.h" />
     <ClInclude Include="src\Duck\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Duck\Events\Event.h" />
@@ -131,9 +129,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
-    <ClInclude Include="src\Duck\ImGui\FrameBuffer.h" />
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Duck\ImGui\OpenGlFrameBuffer.h" />
     <ClInclude Include="src\Duck\Input.h" />
     <ClInclude Include="src\Duck\Json.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
@@ -585,9 +581,9 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
-    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />

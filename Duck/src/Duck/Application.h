@@ -35,7 +35,6 @@
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
-	//class Audio;
 	class GameObject;
 
 	class DUCK_API Application {
