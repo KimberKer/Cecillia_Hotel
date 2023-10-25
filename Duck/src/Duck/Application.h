@@ -50,6 +50,8 @@ namespace Duck {
 
 		inline static Application& Get() { return *s_Instance; }
 
+		void SetRunning(bool running) { m_Running = running; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 

@@ -195,7 +195,7 @@ namespace Duck {
 
 			if (ImGui::Button("Add Object", ImVec2(buttonWidth, 20))) {
 				if (p_player->getX() == x_value - 1 && p_player->getY() == y_value - 1) {
-					DUCK_CORE_ERROR("player same value");
+					DUCK_CORE_ERROR("change the player position first!");
 				}
 				else {
 					m_map->UpdateCellData(m_map->GetFile(), x_value - 1, y_value - 1, obj);
@@ -371,9 +371,10 @@ namespace Duck {
 						isGamePlaying = true;
 					}
 				}
-				//if (ImGui::MenuItem("Quit")) {
-				//	// Handle "Save" action
-				//}
+				if (ImGui::MenuItem("Quit")) {
+					// Handle "Save" action
+					Application::Get().SetRunning(false);
+				}
 				ImGui::EndMenu();
 			}
 

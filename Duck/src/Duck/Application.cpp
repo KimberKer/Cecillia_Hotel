@@ -29,7 +29,6 @@
 #include "CoreManager.h"
 
 
-
 namespace Duck {
 
 	Application* Application::s_Instance = nullptr;
@@ -69,8 +68,8 @@ namespace Duck {
 
 		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
 		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
-		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
-		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
+		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile5.jpg");
+		m_BackgroundTexture2 = Shader::LoadTexture("../images/WallTile1.png");
 
 		//setting number of squares
 		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
@@ -231,6 +230,7 @@ namespace Duck {
 				// Display FPS using ImGui
 				float dt = static_cast<float>(runtime.getDeltaTime()); // Get delta time in seconds
 				if (isGamePlaying) {
+
 					showGrid = false;
 					/* glClearColor(1, 0, 1, 1);
 					 glClear(GL_COLOR_BUFFER_BIT)*/
@@ -300,6 +300,7 @@ namespace Duck {
 				else {
 					showGrid = true;
 				}
+
 				AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
 				AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
 
@@ -315,7 +316,7 @@ namespace Duck {
 
 				//draw objects
 				m_Graphics->DrawBackground(m_BackgroundTexture);
-
+				
 
 				for (int i{}; i < objectlist.size(); i++) {
 
@@ -346,7 +347,9 @@ namespace Duck {
 					layer->OnUpdate();
 				}
 
-
+				if (showGrid) {
+					m_Graphics->ShowGrid();
+				}
 
 				m_ImGuiLayer->Begin();
 				if (showImGuiWindow) {
