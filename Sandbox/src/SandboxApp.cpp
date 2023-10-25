@@ -110,6 +110,10 @@ public:
 		/* ---------- ---------- ---------- */
 
 		///* ---------- Create Entities ---------- */
+
+		//player entity
+
+		//audio entities
 		Duck::Entity bgm = Duck::ecs.CreateEntity();
 		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
 		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
