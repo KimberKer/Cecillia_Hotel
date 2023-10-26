@@ -49,6 +49,8 @@ namespace Duck {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 		void ReadMapData(std::string filename);
+
+		LayerStack GetLayerStack() const { return m_LayerStack; }
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
@@ -70,9 +72,7 @@ namespace Duck {
 		std::shared_ptr<SoundInfo> m_SoundInfo;
 		//std::shared_ptr<Audio> m_Audio;
 		std::shared_ptr<MapDataHandler> m_map;
-
-
-
+		
 		std::unique_ptr<Graphics> m_Graphics;
 
 		uint32_t m_CharacterTexture;

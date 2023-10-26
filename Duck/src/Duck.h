@@ -16,6 +16,8 @@
 #include "Duck/Map/Map.h"
 #include "Duck/De-serialize/GameObject.h"
 
+#include "Duck/ImGui/ImGuiLayer.h"
+
 // -- ECS --
 #include "Duck/ECS/Entity.h"
 

@@ -21,6 +21,10 @@
 #include <stdlib.h>  
 #include <crtdbg.h>
 
+bool isGamePlaying;
+bool showImGuiWindow;
+double fps;
+
 namespace Duck {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -31,6 +35,7 @@ namespace Duck {
 	CoreManager* coreManager = CoreManager::GetInstance();
 
 	Application::Application() {
+
 		DUCK_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -69,19 +74,26 @@ namespace Duck {
 
 		try {
 			while (m_Running) {
-				for (Layer* layer : m_LayerStack) {
+
+				for (Layer* layer : m_LayerStack)
+				{
 					layer->OnUpdate();
 				}
 
-				/*m_ImGuiLayer->Begin();
-				if (showImGuiWindow) {
-					for (Layer* layer : m_LayerStack) {
-						layer->OnImGuiRender();
+
+				m_ImGuiLayer->Begin();
+				if (showImGuiWindow)
+				{
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnImGuiRender(fps);
 					}
 				}
-				m_ImGuiLayer->End();*/
+				m_ImGuiLayer->End();
+
 				m_Window->OnUpdate();
-				
+
+
 				//coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));
 			}
 		}

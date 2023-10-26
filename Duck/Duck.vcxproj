@@ -135,7 +135,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Duck\ImGui\OpenGlFrameBuffer.h" />
     <ClInclude Include="src\Duck\Input.h" />
-    <ClInclude Include="src\Duck\Json.h" />
     <ClInclude Include="src\Duck\KeyCodes.h" />
     <ClInclude Include="src\Duck\Layer.h" />
     <ClInclude Include="src\Duck\LayerStack.h" />
@@ -585,7 +584,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
-    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />

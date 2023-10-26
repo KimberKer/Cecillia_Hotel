@@ -24,6 +24,7 @@
 
 
 namespace Duck {
+
 	ImGuiLayer::ImGuiLayer(std::shared_ptr<MapDataHandler> map, std::vector<std::shared_ptr<GameObject>> objectlist) : Layer("ImGuiLayer")
 	{
 		m_map = map;

@@ -34,9 +34,9 @@ enum OBJ_TYPE
 	OBJ_OBJ,
 	OBJ_GHOST,
 	OBJ_NPC,
-	OBJ_COUNT
 	OBJ_WALL,
-	OBJ_ERROR
+	OBJ_ERROR,
+	OBJ_COUNT
 };
 namespace Duck {
 	class GameObject {
@@ -60,6 +60,14 @@ namespace Duck {
 		STATE getState() const;
 		int getgridCollisionFlag() const;
 		OBJ_TYPE getObj() const;
+		std::shared_ptr<GameObject> CreateObj(float p_x,
+			float p_y,
+			float p_velocityX,
+			float p_velocityY,
+			int p_gridCollisionFlag,
+			Duck::AABB p_boundingbox,
+			STATE p_state,
+			OBJ_TYPE p_obj_type);
 
 
 		void  SetState(STATE state);

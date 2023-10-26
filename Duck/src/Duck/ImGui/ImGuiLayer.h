@@ -19,7 +19,10 @@
 #include "Duck/Map/Map.h"
 #include "Duck/time.h"
 
+extern DUCK_API bool isGamePlaying;
+
 namespace Duck {
+
 	class ImGuiLayer : public Layer
 	{
 	public:

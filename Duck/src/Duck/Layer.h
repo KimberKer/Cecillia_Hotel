@@ -40,6 +40,7 @@ namespace Duck {
 
 		// Get the name of the layer
 		inline const std::string& GetName() const { return m_DebugName; }
+		inline void SetName(std::string name)  { m_DebugName= name; }
 
 	protected:
 		std::string m_DebugName; // Debug name of the layer

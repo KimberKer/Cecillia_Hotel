@@ -1,6 +1,5 @@
 #pragma once
 
-extern bool isGamePlaying;
 
 #include <iostream>
 #include "Duck/Core.h"

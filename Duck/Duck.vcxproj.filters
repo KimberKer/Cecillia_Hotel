@@ -1440,9 +1440,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Json.h">
-      <Filter>src\Duck</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Ghost\AI.h" />
     <ClInclude Include="src\Duck\Player\Player.h" />
     <ClInclude Include="src\Duck\ECS\Entity.h">
@@ -1539,9 +1536,6 @@
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Json.cpp">
-      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Ghost\AI.cpp" />
     <ClCompile Include="src\Duck\Player\Player.cpp" />
