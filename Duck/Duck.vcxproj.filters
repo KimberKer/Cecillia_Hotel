@@ -120,6 +120,9 @@
     <ClInclude Include="src\Duck\Ghost\AI.h">
       <Filter>src\Duck\Ghost</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Ghost\JiangShi.h">
+      <Filter>src\Duck\Ghost</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -139,9 +142,6 @@
       <Filter>src\Duck\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Input.h">
-      <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Json.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\KeyCodes.h">
@@ -1452,21 +1452,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-<<<<<<< Updated upstream
-=======
-    <ClInclude Include="src\Duck\Ghost\AI.h" />
-    <ClInclude Include="src\Duck\Player\Player.h" />
-    <ClInclude Include="src\Duck\ECS\Entity.h">
-      <Filter>src\Duck\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Audio\Audio.h">
-      <Filter>src\Duck\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Audio\AudioComponent.h">
-      <Filter>src\Duck\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Ghost\JiangShi.h" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1485,6 +1470,12 @@
       <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Ghost\AI.cpp">
+      <Filter>src\Duck\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp">
+      <Filter>src\Duck\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp">
       <Filter>src\Duck\Ghost</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
@@ -1507,9 +1498,6 @@
     </ClCompile>
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp">
       <Filter>src\Duck\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Json.cpp">
-      <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Layer.cpp">
       <Filter>src\Duck</Filter>
@@ -1565,14 +1553,5 @@
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-<<<<<<< Updated upstream
-=======
-    <ClCompile Include="src\Duck\Ghost\AI.cpp" />
-    <ClCompile Include="src\Duck\Player\Player.cpp" />
-    <ClCompile Include="src\Duck\Audio\Audio.cpp">
-      <Filter>src\Duck\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp" />
->>>>>>> Stashed changes
   </ItemGroup>
 </Project>

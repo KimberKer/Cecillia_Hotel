@@ -1,19 +1,12 @@
 #pragma once
 
-#ifndef AI_H
-#define AI_H
+#ifndef JIANGSHI_H
+#define JIANGSHI_H
 
 #include "duckpch.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Math/Vector2D.h"
-
-struct Vector2 {
-    float x;
-    float y;
-
-    Vector2() : x(0.0f), y(0.0f) {}
-    Vector2(float x, float y) : x(x), y(y) {}
-};
+#include "Duck/Log.h"
 
 // Enumeration for different AI states
 enum State {
@@ -40,10 +33,10 @@ namespace Duck {
         void Roam(float deltaTime, std::shared_ptr<GameObject> gameObject);
         void Chase(float deltaTime, std::shared_ptr<GameObject> gameObject);
         bool IsPlayerNearby(std::shared_ptr<GameObject> gameObject);
-        std::vector<Vector2> ReadWaypointsFromFile(const std::string& filename);
+        std::vector<MathLib::Vector2D> ReadWaypointsFromFile(const std::string& filename);
 
     private:
-        std::vector<Vector2> waypoints; // Waypoints for roaming
+        std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
         float roamDuration;             // Duration of the "Roaming" state
         float idleDuration;             // Duration of the "Idle" state
         float timeInCurrentState;       // Time elapsed in the current state

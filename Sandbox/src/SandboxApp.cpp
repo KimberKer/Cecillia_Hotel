@@ -8,6 +8,65 @@ public:
 		///* ---------- ECS ---------- */
 		Duck::ecs.Init();
 
+		///* ---------- Register Components ---------- */
+		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
+		//Duck::ecs.RegisterComponent<Duck::JiangShi>();
+		/* ---------- ---------- ---------- */
+
+		///* ---------- Register Systems -> init system ---------- */
+		audioSystem = Duck::ecs.RegisterSystem<Duck::AudioSystem>();
+		{
+			Duck::Signature signature;
+			signature.set(Duck::ecs.GetComponentType<Duck::AudioComponent>());
+			Duck::ecs.SetSystemSignature<Duck::AudioSystem>(signature);
+		}
+		audioSystem->init();
+
+		/*JiangShi = Duck::ecs.RegisterSystem<Duck::JiangShi>();
+		{
+			Duck::Signature signature;
+			signature.set(Duck::ecs.GetComponentType<Duck::JiangShi>());
+			Duck::ecs.SetSystemSignature<Duck::JiangShi>(signature);
+		}*/
+		/* ---------- ---------- ---------- */
+
+		///* ---------- Create Entities ---------- */
+
+		//player 
+
+		//ghost
+		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
+		Duck::ecs.AddComponent<Duck::JiangShi>(
+			ghost,
+			{ 6.f, 3.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
+		);*/
+
+		//audio entities
+		Duck::Entity bgm = Duck::ecs.CreateEntity();
+		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			bgm,
+			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx1,
+			{ "oof", "../assets/audio/oof.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx2,
+			{ "ooz", "../assets/audio/ooz.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx3,
+			{ "pew", "../assets/audio/pew.wav" }
+		);
+		/* ---------- ---------- ---------- */
 		/* ---------- Map Functions ---------- */
 		m_map = std::shared_ptr<Duck::MapDataHandler>(new Duck::MapDataHandler);
 		
@@ -28,25 +87,6 @@ public:
 
 		/* ---------- Set Gridsize of Game ---------- */
 		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
-		/* ---------- ---------- ---------- */
-
-
-		/* ---------- Ghost Functions ---------- */
-		// Load waypoint coordinates for Ghost
-		//m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-		//p_Jiangshi->ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-		// Initialize Jiangshi Ghost
-		m_Jiangshi.SetGhostProperties(
-			7.f,	// Position x
-			7.f,	// Position y
-			0.f,	// Velocity x
-			0.f,	// Velocity y
-			6.f,	// Roam duration
-			3.0f,	// Idle duration
-			0.2f,	// Roam speed
-			0.0f,	// Chase speed
-			1.0f,	// Max chase speed
-			aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));	// Bounding box
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Game Objects ---------- */
@@ -95,53 +135,9 @@ public:
 		runtime.update();
 		float dt = static_cast<float>(runtime.getDeltaTime());
 
-		///* ---------- Register Components ---------- */
-		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
-		/* ---------- ---------- ---------- */
-
-		///* ---------- Register Systems -> init system ---------- */
-		auto audioSystem = Duck::ecs.RegisterSystem<Duck::AudioSystem>();
-		{
-			Duck::Signature signature;
-			signature.set(Duck::ecs.GetComponentType<Duck::AudioComponent>());
-			Duck::ecs.SetSystemSignature<Duck::AudioSystem>(signature);
-		}
-		audioSystem->init();
-		/* ---------- ---------- ---------- */
-
-		///* ---------- Create Entities ---------- */
-
-		//player entity
-
-		//audio entities
-		Duck::Entity bgm = Duck::ecs.CreateEntity();
-		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			bgm,
-			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx1,
-			{ "oof", "../assets/audio/oof.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx2,
-			{ "ooz", "../assets/audio/ooz.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx3,
-			{ "pew", "../assets/audio/pew.wav" }
-		);
-		/* ---------- ---------- ---------- */
-
 		///* ---------- Updating Systems ---------- */
-		audioSystem->update();
+		//audioSystem->update();
+		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
 
 		// Calculate the target grid position based on the character's speed
@@ -166,20 +162,40 @@ public:
 			}
 		}
 
+		// Character's Movement
 		if (!isMoving) {
+			percentMove = 0.0f;
 			if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
-				initialPosition = std::make_pair(p_player->getX(), p_player->getY());
+				initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
 				isMoving = true;
 			}
 		}
 		else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
-			p_player->SetPositionX(initialPosition.first + (CELL_SIZE * p_player->getVelocityX()));
-			isMoving = false;
+			percentMove += PLAYER_VELOCITY * dt;
+			if (percentMove >= 1.0f) {
+				p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX()));
+				percentMove = 0.0f;
+				isMoving = false;
+			}
+			else{
+				p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * percentMove));
+				isMoving = false;
+			}
 		}
 		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
-			p_player->SetPositionY(initialPosition.second + (CELL_SIZE * p_player->getVelocityY()));
-			isMoving = false;
+			percentMove += PLAYER_VELOCITY * dt;
+			if (percentMove >= 1.0f) {
+				p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY()));
+				percentMove = 0.0f;
+				isMoving = false;
+			}
+			else {
+				p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * percentMove));
+				isMoving = false;
+			}
 		}
+		
+		DUCK_TRACE("{0}", percentMove);
 
 		Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 		Duck::RenderCommand::Clear();
@@ -190,9 +206,6 @@ public:
 		//Debug::GetInstance()->BeginSystemProfile("Graphics");
 		// Would be used for cameras
 		Duck::Renderer::BeginScene();
-
-		// Ghost Function
-		m_Jiangshi.Jiangshi(dt, p_player);
 
 		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
 		Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
@@ -228,7 +241,7 @@ public:
 			}
 			
 		}
-		m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
+		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, JiangShi->GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
@@ -284,9 +297,14 @@ public:
 			switch (keyEvent.GetKeyCode()) {
 			case Duck::Key::A:
 			case Duck::Key::D:
+				p_player->SetPositionX(static_cast<float>(m_map->SnapToCellX(1, p_player->getX())));
+				p_player->SetState(STATE_NONE);
+				break;
 			case Duck::Key::W:
 			case Duck::Key::S:
+				p_player->SetPositionY(static_cast<float>(m_map->SnapToCellY(1, p_player->getY())));
 				p_player->SetState(STATE_NONE);
+				break;
 			default:
 				p_player->SetState(STATE_NONE);
 				break;
@@ -297,8 +315,6 @@ public:
 private:
 	Duck::Coordinator ecs;
 
-	//std::shared_ptr<Duck::AudioSystem> audioSystem;
-
 	std::shared_ptr<Duck::SoundInfo> m_SoundInfo;
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
@@ -306,7 +322,6 @@ private:
 	std::vector<std::shared_ptr<Duck::GameObject>> objectlist;
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
-	std::shared_ptr<Duck::GameObject> p_Jiangshi;
 
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
@@ -315,15 +330,13 @@ private:
 	uint32_t m_GhostTexture;
 	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
 
-	Duck::Ghost m_Jiangshi;
-
 	Duck::Time runtime;
 
 	int numOfObjects;
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 10.f;
+	const float         PLAYER_VELOCITY = 20.f;
 
 	bool                loadFiles = false;
 	bool                showImGuiWindow = false;
@@ -332,8 +345,11 @@ private:
 
 	int					PlayerOrientation = 0;
 	bool				isMoving = false;
-	float				percentMove = 0.0f;
-	std::pair<float, float>	initialPosition{};
+	float				percentMove{};
+	MathLib::Vector2D	initialPosition{};
+
+	std::shared_ptr<Duck::AudioSystem> audioSystem;
+	//std::shared_ptr<Duck::JiangShi> JiangShi;
 };
 
 class Sandbox : public Duck::Application {

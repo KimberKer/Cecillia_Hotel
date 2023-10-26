@@ -577,6 +577,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Ghost\AI.cpp" />
     <ClCompile Include="src\Duck\Ghost\JiangShi.cpp" />
+    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
@@ -584,7 +585,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Duck\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Duck\Json.cpp" />
     <ClCompile Include="src\Duck\Layer.cpp" />
     <ClCompile Include="src\Duck\LayerStack.cpp" />
     <ClCompile Include="src\Duck\Log.cpp" />

@@ -2,7 +2,7 @@
 
 //component files
 #include "Duck/Audio/AudioComponent.h"
-#include "Duck/Ghost/AI.h"
+#include "Duck/Ghost/JiangShi.h"
 
 //standard lib
 #include <stdint.h>

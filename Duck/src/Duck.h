@@ -15,6 +15,7 @@
 #include "Duck/Time.h"
 #include "Duck/Map/Map.h"
 #include "Duck/De-serialize/GameObject.h"
+#include "Duck/Ghost/JiangShi.h"
 
 // -- ECS --
 #include "Duck/ECS/Entity.h"
