@@ -25,10 +25,9 @@
 
 namespace Duck {
 
-	ImGuiLayer::ImGuiLayer(std::shared_ptr<MapDataHandler> map, std::vector<std::shared_ptr<GameObject>> objectlist) : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) : Layer("ImGuiLayer")
 	{
-		m_map = map;
-		p_player = objectlist[0];
+		m_maplist = maplist;
 
 		for (int i{}; i < objectlist.size(); i++) {
 			if (objectlist[i]->getObj() == OBJ_PLAYER) {
@@ -111,16 +110,16 @@ namespace Duck {
 
 			ImGui::SeparatorText("GameObjects:");
 
-			ImGui::BulletText("Number of Player: %d", m_map->GetNumberOfObjects(OBJ_PLAYER));
-			ImGui::BulletText("Number of Ghost: %d", m_map->GetNumberOfObjects(OBJ_GHOST));
-			ImGui::BulletText("Number of Walls: %d", m_map->GetNumberOfObjects(OBJ_OBJ));
-			ImGui::BulletText("Number of NPC: %d", m_map->GetNumberOfObjects(OBJ_NPC));
+			ImGui::BulletText("Number of Player: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER));
+			ImGui::BulletText("Number of Ghost: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST));
+			ImGui::BulletText("Number of Walls: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ));
+			ImGui::BulletText("Number of NPC: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC));
 
 			//total
-			int totalCount =	m_map->GetNumberOfObjects(OBJ_OBJ) +
-								m_map->GetNumberOfObjects(OBJ_GHOST) +
-								m_map->GetNumberOfObjects(OBJ_PLAYER) +
-								m_map->GetNumberOfObjects(OBJ_NPC);
+			int totalCount = m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC);
 
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing); //spacing
 			ImGui::BulletText("Total Number of Objects: %d", totalCount);
@@ -154,8 +153,8 @@ namespace Duck {
 			//------------Input text values---------------------------
 			int x_min_value = 0;  // Set your minimum value here
 			int y_min_value = 0;  // Set your minimum value here
-			int max_w_value = m_map->GetWidth();
-			int max_h_value = m_map->GetHeight();
+			int max_w_value = m_maplist[GetMapIndex()]->GetWidth();
+			int max_h_value = m_maplist[GetMapIndex()]->GetHeight();
 
 
 			ImGui::Text("X value");
@@ -197,15 +196,17 @@ namespace Duck {
 
 			if (ImGui::Button("Add Object", ImVec2(buttonWidth, 20))) {
 				if (p_player->getX() == x_value - 1 && p_player->getY() == y_value - 1) {
-					DUCK_CORE_ERROR("change the player position first!");
+					DUCK_CORE_ERROR("Error: Change the player position first!");
 				}
 				else {
-					m_map->UpdateCellData(m_map->GetFile(), x_value - 1, y_value - 1, obj);
+					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
 					//change the state
-					m_objList[(x_value - 1) * m_map->GetWidth() + (y_value - 1)]->SetType(obj);
+					m_objList[(x_value - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_value - 1)]->SetType(obj);
 
 
 				}
+				
+				//ExampleLayer::InitializeGame();
 
 			}
 
@@ -226,8 +227,8 @@ namespace Duck {
 		{
 			int x_min_pvalue = 0;  // Set your minimum value here
 			int y_min_pvalue = 0;  // Set your minimum value here
-			int max_w_pvalue = m_map->GetWidth();
-			int max_h_pvalue = m_map->GetHeight();
+			int max_w_pvalue = m_maplist[GetMapIndex()]->GetWidth();
+			int max_h_pvalue = m_maplist[GetMapIndex()]->GetHeight();
 
 
 			ImGui::Text("X Player value");
@@ -268,11 +269,11 @@ namespace Duck {
 
 			if (ImGui::Button("Update Player Position", ImVec2(buttonWidth, 20))) {
 				//make original position of the player empty
-				if (m_map->UpdateCellData(m_map->GetFile(), p_player->getX(), p_player->getY(), OBJ_EMPTY)) {
+				if (m_maplist[GetMapIndex()]->UpdateCellData( p_player->getX(), p_player->getY(), OBJ_EMPTY)) {
 
 					//change to the new position
-					m_objList[(x_pvalue - 1) * m_map->GetWidth() + (y_pvalue - 1)]->SetType(OBJ_EMPTY);
-					m_map->UpdateCellData(m_map->GetFile(), x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
+					m_objList[(x_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_pvalue - 1)]->SetType(OBJ_EMPTY);
+					m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
 					p_player->SetPositionX(x_pvalue - 1);
 					p_player->SetPositionY(y_pvalue - 1);
 
@@ -302,6 +303,29 @@ namespace Duck {
 
 		ImGui::End();
 	}
+
+	void ImGuiLayer::MapData()
+	{
+
+		ImGui::Begin("Map");
+		
+		ImGui::End();
+	}
+	void ImGuiLayer::Console()
+	{
+
+		ImGui::Begin("Console");
+		ImGui::Text("Console Output:");
+		ImGui::Separator();
+
+		// Update the text area with console messages
+		for (const auto& message : consoleMessages) {
+			ImGui::TextWrapped("%s", message.c_str());
+		}
+
+		ImGui::End();
+	}
+
 
 	void ImGuiLayer::DisplayFPS(double &fps)
 	{

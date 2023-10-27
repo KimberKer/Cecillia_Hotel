@@ -26,9 +26,8 @@ namespace Duck {
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer(std::shared_ptr<MapDataHandler> map, std::vector<std::shared_ptr<GameObject>> objectlist);
+		ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist);
 		~ImGuiLayer();
-
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnEvent(Event& e) override;
@@ -40,6 +39,8 @@ namespace Duck {
 		void TabCreateGameObj();
 		void TabUpdatePlayer();
 		void TabDisplayGameObjects();
+		void MapData();
+		void Console();
 		void DisplayFPS(double &fps);
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
@@ -57,7 +58,7 @@ namespace Duck {
 		double fps = 0.0;
 		bool m_BlockEvents = true;
 		std::vector<std::shared_ptr<GameObject>> m_objList;
-		std::shared_ptr<MapDataHandler> m_map;
+		std::vector<std::shared_ptr<MapDataHandler>> m_maplist;
 		double m_fps;
 		const char* filename;
 		std::shared_ptr<GameObject> p_player;

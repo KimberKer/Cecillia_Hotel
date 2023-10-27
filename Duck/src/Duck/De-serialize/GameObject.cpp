@@ -30,7 +30,7 @@ namespace Duck {
 
 	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type)
 		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), state(getstate), obj_type(obj_type) {}
-
+	 
 	std::shared_ptr<GameObject> GameObject::CreateObj(
 		float p_x,
 		float p_y,

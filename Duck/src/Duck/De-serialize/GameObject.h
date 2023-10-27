@@ -17,7 +17,7 @@
 
 #include <string>
 #include "../Physics/collision.h"
-#include "../Map/map.h"
+
 
 enum STATE
 {
@@ -98,7 +98,6 @@ namespace Duck {
 		float velocityY;
 		int gridCollisionFlag;
 		Duck::AABB boundingBox;
-		MapDataHandler m_map;
 		STATE state;
 		OBJ_TYPE obj_type;
 	};

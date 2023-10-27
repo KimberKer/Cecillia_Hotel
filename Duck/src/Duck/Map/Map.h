@@ -20,7 +20,7 @@ namespace Duck {
     private:
         int MapWidth{};
         int MapHeight{};
-        std::string file = "";
+        std::string filePath;
 
         //temporary var
         std::string width, w;
@@ -38,9 +38,9 @@ namespace Duck {
 
     public:
 
-        MapDataHandler() : MapWidth(0), MapHeight(0), MapData{}, CollisionData{}, file{} {};
-        int GetMapData(const std::string& filename);
-        int UpdateCellData(const std::string& filename, int row, int column, int value);
+        MapDataHandler(const std::string& filePath);
+        int GetMapData();
+        int UpdateCellData( int row, int column, int value);
         void FreeMapData();
         int GetCellValue(int X, int Y);
         std::string GetFile() const;
@@ -54,7 +54,10 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
-        const int* operator[](std::size_t index) const;
-        int* operator[](std::size_t index);
+     
     };
+
+    const int& GetMapIndex();
+    void SetMapIndex(int i);
+
 }
