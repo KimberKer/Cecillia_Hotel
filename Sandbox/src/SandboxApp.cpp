@@ -10,7 +10,8 @@ public:
 
 		///* ---------- Register Components ---------- */
 		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
-		//Duck::ecs.RegisterComponent<Duck::JiangShi>();
+		Duck::ecs.RegisterComponent<Duck::JiangShi>();
+		Duck::ecs.RegisterComponent<Duck::GameObject>();
 		/* ---------- ---------- ---------- */
 
 		///* ---------- Register Systems -> init system ---------- */
@@ -22,12 +23,15 @@ public:
 		}
 		audioSystem->init();
 
-		/*JiangShi = Duck::ecs.RegisterSystem<Duck::JiangShi>();
+		JiangShiSystem = Duck::ecs.RegisterSystem<Duck::JiangShiSystem>();
 		{
 			Duck::Signature signature;
 			signature.set(Duck::ecs.GetComponentType<Duck::JiangShi>());
 			Duck::ecs.SetSystemSignature<Duck::JiangShi>(signature);
-		}*/
+
+			signature.set(Duck::ecs.GetComponentType<Duck::GameObject>());
+			Duck::ecs.SetSystemSignature<Duck::GameObject>(signature);
+		}
 		/* ---------- ---------- ---------- */
 
 		///* ---------- Create Entities ---------- */
@@ -35,11 +39,15 @@ public:
 		//player 
 
 		//ghost
-		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
+		Duck::Entity ghost = Duck::ecs.CreateEntity();
 		Duck::ecs.AddComponent<Duck::JiangShi>(
 			ghost,
-			{ 6.f, 3.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
-		);*/
+			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
+		);
+		Duck::ecs.AddComponent<Duck::GameObject>(
+			ghost,
+			{ 7.f, 7.f, 0.0f, 0.0f, 0, STATE_NONE, OBJ_GHOST }
+		);
 
 		//audio entities
 		Duck::Entity bgm = Duck::ecs.CreateEntity();
@@ -67,6 +75,7 @@ public:
 			{ "pew", "../assets/audio/pew.wav" }
 		);
 		/* ---------- ---------- ---------- */
+
 		/* ---------- Map Functions ---------- */
 		m_map = std::shared_ptr<Duck::MapDataHandler>(new Duck::MapDataHandler);
 		
@@ -137,7 +146,9 @@ public:
 
 		///* ---------- Updating Systems ---------- */
 		//audioSystem->update();
-		//JiangShi->Update(dt, p_player);
+
+		JiangShiSystem->Update(dt);
+
 		/* ---------- ---------- ---------- */
 
 		// Calculate the target grid position based on the character's speed
@@ -195,8 +206,6 @@ public:
 			}
 		}
 		
-		DUCK_TRACE("{0}", percentMove);
-
 		Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 		Duck::RenderCommand::Clear();
 
@@ -323,6 +332,7 @@ private:
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
 
+
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
 
@@ -349,7 +359,7 @@ private:
 	MathLib::Vector2D	initialPosition{};
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
-	//std::shared_ptr<Duck::JiangShi> JiangShi;
+	std::shared_ptr<Duck::JiangShiSystem> JiangShiSystem;
 };
 
 class Sandbox : public Duck::Application {

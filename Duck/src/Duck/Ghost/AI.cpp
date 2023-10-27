@@ -70,7 +70,6 @@ namespace Duck {
 
     // Update function for the Ghost class
     void Ghost::Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        //for (auto const& entity : m_Entities) {
             timeInCurrentState += deltaTime;
 
             switch (state) {
@@ -110,7 +109,6 @@ namespace Duck {
                 }
                 break;
             }
-       //}
     }
 
     // Idle behavior for the Ghost class

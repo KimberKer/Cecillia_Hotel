@@ -2,145 +2,172 @@
 #include "JiangShi.h"
 
 namespace Duck {
-    void JiangShi::Update(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        timeInCurrentState += deltaTime;
-        switch (state) {
-        case State::Idle:
-            Idle();
-            if (timeInCurrentState >= idleDuration) {
-                DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
-                state = State::Roaming;
-                DUCK_CORE_INFO("Switched to Roaming state!");
-                timeInCurrentState = 0;
-            }
-            break;
+    void JiangShiSystem::Update(double deltaTime) {
+        for (auto const& entity : m_Entities) {
+            auto ghostObjEntity = ecs.getComponent<GameObject>(entity);
+            auto playerEntity = ecs.getComponent<GameObject>(entity);
 
-        case State::Roaming:
-            Roam(deltaTime, gameObject);
-            if (timeInCurrentState >= roamDuration) {
-                DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
-                state = State::Idle;
-                DUCK_CORE_INFO("Switched to Idle state!");
-                timeInCurrentState = 0;
-                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
-            }
-            if (IsPlayerNearby(gameObject)) {
-                state = State::Chasing;
-                DUCK_CORE_INFO("Switched to Chasing state!");
-                timeInCurrentState = 0;
-                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
-            }
-            break;
+            if (ghostObjEntity.getObj() == OBJ_GHOST) {
 
-        case State::Chasing:
-            Chase(deltaTime, gameObject);
-            if (!IsPlayerNearby(gameObject)) {
-                state = State::Idle;
-                DUCK_CORE_INFO("Switched to Idle state!");
-                timeInCurrentState = 0;
             }
-            break;
+
+            auto ghostCompEntity = ecs.getComponent<JiangShi>(entity);
+
+            OBJ_TYPE ghostObjectType = ghostObjEntity.getObj();
+            OBJ_TYPE playerObjectType = playerEntity.getObj();
+
+            float currentStateTime = ghostCompEntity.getTimeInCurrentState();
+            float idleDuration = ghostCompEntity.getIdleDuration();
+            float roamDuration = ghostCompEntity.getRoamDuration();
+            State currentState = ghostCompEntity.getState();
+
+            currentStateTime += deltaTime;
+
+            switch (currentState) {
+            case State::Idle:
+                Idle();
+                if (currentStateTime >= idleDuration) {
+                    DUCK_CORE_INFO("Ghost idled for: {0}", currentStateTime);
+                    ghostCompEntity.setTimeInCurrentState(0.0f);
+                    DUCK_CORE_INFO("Switched to Roaming state!");
+                    ghostCompEntity.setState(State::Roaming);
+                }
+                break;
+            case State::Roaming:
+                Roam(deltaTime, ghostObjEntity, ghostCompEntity);
+                if (currentStateTime >= roamDuration) {
+                    DUCK_CORE_INFO("Ghost roamed for: {0}", currentStateTime);
+                    ghostCompEntity.setState(State::Idle);
+                    DUCK_CORE_INFO("Switched to Idle state!");
+                    ghostCompEntity.setTimeInCurrentState(0.0f);
+                    ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Idle"
+                }
+
+                if (IsPlayerNearby(playerEntity)) {
+                    ghostCompEntity.setState(State::Chasing);
+                    DUCK_CORE_INFO("Switched to Chasing state!");
+                    ghostCompEntity.setTimeInCurrentState(0.0f);
+                    ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Chasing"
+                }
+                break;
+            case State::Chasing:
+                Chase(deltaTime, playerEntity, ghostObjEntity, ghostCompEntity);
+                if (!IsPlayerNearby(playerEntity)) {
+                    ghostCompEntity.setState(State::Idle);
+                    DUCK_CORE_INFO("Switched to Idle state!");
+                    ghostCompEntity.setTimeInCurrentState(0.0f);
+                }
+                break;
+            }
         }
     }
 
-    void JiangShi::Idle() {
+    void JiangShiSystem::Idle() {
         DUCK_CORE_INFO("Ghost is idling.");
     }
 
-    void JiangShi::Roam(float deltaTime, std::shared_ptr<GameObject> gameObject) {
+    void JiangShiSystem::Roam(double deltaTime, GameObject ghost, JiangShi jiangshi) {
         // Check if there are waypoints to roam
-        timeElapsed = 0.0;
-        if (waypoints.empty()) {
+        jiangshi.setTimeElapsed(0.0f);
+        if (jiangshi.getWaypoints().empty()) {
             DUCK_CORE_ERROR("No waypoints available for roaming.");
             return;
         }
 
         // Check if the ghost is currently moving or waiting at a waypoint
-        if (isMovingToWaypoint) {
+        if (jiangshi.getIsMovingToWaypoint()) {
             // Check if the ghost has reached the center of the target grid cell
-            if (currentGridX == targetGridX && currentGridY == targetGridY) {
+            if (jiangshi.getCurrentGridX() == jiangshi.getTargetGridX() && jiangshi.getCurrentGridY() == jiangshi.getTargetGridY()) {
                 // Snap the ghost's position to the center of the target grid cell
-                gameObject->SetPositionX(static_cast<float>(targetGridX));
-                gameObject->SetPositionY(static_cast<float>(targetGridY));
+                ghost.SetPositionX(static_cast<float>(jiangshi.getTargetGridX()));
+                ghost.SetPositionY(static_cast<float>(jiangshi.getTargetGridY()));
 
                 // Remove the reached waypoint from the list
-                waypoints.erase(waypoints.begin() + randomIndex);
+                jiangshi.getWaypoints().erase(jiangshi.getWaypoints().begin() + jiangshi.getRandomIndex());
                 DUCK_CORE_INFO("Waypoint reached!");
 
                 // Set the flag to indicate waiting
-                isMovingToWaypoint = false;
+                jiangshi.setIsMovingToWaypoint(false);
+
 
                 // If all waypoints have been visited, reset the list to start over
-                if (waypoints.empty()) {
+                if (jiangshi.getWaypoints().empty()) {
                     DUCK_CORE_INFO("All waypoints reached!");
-                    waypoints = ReadWaypointsFromFile("../txtfiles/waypoints.txt");
+                    jiangshi.getWaypoints() = jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
                 }
             }
             else {
                 // Check if the ghost has reached the center of the target grid cell
-                currentGridX = std::ceil(gameObject->getX());
-                currentGridY = std::ceil(gameObject->getY());
+                jiangshi.setCurrentGridX(std::ceil(ghost.getX()));
+                jiangshi.setCurrentGridY(std::ceil(ghost.getY()));
 
                 // Calculate direction vector towards the selected waypoint
-                float directionX = static_cast<float>(targetGridX - currentGridX);
-                float directionY = static_cast<float>(targetGridY - currentGridY);
+                float directionX = static_cast<float>(jiangshi.getTargetGridX() - jiangshi.getCurrentGridX());
+                float directionY = static_cast<float>(jiangshi.getTargetGridY() - jiangshi.getCurrentGridY());
 
-                if (currentGridX < targetGridX || currentGridX > targetGridX) {
-                    gameObject->SetPositionX(gameObject->getX() + roamSpeed * directionX * deltaTime);
+                if (jiangshi.getCurrentGridX() < jiangshi.getTargetGridX() || jiangshi.getCurrentGridX() > jiangshi.getTargetGridX()) {
+                    ghost.SetPositionX(ghost.getX() + jiangshi.getRoamspeed() * directionX * deltaTime);
                 }
-                else if (currentGridY < targetGridY || currentGridY > targetGridY) {
-                    gameObject->SetPositionY(gameObject->getY() + roamSpeed * directionY * deltaTime);
+                else if (jiangshi.getCurrentGridY() < jiangshi.getTargetGridY() || jiangshi.getCurrentGridY() > jiangshi.getTargetGridY()) {
+                    ghost.SetPositionY(ghost.getY() + jiangshi.getRoamspeed() * directionY * deltaTime);
                 }
             }
         }
         else {
             // Select a random waypoint
-            randomIndex = rand() % waypoints.size();
-            const MathLib::Vector2D& targetWaypoint = waypoints[randomIndex];
+            jiangshi.setRandomIndex(rand() % jiangshi.getWaypoints().size());
+
+            const MathLib::Vector2D& targetWaypoint = jiangshi.getWaypoints()[jiangshi.getRandomIndex()];
 
             // Calculate the target grid cell based on the waypoint
-            targetGridX = static_cast<int>(targetWaypoint.x);
-            targetGridY = static_cast<int>(targetWaypoint.y);
+            jiangshi.setTargetGridX(static_cast<int>(targetWaypoint.x));
+            jiangshi.setTargetGridY(static_cast<int>(targetWaypoint.y));
 
             // Set the flag to indicate movement
-            isMovingToWaypoint = true;
+            jiangshi.setIsMovingToWaypoint(true);
         }
     }
 
-    void JiangShi::Chase(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        timeElapsed += deltaTime;
+    void JiangShiSystem::Chase(double deltaTime, GameObject player, GameObject ghost, JiangShi jiangshi) {
+        jiangshi.setTimeElapsed(jiangshi.getTimeElapsed() + deltaTime);
 
-        if (chaseSpeed < maxChaseSpeed) {
+        if (jiangshi.getChaseSpeed() < jiangshi.getMaxChaseSpeed()) {
             // Increase chaseSpeed to maxChaseSpeed over 5 seconds
-            chaseSpeed += (maxChaseSpeed / 5.0f) * timeElapsed;
+            jiangshi.setChaseSpeed(jiangshi.getChaseSpeed() + (jiangshi.getMaxChaseSpeed() / 5.0f) * jiangshi.getTimeElapsed());
         }
         else {
             // Cap the speed at the maximum limit
-            chaseSpeed = maxChaseSpeed;
+            jiangshi.setChaseSpeed(jiangshi.getMaxChaseSpeed());
         }
 
         // Get the player's position from the GameObject (player)
-        float playerPositionX = gameObject->getX();
-        float playerPositionY = gameObject->getY();
+        float playerPositionX = player.getX();
+        float playerPositionY = player.getY();
+
+        float ghostPositionX = ghost.getX();
+        float ghostPositionY = ghost.getY();
 
         // Calculate direction vector towards the player
-        float directionX = static_cast<float>(playerPositionX - gameObject->getX());
-        float directionY = static_cast<float>(playerPositionY - gameObject->getY());
+        float directionX = static_cast<float>(playerPositionX - ghostPositionX);
+        float directionY = static_cast<float>(playerPositionY - ghostPositionY);
 
         // Move towards the player with the gradually increasing speed
-        gameObject->SetPositionX(gameObject->getX() + chaseSpeed * directionX * deltaTime);
-        gameObject->SetPositionY(gameObject->getY() + chaseSpeed * directionY * deltaTime);
+        ghost.SetPositionX(ghost.getX() + jiangshi.getChaseSpeed() * directionX * deltaTime);
+        ghost.SetPositionY(ghost.getY() + jiangshi.getChaseSpeed() * directionY * deltaTime);
     }
 
-    bool JiangShi::IsPlayerNearby(std::shared_ptr<GameObject> gameObject) {
+    bool JiangShiSystem::IsPlayerNearby(GameObject player) {
         // Get the player's position from the GameObject (player)
-        float playerPositionX = gameObject->getX();
-        float playerPositionY = gameObject->getY();
+        float playerPositionX = player.getX();
+        float playerPositionY = player.getY();
 
         // Calculate the distance between the ghost and the player
-        float distance = std::sqrt((gameObject->getX() - playerPositionX) * (gameObject->getX() - playerPositionX) +
-            (gameObject->getY() - playerPositionY) * (gameObject->getY() - playerPositionY));
+        float distance = std::sqrt((player.getX() - playerPositionX) * (player.getX() - playerPositionX) +
+            (player.getY() - playerPositionY) * (player.getY() - playerPositionY));
 
         return distance <= 3.0f;
     }
+
+
 }
+

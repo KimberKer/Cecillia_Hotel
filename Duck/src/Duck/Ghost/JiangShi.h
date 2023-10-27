@@ -7,6 +7,7 @@
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Math/Vector2D.h"
 #include "Duck/Log.h"
+#include "Duck/ECS/Entity.h"
 
 // Enumeration for different AI states
 enum State {
@@ -27,13 +28,49 @@ namespace Duck {
             float maxChaseSpd,
             Duck::AABB p_boundingBox
         );
-
-        void Update(float deltaTime, std::shared_ptr<GameObject> gameObject);
-        void Idle();
-        void Roam(float deltaTime, std::shared_ptr<GameObject> gameObject);
-        void Chase(float deltaTime, std::shared_ptr<GameObject> gameObject);
-        bool IsPlayerNearby(std::shared_ptr<GameObject> gameObject);
+        
         std::vector<MathLib::Vector2D> ReadWaypointsFromFile(const std::string& filename);
+
+        // Get Function
+        float getTimeInCurrentState() { return timeInCurrentState; }
+        float getIdleDuration() { return idleDuration; }
+        float getRoamDuration() { return roamDuration; }
+        float getTimeElapsed() { return timeElapsed; }
+
+        int getCurrentGridX() { return currentGridX; }
+        int getCurrentGridY() { return currentGridY; }
+        int getTargetGridX() { return targetGridX; }
+        int getTargetGridY() { return targetGridY; }
+
+        float getRoamspeed() { return roamSpeed; }
+        float getChaseSpeed() { return chaseSpeed; }
+        float getMaxChaseSpeed() { return maxChaseSpeed; }
+
+        int getRandomIndex() { return randomIndex; }
+
+        bool getIsMovingToWaypoint() { return isMovingToWaypoint; }
+
+        std::vector<MathLib::Vector2D> getWaypoints() { return waypoints; }
+        State getState() { return state; }
+
+        // Set Function
+        void setTimeInCurrentState(float setTime) { timeInCurrentState = setTime; }
+        void setChaseSpeed(float speed) { chaseSpeed = speed; }
+        void setTimeElapsed(float timeEl) { timeElapsed = timeEl; }
+
+        void setState(State setState) { state = setState; }
+
+        void setCurrentGridX(int gridX) { currentGridX = gridX; }
+        void setCurrentGridY(int gridY) { currentGridX = gridY; }
+        void setTargetGridX(int gridX) { targetGridX = gridX; }
+        void setTargetGridY(int gridY) { targetGridX = gridY; }
+
+        void setChaseSpeed(int speed) { chaseSpeed = speed; }
+
+        void setRandomIndex(int index) { randomIndex = index; }
+
+        void setIsMovingToWaypoint(bool setWaypoint) { isMovingToWaypoint = setWaypoint; }
+
 
     private:
         std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
@@ -55,6 +92,19 @@ namespace Duck {
 
         Duck::AABB boundingBox;
         State state;                    // Current AI state
+    };
+    
+    class JiangShiSystem : public System {
+    public:
+        void Update(double deltaTime);
+        void Idle();
+        void Roam(double deltaTime, GameObject ghost, JiangShi jiangshi);
+        void Chase(double deltaTime, GameObject player, GameObject ghost, JiangShi jiangshi);
+        bool IsPlayerNearby(GameObject player);
+
+        //loat getRoamDuration(JiangShi ghost) { return roamDuration; }
+        //float getIdleDuration() { return idleDuration; }
+        //float getTimeInCurrentState(JiangShi ghost) { return ghost.timeInCurrentState; }
     };
 }
 #endif
