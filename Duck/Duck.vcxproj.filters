@@ -171,12 +171,6 @@
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Physics\Physics.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Physics\PhysicsManager.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Physics\collision.h">
       <Filter>src\Duck\Physics</Filter>
     </ClInclude>
@@ -1535,12 +1529,6 @@
       <Filter>src\Duck\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\Physics.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Physics\collision.cpp">

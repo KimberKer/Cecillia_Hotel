@@ -141,8 +141,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Math\Vector2D.h" />
     <ClInclude Include="src\Duck\MouseCodes.h" />
-    <ClInclude Include="src\Duck\Physics\Physics.h" />
-    <ClInclude Include="src\Duck\Physics\PhysicsManager.h" />
     <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
@@ -594,8 +592,6 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
     <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp" />
-    <ClCompile Include="src\Duck\Physics\Physics.cpp" />
-    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp" />
     <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />

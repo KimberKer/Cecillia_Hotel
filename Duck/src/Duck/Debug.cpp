@@ -12,7 +12,6 @@
 #include "duckpch.h"
 
 #include "Debug.h"
-#include "Physics/PhysicsManager.h"  
 #include <iostream>   // For console output
 #include <iomanip>
 #include <string>
@@ -281,15 +280,15 @@ namespace Duck {
                 }
             }
 
-            // Physics debug info
-            if (debugState & DEBUG_PHYSICS_ACTIVE)
-            {
-                PhysicsManager* physicsManager = PhysicsManager::GetInstance();
-                for (const auto& obj : physicsManager->GetObjects())
-                {
-                    std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
-                }
-            }
+            //// Physics debug info
+            //if (debugState & DEBUG_PHYSICS_ACTIVE)
+            //{
+            //    PhysicsManager* physicsManager = PhysicsManager::GetInstance();
+            //    for (const auto& obj : physicsManager->GetObjects())
+            //    {
+            //        std::cout << "Object Position: X=" << obj.GetX() << ", Y=" << obj.GetY() << std::endl;
+            //    }
+            //}
             
             // Variable debug info
             if (debugState & DEBUG_VARIABLE_ACTIVE)

@@ -5,7 +5,6 @@
 #include "Duck/Log.h"
 #include "Time.h"
 #include "Physics/collision.h"
-#include "Physics/PhysicsManager.h"
 #include "Duck/Graphics/Graphics.h"
 #include "Duck/stb_image.h"
 #include <glad/glad.h>
