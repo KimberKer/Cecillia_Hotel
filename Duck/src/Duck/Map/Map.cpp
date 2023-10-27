@@ -14,7 +14,43 @@
 #include "Map.h"
 
 namespace Duck {
-	
+
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>> &objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player) {
+		// Reset any game-related variables to their initial values
+
+		// Clear the object list and re-create objects based on the map
+		objectlist.clear();
+
+		for (int i = 0; i < MapHeight; i++) {
+			for (int j = 0; j < MapWidth; j++) {
+				int cellValue = MapData[j][i];
+		
+				switch (cellValue) {
+				case 0:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_EMPTY));
+					break;
+				case 1:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_PLAYER));
+					break;
+				case 2:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_OBJ));
+					break;
+				case 3:
+					objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		}
+	}
+
 
 	MapDataHandler::MapDataHandler(const std::string& filepath){
 		filePath = filepath;
@@ -46,7 +82,6 @@ namespace Duck {
 			try {
 				SetWidth(std::stoi(w));
 				SetHeight(std::stoi(h));
-				std::cout << MapWidth << std::endl;
 			}
 			catch (const std::invalid_argument& e) {
 				DUCK_CORE_ERROR("Error: Failed to convert width or height to integer.");
@@ -72,28 +107,20 @@ namespace Duck {
 			//read map
 			for (int i = 0; i < MapHeight; i++) {
 				for (int j = 0; j < MapWidth; j++) {
-					file >> MapData[i][j];
+					file >> MapData[j][i];
 					//checks if there is more than 1 main character
-					if (MapData[i][j] == 1) {
-						if (foundFirstOne) {
-							// If this is not the first '1', change it to '0'
-							MapData[i][j] = 0;
-						}
-						else {
-							foundFirstOne = true; // Mark that the first '1' has been found
-						}
-					}
+					
 				}
 			}
 
 			//apply binary collision
 			//for (int i = 0; i < MapHeight; i++) {
 			//	for (int j = 0; j < MapWidth; j++) {
-			//		if (MapData[i][j] == 1) { //wall
-			//			CollisionData[i][j] = 1;
+			//		if (MapData[j][i] == 1) { //wall
+			//			CollisionData[j][i] = 1;
 			//		}
 			//		else {
-			//			CollisionData[i][j] = 0;
+			//			CollisionData[j][i] = 0;
 			//		}
 
 			//	}
@@ -144,7 +171,7 @@ namespace Duck {
 		std::cout << "Height : " << MapHeight << std::endl;
 		for (int i{}; i < MapHeight; i++) {
 			for (int j{}; j < MapWidth; j++) {
-				std::cout << MapData[i][j] << " ";
+				std::cout << MapData[j][i] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -181,10 +208,10 @@ namespace Duck {
 		file << std::endl;
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				if (i == row && j == column) {
-					MapData[i][j] = value;
+				if (j == row && i == column) {
+					MapData[j][i] = value;
 				}
-				file << MapData[i][j] << ' ';
+				file << MapData[j][i] << ' ';
 			}
 			file << std::endl;
 		}
@@ -238,8 +265,8 @@ namespace Duck {
 	int MapDataHandler::GetNumberOfObjects(int objType) {
 		int count{};
 		for (int i = 0; i < MapHeight; i++) {
-			for (int j = 0; j < MapWidth; j++) {
-				if (MapData[i][j] == objType) {
+			for (int j = 0; j < MapHeight; j++) {
+				if (MapData[j][i] == objType) {
 					count++;
 				}
 			}

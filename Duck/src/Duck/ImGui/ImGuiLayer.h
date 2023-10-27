@@ -26,7 +26,7 @@ namespace Duck {
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist);
+		ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>>& maplist, std::vector<std::shared_ptr<GameObject>>& objectlist);
 		~ImGuiLayer();
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -50,7 +50,9 @@ namespace Duck {
 
 		void InitiateDragAndDropSource(); //drag and drop functionality
 
+		void SetUpdated();
 
+		bool GetUpdated();
 
 	private:
 		float  const additionalSpacing = 20.0f; // Set desired additional spacing
@@ -59,8 +61,10 @@ namespace Duck {
 		bool m_BlockEvents = true;
 		std::vector<std::shared_ptr<GameObject>> m_objList;
 		std::vector<std::shared_ptr<MapDataHandler>> m_maplist;
+		std::shared_ptr<GameObject> gameobj;
 		double m_fps;
 		const char* filename;
 		std::shared_ptr<GameObject> p_player;
+		bool isUpdated;
 	};
 }

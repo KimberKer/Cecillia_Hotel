@@ -114,7 +114,10 @@ public:
 		//m_gameobjList = new Duck::GameObject[MAX_NUMBER_OF_OBJ];
 
 		// Creating the objects based on the map 
-		InitializeMap();
+		//InitializeMap();
+		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
+
+		//prints map
 		m_maplist[Duck::GetMapIndex()]->printMapData();
 
 		/* ---------- ---------- ---------- */
@@ -133,7 +136,7 @@ public:
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		double frameTime = std::chrono::duration<double>(currentTime - startTime).count();
 		startTime = currentTime;
-
+		
 		// Calculate FPS
 		fps = 1.0 / frameTime;
 		float dt = static_cast<float>(runtime.getDeltaTime());
@@ -143,7 +146,8 @@ public:
 		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
 		if (isGamePlaying) {
-		
+			
+			showGrid = GridChecker;
 			// Calculate the target grid position based on the character's speed
 			for (int i{}; i < objectlist.size(); i++) {
 				switch (objectlist[i]->getState()) {
@@ -165,6 +169,7 @@ public:
 					break;
 				}
 			}
+
 
 			// Character's Movement
 			if (!isMoving) {
@@ -198,16 +203,17 @@ public:
 					isMoving = false;
 				}
 			}
+
+			if (m_ImGuiLayer->GetUpdated() == true)
+			{
+				m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
+				m_ImGuiLayer->SetUpdated();
+			}
 		}
 		else {
-			InitializeMap();
+			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
 			showGrid = true;
 		}
-
-		
-		
-	
-
 
 	DUCK_TRACE("{0}", percentMove);
 
@@ -280,7 +286,7 @@ void OnEvent(Duck::Event& event) override {
 
 		}
 		else if (keyEvent.GetKeyCode() == Duck::Key::G) {
-			showGrid = !showGrid;
+			GridChecker = !GridChecker;
 		}
 		else if (keyEvent.GetKeyCode() == Duck::Key::B) {
 			showBB = !showBB;
@@ -402,6 +408,7 @@ private:
 
 	bool                loadFiles = false;
 	bool				showGrid = false;
+	bool				GridChecker = false;
 	bool				showBB = false;
 
 	int					PlayerOrientation = 0;

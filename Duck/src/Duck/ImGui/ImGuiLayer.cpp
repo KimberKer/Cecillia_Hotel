@@ -25,7 +25,7 @@
 
 namespace Duck {
 
-	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>>& maplist, std::vector<std::shared_ptr<GameObject>>& objectlist) : Layer("ImGuiLayer")
 	{
 		m_maplist = maplist;
 
@@ -37,8 +37,17 @@ namespace Duck {
 		m_objList = objectlist;
 
 	}
+
 	ImGuiLayer::~ImGuiLayer()
 	{
+	}
+
+	void ImGuiLayer::SetUpdated() {
+		isUpdated = !isUpdated;
+	}
+
+	bool ImGuiLayer::GetUpdated() {
+		return isUpdated;
 	}
 
 	/******************************************************************************/
@@ -200,9 +209,7 @@ namespace Duck {
 				}
 				else {
 					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
-					std::cout << m_objList.size() << std::endl;
-					//change the state
-					m_objList[(x_value - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_value - 1)]->SetType(obj);
+					isUpdated = true;
 
 
 				}
@@ -269,21 +276,20 @@ namespace Duck {
 			ImGui::SetCursorPosX(buttonX);
 
 			if (ImGui::Button("Update Player Position", ImVec2(buttonWidth, 20))) {
+				
+				//set new player spot
+				m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
+
 				//make original position of the player empty
-				if (m_maplist[GetMapIndex()]->UpdateCellData( p_player->getX(), p_player->getY(), OBJ_EMPTY)) {
+				m_maplist[GetMapIndex()]->UpdateCellData(p_player->getX(), p_player->getY(), OBJ_OBJ);
+			
+				//change to the new position
+				p_player->SetPositionX(x_pvalue - 1);
+				p_player->SetPositionY(y_pvalue - 1);
 
-					//change to the new position
-					m_objList[(x_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_pvalue - 1)]->SetType(OBJ_EMPTY);
-					m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
-					p_player->SetPositionX(x_pvalue - 1);
-					p_player->SetPositionY(y_pvalue - 1);
-
-				}
-
-
+				isUpdated = true;
 
 			}
-
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
 
@@ -389,12 +395,12 @@ namespace Duck {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Game")) {
 				if (isGamePlaying) {
-					if (ImGui::MenuItem("Pause")) {
+					if (ImGui::MenuItem("Stop")) {
 						isGamePlaying = false;
 					}
 				}
 				else {
-					if (ImGui::MenuItem("Resume")) {
+					if (ImGui::MenuItem("Play")) {
 						isGamePlaying = true;
 					}
 				}

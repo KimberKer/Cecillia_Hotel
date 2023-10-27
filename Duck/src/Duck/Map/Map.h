@@ -12,6 +12,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include "../De-serialize/GameObject.h"
 #include "Duck/Log.h"
 
 namespace Duck {
@@ -21,7 +22,6 @@ namespace Duck {
         int MapWidth{};
         int MapHeight{};
         std::string filePath;
-
         //temporary var
         std::string width, w;
         std::string height, h;
@@ -54,6 +54,7 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player);
      
     };
 
