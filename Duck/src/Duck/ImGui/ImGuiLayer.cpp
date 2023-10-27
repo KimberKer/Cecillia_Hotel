@@ -200,6 +200,7 @@ namespace Duck {
 				}
 				else {
 					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
+					std::cout << m_objList.size() << std::endl;
 					//change the state
 					m_objList[(x_value - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_value - 1)]->SetType(obj);
 
@@ -319,9 +320,9 @@ namespace Duck {
 		ImGui::Separator();
 
 		// Update the text area with console messages
-		for (const auto& message : consoleMessages) {
+	/*	for (const auto& message : consoleMessages) {
 			ImGui::TextWrapped("%s", message.c_str());
-		}
+		}*/
 
 		ImGui::End();
 	}

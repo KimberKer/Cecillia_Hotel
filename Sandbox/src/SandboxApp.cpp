@@ -81,16 +81,14 @@ public:
 		std::shared_ptr<Duck::MapDataHandler> map2 = std::make_shared<Duck::MapDataHandler>("../txtfiles/map2.txt");
 		m_maplist.push_back(map2);
 
-		// Print map layout to console
-		m_maplist[Duck::GetMapIndex()]->printMapData();
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Load Texture ---------- */
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics);
-		m_CharacterTexture = Duck::Shader::LoadTexture("../images/Character1.png");
-		m_GhostTexture = Duck::Shader::LoadTexture("../images/Ghost.png");
-		m_BackgroundTexture = Duck::Shader::LoadTexture("../images/FloorTile1.png");
-		m_BackgroundTexture2 = Duck::Shader::LoadTexture("../images/FloorTile2.png");
+		m_CharacterTexture = Duck::Shader::LoadTexture("../assets/images/Character1.png");
+		m_GhostTexture = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
+		m_BackgroundTexture = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
+		m_BackgroundTexture2 = Duck::Shader::LoadTexture("../assets/images/FloorTile2.png");
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Set Gridsize of Game ---------- */
@@ -107,20 +105,6 @@ public:
 		/* ---------- Ghost Functions ---------- */
 		// Load waypoint coordinates for Ghost
 		//m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-
-		// Initialize Jiangshi Ghost
-		m_Jiangshi.SetGhostProperties(
-			7.f,	// Position x
-			7.f,	// Position y
-			0.f,	// Velocity x
-			0.f,	// Velocity y
-			6.f,	// Roam duration
-			3.0f,	// Idle duration
-			0.2f,	// Roam speed
-			0.0f,	// Chase speed
-			1.0f,	// Max chase speed
-			aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));	// Bounding box
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Game Objects ---------- */
@@ -130,7 +114,7 @@ public:
 
 		// Creating the objects based on the map 
 		InitializeMap();
-
+		m_maplist[Duck::GetMapIndex()]->printMapData();
 	
 		/* ---------- ---------- ---------- */
 
@@ -224,7 +208,7 @@ public:
 		// Would be used for cameras
 		Duck::Renderer::BeginScene();
 
-		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_map->GetHeight(), m_map->GetWidth());
+		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_maplist[Duck::GetMapIndex()]->GetHeight(), m_maplist[Duck::GetMapIndex()]->GetWidth());
 		Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
 
 		if (m_phy.IsOutOfBounds(windowAABB, playerAABB)) {
@@ -257,7 +241,7 @@ public:
 			}
 
 		}
-		m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
+		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 
@@ -344,27 +328,28 @@ public:
 
 		for (int i = 0; i < m_maplist[Duck::GetMapIndex()]->GetWidth(); i++) {
 			for (int j = 0; j < m_maplist[Duck::GetMapIndex()]->GetHeight(); j++) {
-				if (numOfObjects < MAX_NUMBER_OF_OBJ) {
+			
 					int cellValue = m_maplist[Duck::GetMapIndex()]->GetCellValue(i, j);
 					switch (cellValue) {
 					case 0:
+						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_EMPTY));
 						break;
 					case 1:
 						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_PLAYER));
-						numOfObjects++;
 						break;
 					case 2:
 						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
-						numOfObjects++;
+					
 						break;
 					case 3:
 						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
-						numOfObjects++;
+		
 						break;
+
 					default:
 						break;
 					}
-				}
+				
 			}
 		}
 		for (int i{}; i < objectlist.size(); i++) {
