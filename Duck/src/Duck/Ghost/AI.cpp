@@ -55,7 +55,7 @@ namespace Duck {
         srand(static_cast<unsigned int>(time(nullptr)));
     }
 
-    void Ghost::SetGhostProperties(float posX, float posY, float velX, float velY, float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingBox) {
+    void Ghost::SetGhostProperties(float posX, float posY, float velX, float velY, float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, AABB p_boundingBox) {
         ghostPositionX = posX;
         ghostPositionY = posY;
         velocityX = velX;
@@ -70,45 +70,47 @@ namespace Duck {
 
     // Update function for the Ghost class
     void Ghost::Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        timeInCurrentState += deltaTime;
+        //for (auto const& entity : m_Entities) {
+            timeInCurrentState += deltaTime;
 
-        switch (state) {
-        case State::Idle:
-            Idle();
-            if (timeInCurrentState >= idleDuration) {
-                DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
-                state = State::Roaming;
-                DUCK_CORE_INFO("Switched to Roaming state!");
-                timeInCurrentState = 0;
-            }
-            break;
+            switch (state) {
+            case State::Idle:
+                Idle();
+                if (timeInCurrentState >= idleDuration) {
+                    DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
+                    state = State::Roaming;
+                    DUCK_CORE_INFO("Switched to Roaming state!");
+                    timeInCurrentState = 0;
+                }
+                break;
 
-        case State::Roaming:
-            Roam(deltaTime);
-            if (timeInCurrentState >= roamDuration) {
-                DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
-                state = State::Idle;
-                DUCK_CORE_INFO("Switched to Idle state!");
-                timeInCurrentState = 0;
-                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
-            }
-            if (IsPlayerNearby(gameObject)) {
-                state = State::Chasing;
-                DUCK_CORE_INFO("Switched to Chasing state!");
-                timeInCurrentState = 0;
-                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
-            }
-            break;
+            case State::Roaming:
+                Roam(deltaTime);
+                if (timeInCurrentState >= roamDuration) {
+                    DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
+                    state = State::Idle;
+                    DUCK_CORE_INFO("Switched to Idle state!");
+                    timeInCurrentState = 0;
+                    chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
+                }
+                if (IsPlayerNearby(gameObject)) {
+                    state = State::Chasing;
+                    DUCK_CORE_INFO("Switched to Chasing state!");
+                    timeInCurrentState = 0;
+                    chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
+                }
+                break;
 
-        case State::Chasing:
-            Chase(deltaTime, gameObject);
-            if (!IsPlayerNearby(gameObject)) {
-                state = State::Idle;
-                DUCK_CORE_INFO("Switched to Idle state!");
-                timeInCurrentState = 0;
+            case State::Chasing:
+                Chase(deltaTime, gameObject);
+                if (!IsPlayerNearby(gameObject)) {
+                    state = State::Idle;
+                    DUCK_CORE_INFO("Switched to Idle state!");
+                    timeInCurrentState = 0;
+                }
+                break;
             }
-            break;
-        }
+       //}
     }
 
     // Idle behavior for the Ghost class

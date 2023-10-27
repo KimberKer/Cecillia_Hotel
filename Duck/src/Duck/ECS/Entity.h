@@ -2,6 +2,7 @@
 
 //component files
 #include "Duck/Audio/AudioComponent.h"
+#include "Duck/Ghost/JiangShi.h"
 
 //standard lib
 #include <stdint.h>
@@ -344,6 +345,12 @@ namespace Duck
 		std::shared_ptr<T> RegisterSystem()
 		{
 			return m_SystemManager->RegisterSystem<T>();
+		}
+
+		template<typename T>
+		std::unique_ptr<T> GetSystems()
+		{
+			return m_SystemManager;
 		}
 
 		template<typename T>

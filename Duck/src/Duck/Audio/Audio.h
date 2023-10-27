@@ -17,6 +17,7 @@
 #include "../FMOD/api/core/inc/fmod_errors.h"
 
 #include "../ECS/Entity.h"
+#include "AudioComponent.h"
 
 #include <iostream>
 #include <map>
@@ -26,13 +27,14 @@
 
 namespace Duck 
 {
+    class AudioComponent;
+
     //Error handling for FMOD errors
     void ERRCHECK_fn(FMOD_RESULT result, const char* file, int line);
     #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
 	class AudioSystem : public System
     {
-
 	public:
         AudioSystem();
         ~AudioSystem();

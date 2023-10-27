@@ -10,18 +10,18 @@ namespace Duck
 
     public:
         AudioComponent() = default;
-        AudioComponent(const std::string& name, const std::string& path) :
-            filename(name), filepath(path) {}
+        AudioComponent(const std::string& name, const std::string& path, bool play = false, float vol = 1.0) :
+            filename(name), filepath(path), playing(play), volume(vol) {}
 
         const std::string& getFileName() { return filename; }
         const std::string& getFilePath() { return filepath; }
-        float getVolume() { return vol; }
+        float getVolume() { return volume; }
 
         bool isLoaded() { return loaded; }
         bool isPlaying() { return playing; }
         bool isLoop() { return looping; }
 
-        void setVol(float newVol) { vol = newVol; }
+        void setVol(float newVol) { volume = newVol; }
         void setLoaded(bool load) { loaded = load; }
         void setPlaying(bool play) { playing = play; }
         void setLoop(bool loop) { looping = loop; }
@@ -35,7 +35,7 @@ namespace Duck
 
         std::string filename;
         std::string filepath;
-        float vol = 1.0f; //default volume
+        float volume = 1.0f; //default volume
 
         bool loaded = false;
         bool playing = true;

@@ -12,7 +12,10 @@
 
 
 #include "duckpch.h"
+
 #include "Audio.h"
+#include "Duck/KeyCodes.h"
+#include "Duck/Platform/Windows/WindowsInput.h"
 
 
 
@@ -195,6 +198,48 @@ namespace Duck {
 			if (!sound.isLoaded())
 			{
 				loadSound(sharedSound);
+			}
+
+			//play sounds
+			if (sound.isPlaying())
+			{
+				playSound(sharedSound);
+			}
+
+			/*
+			input handling
+
+			key z -> oof
+			key x -> ooz
+			key c -> pew
+			*/
+			if (WindowsInput::IsKeyPressed(Key::Z))
+			{
+				if (sound.getFileName() == "oof" && !sound.isPlaying())
+				{
+					sound.setPlaying(true);
+				}
+			}
+
+			else if (WindowsInput::IsKeyPressed(Key::X))
+			{
+				if (sound.getFileName() == "ooz" && !sound.isPlaying())
+				{
+					sound.setPlaying(true);
+				}
+			}
+
+			else if (WindowsInput::IsKeyPressed(Key::C))
+			{
+				if (sound.getFileName() == "pew" && !sound.isPlaying())
+				{
+					sound.setPlaying(true);
+				}
+			}
+
+			else
+			{
+				sound.setPlaying(false);
 			}
 		}
 	}

@@ -35,7 +35,8 @@ project "ImGui"
     --directories to include
     includedirs
     {
-        "$(SolutionDir)extern/glfw-3.3.8.bin.WIN64/include",
+        --"$(SolutionDir)extern/glfw-3.3.8.bin.WIN64/include",
+        "$(SolutionDir)Duck/vendor/GLFW/include",
         "%{IncludeDir.GLFW}"
     }
 
