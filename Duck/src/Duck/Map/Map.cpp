@@ -14,7 +14,34 @@
 #include "Map.h"
 
 namespace Duck {
-	
+
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>> &objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]) {
+		// Reset any game-related variables to their initial values
+
+		// Clear the object list and re-create objects based on the map
+		objectlist.clear();
+
+		for (int i = 0; i < MapHeight; i++) {
+			for (int j = 0; j < MapWidth; j++) {
+				int cellValue = MapData[j][i];
+				auto objectType = cellToObject.find(cellValue);
+				if (objectType != cellToObject.end()) {
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, image[objectType->second], STATE_NONE, objectType->second));
+				}
+				else {
+					// Handle default case or unknown cell values
+				}
+			}
+		}
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		
+		}
+	}
+
 
 	MapDataHandler::MapDataHandler(const std::string& filepath){
 		filePath = filepath;
@@ -160,7 +187,8 @@ namespace Duck {
 	 /******************************************************************************/
 	int MapDataHandler::UpdateCellData(int row, int column, int value) {
 		std::ifstream inputFile(filePath);
-		std::ofstream file("../txtfiles/temp.txt");
+		std::cout << filePath << std::endl;
+		std::ofstream file("../txtfiles/Map/temp.txt");
 
 		if (!inputFile.is_open() || !file.is_open()) {
 			DUCK_CORE_ERROR("Failed to open file: 1 ");;
@@ -195,7 +223,7 @@ namespace Duck {
 			std::cerr << "Error removing original file" << std::endl;
 			return 0;
 		}
-		if (std::rename("../txtfiles/temp.txt", filePath.c_str()) != 0) {
+		if (std::rename("../txtfiles/Map/temp.txt", filePath.c_str()) != 0) {
 			DUCK_CORE_ERROR("Error renaming file");
 			return 0;
 		}

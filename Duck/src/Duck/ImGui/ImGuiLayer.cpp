@@ -6,7 +6,7 @@
 //
 // Brief:      Integration of ImGui for GUI rendering.
 //
-// Copyright © 2023 DigiPen, All rights reserved.
+// Copyright   2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #include "duckpch.h"
 #include "imgui.h"
@@ -25,7 +25,7 @@
 
 namespace Duck {
 
-	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>>& maplist, std::vector<std::shared_ptr<GameObject>>& objectlist) : Layer("ImGuiLayer")
 	{
 		m_maplist = maplist;
 
@@ -37,8 +37,17 @@ namespace Duck {
 		m_objList = objectlist;
 
 	}
+
 	ImGuiLayer::~ImGuiLayer()
 	{
+	}
+
+	void ImGuiLayer::SetUpdated() {
+		isUpdated = !isUpdated;
+	}
+
+	bool ImGuiLayer::GetUpdated() {
+		return isUpdated;
 	}
 
 	/******************************************************************************/
@@ -139,13 +148,13 @@ namespace Duck {
 			ImGui::RadioButton("Ghost", &selectedOption, 1); ImGui::SameLine();
 			ImGui::RadioButton("Empty", &selectedOption, 2);
 			OBJ_TYPE obj = OBJ_EMPTY;
-			if (selectedOption == 0) { //wall
-				obj = OBJ_OBJ;
+			if (selectedOption == 0) { //EMPTY
+				obj = OBJ_WALL;
 			}
 			else if (selectedOption == 1) { //ghost 
 				obj = OBJ_GHOST;
 			}
-			else if (selectedOption == 2) { //ghost 
+			else if (selectedOption == 2) { //EMPTY 
 				obj = OBJ_EMPTY;
 			}
 
@@ -199,14 +208,12 @@ namespace Duck {
 					DUCK_CORE_ERROR("Error: Change the player position first!");
 				}
 				else {
-					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
-					std::cout << m_objList.size() << std::endl;
-					//change the state
-					m_objList[(x_value - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_value - 1)]->SetType(obj);
+					m_maplist[GetMapIndex()]->UpdateCellData(x_value - 1, y_value - 1, obj);
+					isUpdated = true;
 
 
 				}
-				
+
 				//ExampleLayer::InitializeGame();
 
 			}
@@ -266,24 +273,28 @@ namespace Duck {
 			ImVec2 tabContentRegion = ImGui::GetContentRegionAvail();
 			float buttonWidth = tabContentRegion.x;
 			float buttonX = (tabContentRegion.x - buttonWidth) * 0.5f;
+
 			ImGui::SetCursorPosX(buttonX);
 
 			if (ImGui::Button("Update Player Position", ImVec2(buttonWidth, 20))) {
+
+				//set new player spot
+				m_maplist[GetMapIndex()]->UpdateCellData(x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
+
 				//make original position of the player empty
-				if (m_maplist[GetMapIndex()]->UpdateCellData( p_player->getX(), p_player->getY(), OBJ_EMPTY)) {
-
-					//change to the new position
-					m_objList[(x_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (y_pvalue - 1)]->SetType(OBJ_EMPTY);
-					m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
-					p_player->SetPositionX(x_pvalue - 1);
-					p_player->SetPositionY(y_pvalue - 1);
-
-				}
+				m_maplist[GetMapIndex()]->UpdateCellData(p_player->getX(), p_player->getY(), OBJ_EMPTY);
 
 
+				//change to the new position
+				//if(!mapChanged){
+				p_player->SetPositionX(x_pvalue - 1);
+				p_player->SetPositionY(y_pvalue - 1);
+				//}
 
+				isUpdated = true;
+
+				std::cout << "--------------" << GetMapIndex() << ": " << p_player->getX() << " " << p_player->getY() << "--------------" << std::endl;
 			}
-
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
 
@@ -305,13 +316,7 @@ namespace Duck {
 		ImGui::End();
 	}
 
-	void ImGuiLayer::MapData()
-	{
 
-		ImGui::Begin("Map");
-		
-		ImGui::End();
-	}
 	void ImGuiLayer::Console()
 	{
 
@@ -327,8 +332,61 @@ namespace Duck {
 		ImGui::End();
 	}
 
+	void ImGuiLayer::ShowFileBrowser() {
+		// Ensure that the directory_entries are loaded once
+		static std::vector<std::filesystem::directory_entry> directory_entries;
+		static std::filesystem::path current_directory_path("../txtfiles/Map/");
+		static int selected_item = -1;
+		// Load directory entries
+		directory_entries.clear();
+		for (const auto& entry : std::filesystem::directory_iterator(current_directory_path)) {
+			directory_entries.push_back(entry);
+		}
 
-	void ImGuiLayer::DisplayFPS(double &fps)
+		// Display the file browser window
+		if (ImGui::Begin("File Browser")) {
+			// List directories and files in the current directory
+
+			ImGui::Text("Current File: %s", directory_entries[GetMapIndex()].path().filename().string().c_str());
+
+
+			if (ImGui::BeginCombo("Files", selected_item >= 0 ? directory_entries[selected_item].path().filename().string().c_str() : NULL)) {
+				for (int i = 0; i < directory_entries.size(); i++) {
+					bool is_selected = (selected_item == i);
+					if (ImGui::Selectable(directory_entries[i].path().filename().string().c_str(), is_selected)) {
+						SetMapIndex(i);
+						isUpdated = true;
+						mapChanged = true;
+					}
+
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected) {
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::SeparatorText("Files in Dir");
+
+			// Loop through directories and files and display them
+			for (const auto& entry : directory_entries) {
+				if (entry.is_directory()) {
+					ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), "[Dir] %s", entry.path().filename().string().c_str());
+					// Handle directory selection
+				}
+				else {
+					ImGui::Text("[File] %s", entry.path().filename().string().c_str());
+					// Handle file selection
+				}
+			}
+		}
+		ImGui::End();
+	}
+
+
+
+
+	void ImGuiLayer::DisplayFPS(double& fps)
 	{
 		ImGui::Begin("FPS");
 		ImGui::Text("FPS: %.2f", fps);
@@ -382,19 +440,18 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 
-	void ImGuiLayer::OnImGuiRender(double &fps)
+	void ImGuiLayer::OnImGuiRender(double& fps)
 	{
-
 		// Start a new frame
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Game")) {
 				if (isGamePlaying) {
-					if (ImGui::MenuItem("Pause")) {
+					if (ImGui::MenuItem("Stop")) {
 						isGamePlaying = false;
 					}
 				}
 				else {
-					if (ImGui::MenuItem("Resume")) {
+					if (ImGui::MenuItem("Play")) {
 						isGamePlaying = true;
 					}
 				}
@@ -411,15 +468,20 @@ namespace Duck {
 		}
 
 		// Add your GUI content here
-	
+
 
 		CreateObjects();
 		DisplayFPS(fps);
+		ShowFileBrowser();
 		//ImGui::ShowDemoWindow(&show);
 
 	}
 	//------------FOR DRAG AND DROP---------------------
 
+	bool ImGuiLayer::GetChanged()
+	{
+		return mapChanged;
+	}
 
 
 
@@ -429,6 +491,5 @@ namespace Duck {
 
 
 
-	
 
 }
