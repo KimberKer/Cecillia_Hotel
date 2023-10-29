@@ -14,14 +14,7 @@
 
 #include "Duck/De-serialize/GameObject.h"
 #include "duckpch.h"
-
-struct Vector2 {
-    float x;
-    float y;
-
-    Vector2() : x(0.0f), y(0.0f) {}
-    Vector2(float x, float y) : x(x), y(y) {}
-};
+#include "Duck/Math/Vector2D.h"
 
 namespace Duck {
     class Ghost {
@@ -40,7 +33,7 @@ namespace Duck {
         void Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject);
 
         // Load waypoints from a file
-        std::vector<Vector2> ReadWaypointsFromFile(const std::string& filename);
+        std::vector<MathLib::Vector2D> ReadWaypointsFromFile(const std::string& filename);
 
         // Idle behavior for the Ghost
         void Idle();
@@ -76,7 +69,7 @@ namespace Duck {
         void SetVelocityY(float vely);
 
     private:
-        std::vector<Vector2> waypoints; // Waypoints for roaming
+        std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
         float ghostPositionX;           // X-coordinate of the ghost's position
         float ghostPositionY;           // Y-coordinate of the ghost's position
         float directionX;

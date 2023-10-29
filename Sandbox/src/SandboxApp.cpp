@@ -38,12 +38,13 @@ public:
 		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 
 		// Initialize Jiangshi Ghost
-		m_Jiangshi.SetGhostProperties(7.f,	// Position x
+		m_Jiangshi.SetGhostProperties(
+			7.f,	// Position x
 			7.f,	// Position y
 			0.f,	// Velocity x
 			0.f,	// Velocity y
-			6.f,	// Roam duration
-			3.0f,	// Idle duration
+			12.f,	// Roam duration
+			2.0f,	// Idle duration
 			0.2f,	// Roam speed
 			0.0f,	// Chase speed
 			1.0f,	// Max chase speed
