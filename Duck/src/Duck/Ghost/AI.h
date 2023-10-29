@@ -64,6 +64,7 @@ namespace Duck {
         STATE getState() const;
         int getgridCollisionFlag() const;
         OBJ_TYPE getObj() const;
+        Duck::AABB getBoundingBox();
        
         void SetGhostPositionX(float x);
         void SetGhostPositionY(float y);
@@ -78,7 +79,7 @@ namespace Duck {
 
     private:
         std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
-        float ghostPositionX;           // X-coordinate of the ghost's position
+       float ghostPositionX;           // X-coordinate of the ghost's position
         float ghostPositionY;           // Y-coordinate of the ghost's position
         float velocityX;
         float velocityY;

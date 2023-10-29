@@ -237,7 +237,7 @@ namespace Duck {
     }
 
     void Ghost::SetGhostPositionY(float y) {
-        ghostPositionX = y;
+        ghostPositionY = y;
     }
 
     // Load waypoints from a file
@@ -263,6 +263,15 @@ namespace Duck {
         file.close();
         return waypoints;
     }
+    Duck::AABB Ghost::getBoundingBox() {
+        return boundingBox;
+    }
+    float Ghost::getVelocityX() const { return  velocityX; }
+    float Ghost::getVelocityY() const { return velocityY;  }
+
+    void Ghost::SetVelocityX(float x) {  velocityX = x; }
+    void Ghost::SetVelocityY(float y) {  velocityY= y; }
+
 
    /* bool Ghost::loadFromFile(const std::string& filename) {
         std::string pos_x, pos_y, vel_x, vel_y, roamDur, idleDur, roamSpd, chaseSpd, maxChaseSpd, gridFlag, bounding, curr_state, getstate, type, getType;

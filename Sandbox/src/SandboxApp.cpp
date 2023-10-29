@@ -85,14 +85,37 @@ public:
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Load Texture ---------- */
+
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics);
-		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/empty.png");
+
+
+		static std::vector<std::filesystem::directory_entry> assetEntries;
+		static std::filesystem::path currentAssetDirectory("../assets/images/");
+		//std::vector<uint32_t> assets;
+		for (const auto& entry : std::filesystem::directory_iterator(currentAssetDirectory)) {
+			assetEntries.push_back(entry);
+		}
+		for (int i = 0; i < assetEntries.size(); i++) {
+			std::filesystem::path entryPath = assetEntries[i].path();
+			std::string assetName = entryPath.filename().string();
+			
+			std::string image = "../assets/images/" + assetName;
+			
+		Duck::Shader::LoadTexture(image.c_str());
+			//std::cout << image.c_str() << std::endl;
+		}
+
+		Duck::Shader::LoadTexture("../assets/images/empty.png");
+		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
 		Image[OBJ_PLAYER] = Duck::Shader::LoadTexture("../assets/images/Character1.png");
 		Image[OBJ_WALL] = Duck::Shader::LoadTexture("../assets/images/WallTile1.png");
 		Image[OBJ_GHOST] = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
 		Image[OBJ_NPC] = Duck::Shader::LoadTexture("../assets/images/empty.png"); //not yet created
 		Image[OBJ_OBJ] = Duck::Shader::LoadTexture("../assets/images/empty.png"); //not yet created
-		Image[OBJ_ERROR] = Duck::Shader::LoadTexture("../assets/images/empty.png"); //not yet created
+		Duck::Shader::LoadTexture("../assets/images/FloorTile2.png"); //not yet created
+
+		//uint32_t hello = Duck::Shader::LoadTexture("../assets/images/FloorTile5.jpg");
+
 
 		//m_CharacterTexture  = Duck::Shader::LoadTexture("../assets/images/Character1.png");
 
@@ -109,27 +132,41 @@ public:
 		m_Audio->loadSound(m_SoundInfo);*/
 		/* ---------- ---------- ---------- */
 
-		/* ---------- Ghost Functions ---------- */
-		// Load waypoint coordinates for Ghost
-		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-
-		// Initialize Jiangshi Ghost
-	// Bounding box
-		/* ---------- ---------- ---------- */
+	
 		
 		/* ---------- Game Objects ---------- */
 		//create a list of game objects
-		numOfObjects = 0;
 		//m_gameobjList = new Duck::GameObject[MAX_NUMBER_OF_OBJ];
 
 		// Creating the objects based on the map 
 		//InitializeMap();
-		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
+		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi, Image);
 
 		//prints map
 		m_maplist[Duck::GetMapIndex()]->printMapData();
 
 		/* ---------- ---------- ---------- */
+
+			/* ---------- Ghost Functions ---------- */
+		// Load waypoint coordinates for Ghost
+		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
+
+
+		// Initialize Jiangshi Ghost
+		m_Jiangshi.SetGhostProperties(
+			m_maplist[Duck::GetMapIndex()]->GetGhostPositionX(),	// Position x
+			m_maplist[Duck::GetMapIndex()]->GetGhostPositionY(),	// Position y
+			0.f,	// Velocity x
+			0.f,	// Velocity y
+			12.f,	// Roam duration
+			2.0f,	// Idle duration
+			0.2f,	// Roam speed
+			0.0f,	// Chase speed
+			1.0f,	// Max chase speed
+			aabb.ConvertToAABB(9.f, 9.f, 1.f, 1.f));
+		std::cout << m_maplist[Duck::GetMapIndex()]->GetGhostPositionX() << std::endl;
+		// Bounding box
+			/* ---------- ---------- ---------- */
 
 		m_ImGuiLayer = new Duck::ImGuiLayer(m_maplist, objectlist);
 		Duck::Application::Get().PushOverlay(m_ImGuiLayer);
@@ -151,12 +188,15 @@ public:
 		fps = 1.0 / frameTime;
 		float dt = static_cast<float>(runtime.getDeltaTime());
 
-		///* ---------- Updating Systems ---------- */
-		//audioSystem->update();
-		m_Jiangshi.Jiangshi(dt, p_player);
-		/* ---------- ---------- ---------- */
 		if (isGamePlaying) {
 
+		///* ---------- Updating Systems ---------- */
+		//audioSystem->update();
+		if (!m_ImGuiLayer->GetGhostChanged()) {
+			m_Jiangshi.Jiangshi(dt, p_player);	
+
+		}
+		/* ---------- ---------- ---------- */
 			showGrid = GridChecker;
 			// Calculate the target grid position based on the character's speed
 			for (int i{}; i < objectlist.size(); i++) {
@@ -216,14 +256,31 @@ public:
 
 			if (m_ImGuiLayer->GetUpdated())
 			{
-				m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
+				m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi, Image);
 				m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
 				m_ImGuiLayer->SetUpdated();
 
+				m_Jiangshi.SetGhostProperties(
+					m_maplist[Duck::GetMapIndex()]->GetGhostPositionX(),	// Position x
+					m_maplist[Duck::GetMapIndex()]->GetGhostPositionY(),	// Position y
+					0.f,	// Velocity x
+					0.f,	// Velocity y
+					12.f,	// Roam duration
+					2.0f,	// Idle duration
+					0.2f,	// Roam speed
+					0.0f,	// Chase speed
+					1.0f,	// Max chase speed
+					aabb.ConvertToAABB(9.f, 9.f, 1.f, 1.f));
+				std::cout << m_maplist[Duck::GetMapIndex()]->GetGhostPositionX() << std::endl;
+
 			}
 		}
+
+
 		else {
-			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
+			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi,Image);
+			m_Jiangshi.SetGhostPositionX(m_maplist[Duck::GetMapIndex()]->GetGhostPositionX());
+			m_Jiangshi.SetGhostPositionY(m_maplist[Duck::GetMapIndex()]->GetGhostPositionY());
 			showGrid = true;
 		}
 
@@ -256,7 +313,8 @@ public:
 
 		for (int i{}; i < objectlist.size(); i++) {
 			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
-			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_EMPTY) {
+			Duck::AABB ghostAABB = aabb.ConvertToAABB(m_Jiangshi.GetGhostPositionX(), m_Jiangshi.GetGhostPositionY(), CELL_SIZE, CELL_SIZE);
+			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_EMPTY && objectlist[i]->getObj() != OBJ_GHOST) {
 				if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
 					DUCK_CORE_INFO("Player: Collision Detected!");
 					p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX())));
@@ -265,12 +323,23 @@ public:
 					p_player->SetVelocityY(0);
 					isMoving = false;
 				}
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
+				//wall collides with ghost
+				if ((m_phy.CollisionIntersection_RectRect(ghostAABB, { m_Jiangshi.getVelocityX(), m_Jiangshi.getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt))) {
+					m_Jiangshi.SetGhostPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, m_Jiangshi.GetGhostPositionX())));
+					m_Jiangshi.SetGhostPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, m_Jiangshi.GetGhostPositionY())));
+					m_Jiangshi.SetVelocityX(0);
+					m_Jiangshi.SetVelocityY(0);
+				}
+		
 				
 			}
-
+			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
+				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
+			}
 		}
-		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
+		if (!m_ImGuiLayer->GetGhostChanged()) {
+			m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
+		}
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, p_player->GetImage(), showBB);
 
 		if (showGrid) {
@@ -386,7 +455,7 @@ private:
 	bool				isMoving = false;
 	float				percentMove{};
 	MathLib::Vector2D	initialPosition{};
-	uint32_t Image[OBJ_COUNT];
+	uint32_t			Image[20];
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	//std::shared_ptr<Duck::JiangShi> JiangShi;

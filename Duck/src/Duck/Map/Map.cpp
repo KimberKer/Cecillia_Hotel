@@ -15,7 +15,7 @@
 
 namespace Duck {
 
-	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>> &objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]) {
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, Ghost ghost, uint32_t image[]) {
 		// Reset any game-related variables to their initial values
 
 		// Clear the object list and re-create objects based on the map
@@ -30,23 +30,10 @@ namespace Duck {
 
 				}
 				if (cellValue == 3) {
-
-					ghost->SetGhostProperties(
-						static_cast<float>(j),	// Position x
-						static_cast<float>(i),	// Position y
-						0.f,	// Velocity x
-						0.f,	// Velocity y
-						12.f,	// Roam duration
-						2.0f,	// Idle duration
-						0.2f,	// Roam speed
-						0.0f,	// Chase speed
-						1.0f,	// Max chase speed
-						aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));
-
+					ghost_x = j;
+					ghost_y = i;
 				}
-				else {
-					// Handle default case or unknown cell values
-				}
+
 			}
 		}
 
@@ -54,11 +41,12 @@ namespace Duck {
 			if (objectlist[i]->getObj() == OBJ_PLAYER) {
 				p_player = objectlist[i];
 			}
-			
-		
+
+
 		}
 	}
-
+	float MapDataHandler::GetGhostPositionX() { return ghost_x; }
+	float MapDataHandler::GetGhostPositionY() { return ghost_y; }
 
 	MapDataHandler::MapDataHandler(const std::string& filepath){
 		filePath = filepath;
@@ -202,7 +190,7 @@ namespace Duck {
 		This function updates the map data
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::UpdateCellData(int row, int column, int value) {
+	int MapDataHandler::UpdateCellData(int x, int y, int value) {
 		std::ifstream inputFile(filePath);
 		std::cout << filePath << std::endl;
 		std::ofstream file("../txtfiles/Map/temp.txt");
@@ -212,7 +200,7 @@ namespace Duck {
 			return 0;
 		}
 
-		if (row >= MapHeight || column >= MapWidth) {
+		if (y >= MapHeight || x >= MapWidth) {
 			DUCK_CORE_ERROR("Row or column out of range");
 			file.close();
 			inputFile.close();
@@ -226,7 +214,7 @@ namespace Duck {
 		file << std::endl;
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				if (i == row && j == column) {
+				if (i == y && j == x) {
 					MapData[i][j] = value;
 				}
 				file << MapData[i][j] << ' ';

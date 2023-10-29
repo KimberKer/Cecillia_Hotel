@@ -21,7 +21,6 @@ namespace Duck {
 
     class MapDataHandler {
     private:
-        std::shared_ptr<Ghost> ghost;
         Duck::AABB aabb;
         int MapWidth{};
         int MapHeight{};
@@ -29,6 +28,8 @@ namespace Duck {
         //temporary var
         std::string width, w;
         std::string height, h;
+        float ghost_x, ghost_y;
+
 
         int** MapData;
         int** CollisionData;
@@ -41,7 +42,7 @@ namespace Duck {
 
 
     public:
-
+        
         MapDataHandler(const std::string& filePath);
         int GetMapData();
         int UpdateCellData(int row, int column, int value);
@@ -58,8 +59,9 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
-        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]);
-
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, Ghost ghost, uint32_t image[]);
+        float GetGhostPositionX();
+        float GetGhostPositionY();
     };
 
     const int& GetMapIndex();

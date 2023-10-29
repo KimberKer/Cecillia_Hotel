@@ -40,6 +40,7 @@ namespace Duck {
 		void TabCreateGameObj();
 		void TabUpdatePlayer();
 		void TabDisplayGameObjects();
+		void ShowAssetBrowser();
 		void UpdateObjects(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist);
 
 		void Console();
@@ -48,20 +49,26 @@ namespace Duck {
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
 
+		void SetGhostChanged();
+
+		bool GetGhostChanged();
 
 		void SetUpdated();
 
 		bool GetUpdated();
-
 		bool GetChanged();
 
 		void ShowFileBrowser();
+
+		void PicVecPush(uint32_t pics);
+		uint32_t ReturnPicVecPush(std::string pics);
 
 	private:
 		float  const additionalSpacing = 20.0f; // Set desired additional spacing
 		double lastFrameTime = 0.0;
 		double fps = 0.0;
 		bool m_BlockEvents = true;
+		std::vector<uint32_t> picVec;
 		std::vector<std::shared_ptr<GameObject>> m_objList;
 		std::vector<std::shared_ptr<MapDataHandler>> m_maplist;
 		std::shared_ptr<GameObject> gameobj;
@@ -71,6 +78,7 @@ namespace Duck {
 		bool isUpdated;
 		std::vector<std::filesystem::directory_entry> directory_entries;
 		bool mapChanged = false;
+		bool GhostChanged = true;
 	};
 
 }
