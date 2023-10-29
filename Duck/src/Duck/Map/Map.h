@@ -14,11 +14,15 @@
 #include <iostream>
 #include "../De-serialize/GameObject.h"
 #include "Duck/Log.h"
+#include "../Ghost/AI.h"
+#include "../Math/Vector2D.h"
 
 namespace Duck {
 
     class MapDataHandler {
     private:
+        std::shared_ptr<Ghost> ghost;
+        Duck::AABB aabb;
         int MapWidth{};
         int MapHeight{};
         std::string filePath;

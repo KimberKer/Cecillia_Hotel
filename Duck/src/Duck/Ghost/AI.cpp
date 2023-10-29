@@ -38,6 +38,7 @@ Hachishakusama:
 
 namespace Duck {
     // Constructor for the Ghost class
+
     Ghost::Ghost() :
         state(State::Idle),
         ghostPositionX(0.0f),

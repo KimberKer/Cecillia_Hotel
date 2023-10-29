@@ -38,6 +38,17 @@ namespace Duck {
 
 	}
 
+	void ImGuiLayer::UpdateObjects(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) {
+		maplist = maplist;
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		}
+		m_objList = objectlist;
+	}
+
 	ImGuiLayer::~ImGuiLayer()
 	{
 	}

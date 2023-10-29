@@ -40,6 +40,7 @@ namespace Duck {
 		void TabCreateGameObj();
 		void TabUpdatePlayer();
 		void TabDisplayGameObjects();
+		void UpdateObjects(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist);
 
 		void Console();
 		void DisplayFPS(double& fps);
@@ -47,9 +48,6 @@ namespace Duck {
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
 
-		void HandleDragAndDropTarget(); //drag and drop functionality
-
-		void InitiateDragAndDropSource(); //drag and drop functionality
 
 		void SetUpdated();
 

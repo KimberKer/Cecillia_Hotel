@@ -86,7 +86,7 @@ public:
 
 		/* ---------- Load Texture ---------- */
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics);
-		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
+		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/empty.png");
 		Image[OBJ_PLAYER] = Duck::Shader::LoadTexture("../assets/images/Character1.png");
 		Image[OBJ_WALL] = Duck::Shader::LoadTexture("../assets/images/WallTile1.png");
 		Image[OBJ_GHOST] = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
@@ -114,19 +114,9 @@ public:
 		m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
 
 		// Initialize Jiangshi Ghost
-		m_Jiangshi.SetGhostProperties(
-			7.f,	// Position x
-			7.f,	// Position y
-			0.f,	// Velocity x
-			0.f,	// Velocity y
-			12.f,	// Roam duration
-			2.0f,	// Idle duration
-			0.2f,	// Roam speed
-			0.0f,	// Chase speed
-			1.0f,	// Max chase speed
-			aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));	// Bounding box
+	// Bounding box
 		/* ---------- ---------- ---------- */
-
+		
 		/* ---------- Game Objects ---------- */
 		//create a list of game objects
 		numOfObjects = 0;
@@ -143,6 +133,7 @@ public:
 
 		m_ImGuiLayer = new Duck::ImGuiLayer(m_maplist, objectlist);
 		Duck::Application::Get().PushOverlay(m_ImGuiLayer);
+
 	}
 
 	void OnUpdate() override
@@ -162,7 +153,7 @@ public:
 
 		///* ---------- Updating Systems ---------- */
 		//audioSystem->update();
-		//JiangShi->Update(dt, p_player);
+		m_Jiangshi.Jiangshi(dt, p_player);
 		/* ---------- ---------- ---------- */
 		if (isGamePlaying) {
 
@@ -226,12 +217,9 @@ public:
 			if (m_ImGuiLayer->GetUpdated())
 			{
 				m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
+				m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
 				m_ImGuiLayer->SetUpdated();
-			}
 
-			if (m_ImGuiLayer->GetChanged() == true)
-			{
-				std::cout << Duck::GetMapIndex() << std::endl;
 			}
 		}
 		else {
@@ -263,7 +251,7 @@ public:
 
 
 		//draw objects
-		m_Graphics->DrawBackground(m_BackgroundTexture);
+		m_Graphics->DrawBackground(objectlist[OBJ_EMPTY]->GetImage());
 
 
 		for (int i{}; i < objectlist.size(); i++) {
@@ -277,15 +265,12 @@ public:
 					p_player->SetVelocityY(0);
 					isMoving = false;
 				}
-				else if (p_player->getState() != STATE_NONE) {
-					//DUCK_CORE_INFO("Player: No Collision Detected!");
-				}
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
+				
 			}
 
 		}
-		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
-
+		//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, p_player->GetImage(), showBB);
 
 		if (showGrid) {
@@ -365,6 +350,7 @@ public:
 private:
 	Duck::Coordinator ecs;
 
+	Duck::Ghost m_Jiangshi;
 	std::shared_ptr<Duck::SoundInfo> m_SoundInfo;
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
@@ -380,7 +366,7 @@ private:
 
 	uint32_t m_CharacterTexture;
 	uint32_t m_GhostTexture;
-	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
+	uint32_t m_BackgroundTexture2;
 
 	Duck::Time runtime;
 	int mapindex = 0;

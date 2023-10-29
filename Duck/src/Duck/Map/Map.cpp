@@ -23,10 +23,26 @@ namespace Duck {
 
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				int cellValue = MapData[j][i];
+				int cellValue = MapData[i][j];
 				auto objectType = cellToObject.find(cellValue);
 				if (objectType != cellToObject.end()) {
-					objectlist.push_back(m_gameobjList->CreateObj(j, i, image[objectType->second], STATE_NONE, objectType->second));
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, image[objectType->first], STATE_NONE, objectType->second));
+
+				}
+				if (cellValue == 3) {
+
+					ghost->SetGhostProperties(
+						static_cast<float>(j),	// Position x
+						static_cast<float>(i),	// Position y
+						0.f,	// Velocity x
+						0.f,	// Velocity y
+						12.f,	// Roam duration
+						2.0f,	// Idle duration
+						0.2f,	// Roam speed
+						0.0f,	// Chase speed
+						1.0f,	// Max chase speed
+						aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f));
+
 				}
 				else {
 					// Handle default case or unknown cell values
@@ -38,6 +54,7 @@ namespace Duck {
 			if (objectlist[i]->getObj() == OBJ_PLAYER) {
 				p_player = objectlist[i];
 			}
+			
 		
 		}
 	}
