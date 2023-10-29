@@ -8,7 +8,6 @@
 #include "KeyCodes.h"
 
 #include "Duck/De-serialize/GameObject.h"
-#include "Duck/De-serialize/GameObject.h"
 
 #include "Duck/ECS/Entity.h"
 
@@ -26,6 +25,8 @@
 #include "Duck/Graphics/Graphics.h"
 
 #include "Duck/Map/map.h"
+#include "Duck/Ghost/AI.h"
+#include "Duck/Time.h"
 
 #include "Logging/Logging.h"
 #include "Window.h"
@@ -37,7 +38,6 @@
 namespace Duck {
 	class Graphics;
 	class SoundInfo;
-	//class Audio;
 	class GameObject;
 
 	class DUCK_API Application {
@@ -50,25 +50,31 @@ namespace Duck {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		void ReadMapData(std::string filename);
+
+		LayerStack GetLayerStack() const { return m_LayerStack; }
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
-		
+
 		inline static Application& Get() { return *s_Instance; }
+
+		void SetRunning(bool running) { m_Running = running; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
-		std::shared_ptr<Window> m_Window;
+	private:
+		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		float m_LastFrameTime = 0.0f;
 
 		std::shared_ptr<SoundInfo> m_SoundInfo;
 		//std::shared_ptr<Audio> m_Audio;
 		std::shared_ptr<MapDataHandler> m_map;
-
-
+		
 		std::unique_ptr<Graphics> m_Graphics;
 		float CamZoom;
 
@@ -78,41 +84,11 @@ namespace Duck {
 
 	private:
 		static Application* s_Instance;
-
-		AABB aabb;
-		PhysicsLib m_phy;
-		std::vector<std::shared_ptr<GameObject>> objectlist;
-		std::shared_ptr<GameObject> m_gameobjList;
-		std::shared_ptr<GameObject> p_player;
-		//static GameObject* p_object;
-		int numOfObjects;
-
-
-		unsigned const int MAX_NUMBER_OF_OBJ = 30;
-		unsigned const int CELL_SIZE = 1.f;
-
-
-
-
-		const float         PLAYER_VELOCITY = 0.1f;
-
-		bool                loadFiles = false;
-		bool                showImGuiWindow = false;
-		bool				showGrid = false;
-		bool				showBB = false;
-
-		int					PlayerOrientation = 0;
 	};
-
-
-
-
-
 
 	// To be defined in CLIENT
 	Application* CreateApplication();
 }
 
 
- //GLFWwindow* window;
- 
+//GLFWwindow* window;

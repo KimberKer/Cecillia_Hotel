@@ -14,6 +14,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "Duck/Application.h"
+#include "Duck/Log.h"
 #include "imgui_internal.h" //for drag and drop functionality
 
 
@@ -23,12 +24,30 @@
 
 
 namespace Duck {
-	ImGuiLayer::ImGuiLayer(std::shared_ptr<MapDataHandler> map) : Layer("ImGuiLayer")
+
+	ImGuiLayer::ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>>& maplist, std::vector<std::shared_ptr<GameObject>>& objectlist) : Layer("ImGuiLayer")
 	{
-		m_map = map;
+		m_maplist = maplist;
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		}
+		m_objList = objectlist;
+
 	}
+
 	ImGuiLayer::~ImGuiLayer()
 	{
+	}
+
+	void ImGuiLayer::SetUpdated() {
+		isUpdated = !isUpdated;
+	}
+
+	bool ImGuiLayer::GetUpdated() {
+		return isUpdated;
 	}
 
 	/******************************************************************************/
@@ -92,74 +111,237 @@ namespace Duck {
 		ImGui::NewFrame();
 
 		ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
-		
+
+	}
+	void ImGuiLayer::TabDisplayGameObjects() {
+		if (ImGui::CollapsingHeader("GameObjects Info", ImGuiTreeNodeFlags_None))
+		{
+
+			ImGui::SeparatorText("GameObjects:");
+
+			ImGui::BulletText("Number of Player: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER));
+			ImGui::BulletText("Number of Ghost: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST));
+			ImGui::BulletText("Number of Walls: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ));
+			ImGui::BulletText("Number of NPC: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC));
+
+			//total
+			int totalCount = m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER) +
+				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC);
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing); //spacing
+			ImGui::BulletText("Total Number of Objects: %d", totalCount);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing); //spacing
+
+		}
+	}
+	void ImGuiLayer::TabCreateGameObj() {
+
+		if (ImGui::CollapsingHeader("Adding/Removing Objects", ImGuiTreeNodeFlags_None))
+		{
+			ImGui::SeparatorText("Objects");
+
+			//------------Radio Button---------------------------
+			static int selectedOption = 3; //1= false, 0 = true
+			ImGui::RadioButton("Wall", &selectedOption, 0); ImGui::SameLine();
+			ImGui::RadioButton("Ghost", &selectedOption, 1); ImGui::SameLine();
+			ImGui::RadioButton("Empty", &selectedOption, 2);
+			OBJ_TYPE obj = OBJ_EMPTY;
+			if (selectedOption == 0) { //wall
+				obj = OBJ_OBJ;
+			}
+			else if (selectedOption == 1) { //ghost 
+				obj = OBJ_GHOST;
+			}
+			else if (selectedOption == 2) { //ghost 
+				obj = OBJ_EMPTY;
+			}
+
+
+			//------------Input text values---------------------------
+			int x_min_value = 0;  // Set your minimum value here
+			int y_min_value = 0;  // Set your minimum value here
+			int max_w_value = m_maplist[GetMapIndex()]->GetWidth();
+			int max_h_value = m_maplist[GetMapIndex()]->GetHeight();
+
+
+			ImGui::Text("X value");
+			static int y_value{ 1 };
+			static int x_value{ 1 };
+
+			if (ImGui::InputInt("X", &x_value, 1))
+			{
+				// Check and enforce the minimum and maximum values
+				if (x_value < x_min_value)
+					x_value = x_min_value;
+				else if (x_value > max_w_value)
+					x_value = max_w_value;
+			}
+			ImGui::Text("Y value");
+
+			if (ImGui::InputInt("Y", &y_value, 1))
+			{
+				// Check and enforce the minimum and maximum values
+				if (y_value < y_min_value)
+					y_value = y_min_value;
+				else if (y_value > max_h_value)
+					y_value = max_h_value;
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing);
+			//------------Button---------------------------
+
+			ImGui::PushID(1);
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(4 / 7.0f, 0.6f, 0.6f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(4 / 7.0f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(4 / 7.0f, 0.8f, 0.8f));
+
+			ImVec2 tabContentRegion = ImGui::GetContentRegionAvail();
+			float buttonWidth = tabContentRegion.x;
+			float buttonX = (tabContentRegion.x - buttonWidth) * 0.5f;
+			ImGui::SetCursorPosX(buttonX);
+
+			if (ImGui::Button("Add Object", ImVec2(buttonWidth, 20))) {
+				if (p_player->getX() == x_value - 1 && p_player->getY() == y_value - 1) {
+					DUCK_CORE_ERROR("Error: Change the player position first!");
+				}
+				else {
+					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
+					isUpdated = true;
+
+
+				}
+				
+				//ExampleLayer::InitializeGame();
+
+			}
+
+			if (ImGui::IsItemClicked()) {
+				ImGui::SetKeyboardFocusHere(-1);
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::PopID();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing);
+
+
+
+		}
+	}
+	void ImGuiLayer::TabUpdatePlayer() {
+		if (ImGui::CollapsingHeader("Replace Player Current Position", ImGuiTreeNodeFlags_None))
+		{
+			int x_min_pvalue = 0;  // Set your minimum value here
+			int y_min_pvalue = 0;  // Set your minimum value here
+			int max_w_pvalue = m_maplist[GetMapIndex()]->GetWidth();
+			int max_h_pvalue = m_maplist[GetMapIndex()]->GetHeight();
+
+
+			ImGui::Text("X Player value");
+			static int y_pvalue{ 1 };
+			static int x_pvalue{ 1 };
+
+			if (ImGui::InputInt("X position", &x_pvalue, 1))
+			{
+				// Check and enforce the minimum and maximum values
+				if (x_pvalue < x_min_pvalue)
+					x_pvalue = x_min_pvalue;
+				else if (x_pvalue > max_w_pvalue)
+					x_pvalue = max_w_pvalue;
+			}
+			ImGui::Text("Y Player value");
+
+			if (ImGui::InputInt("Y position", &y_pvalue, 1))
+			{
+				// Check and enforce the minimum and maximum values
+				if (y_pvalue < y_min_pvalue)
+					y_pvalue = y_min_pvalue;
+				else if (y_pvalue > max_h_pvalue)
+					y_pvalue = max_h_pvalue;
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing);
+			ImGui::PushID(1);
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(4 / 7.0f, 0.6f, 0.6f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(4 / 7.0f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(4 / 7.0f, 0.8f, 0.8f));
+
+
+			ImVec2 tabContentRegion = ImGui::GetContentRegionAvail();
+			float buttonWidth = tabContentRegion.x;
+			float buttonX = (tabContentRegion.x - buttonWidth) * 0.5f;
+			ImGui::SetCursorPosX(buttonX);
+
+			if (ImGui::Button("Update Player Position", ImVec2(buttonWidth, 20))) {
+				
+				//set new player spot
+				m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
+
+				//make original position of the player empty
+				m_maplist[GetMapIndex()]->UpdateCellData(p_player->getX(), p_player->getY(), OBJ_OBJ);
+			
+				//change to the new position
+				p_player->SetPositionX(x_pvalue - 1);
+				p_player->SetPositionY(y_pvalue - 1);
+
+				isUpdated = true;
+
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::PopID();
+
+
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing);
+		}
+
 	}
 
 	void ImGuiLayer::CreateObjects()
 	{
 
-		ImGui::Begin("Create Objects");
-		ImGui::SeparatorText("Objects");
-		//radio
-		static int selectedOption = 3; //1= false, 0 = true
-		ImGui::RadioButton("Wall", &selectedOption, 0); ImGui::SameLine();
-		ImGui::RadioButton("Ghost", &selectedOption, 1); ImGui::SameLine();
-		ImGui::RadioButton("Player", &selectedOption, 2);
-		OBJ_TYPE obj;
-		if (selectedOption == 0) {
-			obj = OBJ_OBJ;
-		}
-		else if (selectedOption == 1) {
-			obj = OBJ_GHOST;
-		}
-		else if (selectedOption == 2) {
-			obj = OBJ_PLAYER;
-		}
-		int x_min_value = 0;  // Set your minimum value here
-		int y_min_value = 0;  // Set your minimum value here
-		int max_w_value = m_map->GetWidth();
-		int max_h_value = m_map->GetHeight();
-
-
-		ImGui::Text("X value");
-		static int y_value{1};
-		static int x_value{1};
-
-		if (ImGui::InputInt("X", &x_value, 1))
-		{
-			// Check and enforce the minimum and maximum values
-			if (x_value < x_min_value)
-				x_value = x_min_value;
-			else if (x_value > max_w_value)
-				x_value = max_w_value;
-		}
-		ImGui::Text("Y value");
-
-		if (ImGui::InputInt("Y", &y_value, 1))
-		{
-			// Check and enforce the minimum and maximum values
-			if (y_value < y_min_value)
-				y_value = y_min_value;
-			else if (y_value > max_h_value)
-				y_value = max_h_value;
-		}
-		//ImGui::SameLine();
-		//button
-		//ImGui::SameLine();
-		ImGui::PushID(1);
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(4 / 7.0f, 0.6f, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(4 / 7.0f, 0.7f, 0.7f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(4 / 7.0f, 0.8f, 0.8f));
-		if (ImGui::Button("Add Object")) {
-			m_map->UpdateCellData(m_map->GetFile(), x_value, y_value, obj);
-		}
-		ImGui::PopStyleColor(3);
-		ImGui::PopID();
-
-
+		ImGui::Begin("Objects");
+		TabDisplayGameObjects();
+		TabUpdatePlayer();
+		TabCreateGameObj();
 
 		ImGui::End();
 	}
+
+	void ImGuiLayer::MapData()
+	{
+
+		ImGui::Begin("Map");
+		
+		ImGui::End();
+	}
+	void ImGuiLayer::Console()
+	{
+
+		ImGui::Begin("Console");
+		ImGui::Text("Console Output:");
+		ImGui::Separator();
+
+		// Update the text area with console messages
+	/*	for (const auto& message : consoleMessages) {
+			ImGui::TextWrapped("%s", message.c_str());
+		}*/
+
+		ImGui::End();
+	}
+
+
+	void ImGuiLayer::DisplayFPS(double &fps)
+	{
+		ImGui::Begin("FPS");
+		ImGui::Text("FPS: %.2f", fps);
+
+		ImGui::End();
+	}
+
 
 	/******************************************************************************/
 	/*!
@@ -200,60 +382,59 @@ namespace Duck {
 		}
 	}
 
-
 	/******************************************************************************/
 	/*!
 		This function renders ImGui demo window if needed.
 	 */
 	 /******************************************************************************/
 
-	void ImGuiLayer::OnImGuiRender()
+	void ImGuiLayer::OnImGuiRender(double &fps)
 	{
-		static bool show = true;
+
+		// Start a new frame
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("Game")) {
+				if (isGamePlaying) {
+					if (ImGui::MenuItem("Stop")) {
+						isGamePlaying = false;
+					}
+				}
+				else {
+					if (ImGui::MenuItem("Play")) {
+						isGamePlaying = true;
+					}
+				}
+				if (ImGui::MenuItem("Quit")) {
+					// Handle "Save" action
+					Application::Get().SetRunning(false);
+				}
+				ImGui::EndMenu();
+			}
+
+			// Add more menus and menu items as needed
+
+			ImGui::EndMainMenuBar();
+		}
+
+		// Add your GUI content here
+	
+
 		CreateObjects();
+		DisplayFPS(fps);
 		//ImGui::ShowDemoWindow(&show);
 
 	}
-
-
-
-
-
-
-
-	//------------FOR DRAG AND DROP---------------------
-	// Implement the functions in your ImGuiLayer.cpp file
-	void ImGuiLayer::HandleDragAndDropTarget()
-	{
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("YOUR_PAYLOAD_TYPE"))
-			{
-				// Handle the dropped data here.
-				// You can access the payload data using payload->Data and payload->DataSize.
-			}
-			ImGui::EndDragDropTarget();
-		}
-	}
-
-	void ImGuiLayer::InitiateDragAndDropSource()
-	{
-		if (ImGui::BeginDragDropSource())
-		{
-			// Set the payload data (e.g., a pointer to the object being dragged).
-			// UNCOMMENT THE LINE BELOW VVVVV
-			//ImGui::SetDragDropPayload("YOUR_PAYLOAD_TYPE", &yourData, sizeof(yourData));
-
-			// Display the text or image that represents the draggable item.
-			ImGui::Text("Drag me");
-
-			ImGui::EndDragDropSource();
-		}
-	}
 	//------------FOR DRAG AND DROP---------------------
 
 
 
 
+
+
+
+
+
+
+	
 
 }

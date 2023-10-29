@@ -17,23 +17,31 @@
 #include "Duck/Events/MouseEvent.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Map/Map.h"
+#include "Duck/time.h"
+
+extern DUCK_API bool isGamePlaying;
 
 namespace Duck {
+
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer(std::shared_ptr<MapDataHandler> map);
+		ImGuiLayer(std::vector<std::shared_ptr<MapDataHandler>>& maplist, std::vector<std::shared_ptr<GameObject>>& objectlist);
 		~ImGuiLayer();
-
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnEvent(Event& e) override;
-		virtual void OnImGuiRender() override;
+		virtual void OnImGuiRender(double& fps) override;
 
 		void Begin();
 		void End();
-		void CreateObjects();
-		
+		void CreateObjects(); 
+		void TabCreateGameObj();
+		void TabUpdatePlayer();
+		void TabDisplayGameObjects();
+		void MapData();
+		void Console();
+		void DisplayFPS(double &fps);
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
@@ -42,12 +50,21 @@ namespace Duck {
 
 		void InitiateDragAndDropSource(); //drag and drop functionality
 
+		void SetUpdated();
 
+		bool GetUpdated();
 
 	private:
+		float  const additionalSpacing = 20.0f; // Set desired additional spacing
+		double lastFrameTime = 0.0;
+		double fps = 0.0;
 		bool m_BlockEvents = true;
-		float m_time = 0.0f;
-		std::shared_ptr<MapDataHandler> m_map;
+		std::vector<std::shared_ptr<GameObject>> m_objList;
+		std::vector<std::shared_ptr<MapDataHandler>> m_maplist;
+		std::shared_ptr<GameObject> gameobj;
+		double m_fps;
 		const char* filename;
+		std::shared_ptr<GameObject> p_player;
+		bool isUpdated;
 	};
 }

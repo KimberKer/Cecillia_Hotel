@@ -12,6 +12,7 @@
 #pragma once
 #include "Duck/Core.h"
 #include "Duck/Events/Event.h"
+#include "Duck/Time.h"
 
 namespace Duck {
 	// Base class for application layers
@@ -35,10 +36,11 @@ namespace Duck {
 		// Called when an event is dispatched to the layer
 		virtual void OnEvent(Event& event) {}
 
-		virtual void OnImGuiRender() {}
+		virtual void OnImGuiRender(double &fps) {}
 
 		// Get the name of the layer
 		inline const std::string& GetName() const { return m_DebugName; }
+		inline void SetName(std::string name)  { m_DebugName= name; }
 
 	protected:
 		std::string m_DebugName; // Debug name of the layer

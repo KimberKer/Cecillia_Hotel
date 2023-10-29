@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <iostream>
 #include "Duck/Core.h"
 #include <vector>
@@ -18,6 +19,7 @@
 #include <unordered_set>
 #include <iosfwd>  // Include this for forward declaration
 #include <math.h>
+#include <exception>
 
 #ifdef DUCK_PLATFORM_WINDOWS
 	#include <Windows.h>

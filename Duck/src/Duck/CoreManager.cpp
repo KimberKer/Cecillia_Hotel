@@ -16,12 +16,10 @@ namespace Duck {
 
     CoreManager::CoreManager() {
         debugger = Debug::GetInstance();
-        physicsManager = PhysicsManager::GetInstance();
     }
 
     CoreManager::~CoreManager() {
         Debug::DestroyInstance();
-        PhysicsManager::DestroyInstance();
     }
 
     CoreManager* CoreManager::GetInstance() {
@@ -44,7 +42,6 @@ namespace Duck {
     void CoreManager::Init(GLFWwindow* window) {
         // Initialize systems as needed
         glfwSetKeyCallback(window, Debug::HandleDebugInput);
-        physicsManager->InitializeTestObjects();
     }
 
     void CoreManager::Update(double deltaTime, GLFWwindow* window) {
@@ -52,10 +49,7 @@ namespace Duck {
         debugger->Update(deltaTime, window);
         debugger->EndSystemProfile("Debug");
 
-        // Wraps the physics system to calculate the system time
-        debugger->BeginSystemProfile("Physics");
-        physicsManager->UpdateALL(deltaTime);
-        debugger->EndSystemProfile("Physics");
+
 
     }
 }

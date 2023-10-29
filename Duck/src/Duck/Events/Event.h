@@ -4,7 +4,7 @@
 // email:	s.ker\@digipen.edu
 // 
 //
-// Brief:     Contains the implementations relateed to evetns
+// Brief:     Contains the implementations related to events
 //
 // Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
