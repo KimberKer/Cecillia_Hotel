@@ -168,12 +168,14 @@ namespace Duck {
         else {
             // Select a random waypoint
             randomIndex = rand() % waypoints.size();
-            const Vector2& targetWaypoint = waypoints[randomIndex];
+            const MathLib::Vector2D targetWaypoint = waypoints[randomIndex];
 
             // Calculate the target grid cell based on the waypoint
             targetGridX = static_cast<int>(targetWaypoint.x);
             targetGridY = static_cast<int>(targetWaypoint.y);
             
+            //DUCK_CORE_INFO("Target Grid X: {0}, Target Grid Y: {1}", targetGridX, targetGridY);
+
             // Set the flag to indicate movement
             isMovingToWaypoint = true;
         }
@@ -184,8 +186,9 @@ namespace Duck {
         timeElapsed += deltaTime;
 
         if (chaseSpeed < maxChaseSpeed) {
-            // Increase chaseSpeed to maxChaseSpeed over 5 seconds
-            chaseSpeed += (maxChaseSpeed / 5.0f) * timeElapsed;
+            chaseSpeed += (maxChaseSpeed - chaseSpeed) * (timeElapsed / 10.0f);
+            //DUCK_CORE_INFO("Chase Speed: {0}", chaseSpeed);
+            //DUCK_CORE_INFO("Time: {0}", timeElapsed);
         }
         else {
             // Cap the speed at the maximum limit
@@ -237,8 +240,8 @@ namespace Duck {
     }
 
     // Load waypoints from a file
-    std::vector<Vector2> Ghost::ReadWaypointsFromFile(const std::string& filename) {
-        std::vector<Vector2> waypoints;
+    std::vector<MathLib::Vector2D> Ghost::ReadWaypointsFromFile(const std::string& filename) {
+        std::vector<MathLib::Vector2D> waypoints;
         std::ifstream file(filename);
 
         if (!file.is_open()) {
@@ -246,7 +249,7 @@ namespace Duck {
                 return waypoints;
         }
 
-        Vector2 waypoint;
+        MathLib::Vector2D waypoint;
         std::string line;
 
         while (std::getline(file, line)) {
