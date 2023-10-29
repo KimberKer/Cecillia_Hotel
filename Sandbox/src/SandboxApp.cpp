@@ -85,7 +85,7 @@ public:
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Load Texture ---------- */
-		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics);
+		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics(Duck::Application::Get().GetWindow()));
 		m_CharacterTexture = Duck::Shader::LoadTexture("../assets/images/Character1.png");
 		m_GhostTexture = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
 		m_BackgroundTexture = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
@@ -220,8 +220,6 @@ public:
 	Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 	Duck::RenderCommand::Clear();
 
-	// Would be used for cameras
-	Duck::Renderer::BeginScene();
 
 	//Debug::GetInstance()->BeginSystemProfile("Graphics");
 	// Would be used for cameras
@@ -263,6 +261,7 @@ public:
 	//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
+	m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 
 	if (showGrid) {
 		m_Graphics->ShowGrid();

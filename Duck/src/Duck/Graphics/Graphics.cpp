@@ -24,7 +24,7 @@ namespace Duck {
 
 
     // Constructor for the Graphics class. Initializes various graphics objects and shaders.
-	Graphics::Graphics(std::shared_ptr<Window> window) {
+	Graphics::Graphics(Window& window) {
 
         // Default Grid Size
 
@@ -40,8 +40,8 @@ namespace Duck {
         mProj = 
             {
 
-    2.f / window->GetWidth(), 0.f,						 0.f, 0.f,
-    0.f,				      2.f / window->GetHeight(), 0.f, 0.f,
+    2.f / window.GetWidth(), 0.f,						 0.f, 0.f,
+    0.f,				      2.f / window.GetHeight(), 0.f, 0.f,
     0.f,					  0.f,						 1.f, 0.f,
     0.f,                      0.f,                       0.f, 1.f
 

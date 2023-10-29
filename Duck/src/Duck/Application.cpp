@@ -43,56 +43,6 @@ namespace Duck {
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 	}
 
-		m_Graphics = std::unique_ptr<Graphics>(new Graphics(m_Window));
-		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
-		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
-		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
-		m_InventorySlot = Shader::LoadTexture("../images/InventorySlot.png");
-		m_AnimatedTexture = Shader::LoadTexture("../images/Character1Sprite.png");
-
-		//setting number of squares
-		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
-		// set Camera zoom scale
-		CamZoom = 1.f;
-
-
-		//create a list of game objects
-		numOfObjects = 0;
-		//m_gameobjList = new GameObject[MAX_NUMBER_OF_OBJ];
-		//m_map->printMapData();
-		//creating the objects based on the map 
-
-		for (int i{}; i < m_map->GetWidth(); i++) {
-			for (int j{}; j < m_map->GetHeight(); j++) {
-				if (numOfObjects < MAX_NUMBER_OF_OBJ) {
-					int cellValue = m_map->GetCellValue(i, j);
-					switch (cellValue) {
-					case 0:
-						break;
-						//player
-					case 1:
-						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_PLAYER));
-						numOfObjects++;
-						break;
-					case 2:
-						objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
-						numOfObjects++;
-						break;
-					default:
-						break;
-					}
-
-				}
-
-			}
-		}
-
-
-		for (int i{}; i < objectlist.size(); i++) {
-			if (objectlist[i]->getObj() == OBJ_PLAYER) {
-				p_player = objectlist[i];
-			}
-		}
 	Application::~Application() {
 		coreManager->DestroyInstance();
 	}
@@ -125,7 +75,7 @@ namespace Duck {
 
 		try {
 			while (m_Running) {
-				
+
 				for (Layer* layer : m_LayerStack)
 				{
 					layer->OnUpdate();

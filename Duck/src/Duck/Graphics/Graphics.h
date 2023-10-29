@@ -29,7 +29,7 @@ namespace Duck {
     public:
 
         // Constructor for the Graphics class.
-        Graphics(std::shared_ptr<Window> window);
+        Graphics(Window& window);
 
         // Destructor for the Graphics class.
          ~Graphics();
