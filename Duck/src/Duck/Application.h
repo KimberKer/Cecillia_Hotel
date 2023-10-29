@@ -4,6 +4,9 @@
 //#include <GLFW/glfw3.h>
 #include "Duck/Audio/Audio.h"
 
+#include "Duck/Platform/Windows/WindowsInput.h"
+#include "KeyCodes.h"
+
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/De-serialize/GameObject.h"
 
@@ -56,7 +59,7 @@ namespace Duck {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
-		std::unique_ptr<Window> m_Window;
+		std::shared_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
@@ -67,9 +70,10 @@ namespace Duck {
 
 
 		std::unique_ptr<Graphics> m_Graphics;
+		float CamZoom;
 
 		uint32_t m_CharacterTexture;
-		uint32_t m_BackgroundTexture, m_BackgroundTexture2;
+		uint32_t m_BackgroundTexture, m_BackgroundTexture2, m_InventorySlot, m_AnimatedTexture;
 
 
 	private:

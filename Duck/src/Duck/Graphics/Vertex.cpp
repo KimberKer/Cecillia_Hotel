@@ -103,6 +103,7 @@ namespace Duck {
     void VertexArray::SetPrimitiveType(const int32_t primitive) {
 
         m_PrimitiveType = primitive;
+
     }
 
 }

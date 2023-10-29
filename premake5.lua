@@ -46,6 +46,7 @@ IncludeDir["glm"] = "Duck/vendor/glm"
 IncludeDir["ImGui"] = "Duck/vendor/imgui"
 IncludeDir["FMODcore"] = "Duck/vendor/FMOD/api/core/inc"
 IncludeDir["FMODstudio"] = "Duck/vendor/FMOD/api/studio/inc"
+IncludeDir["FreeType"] = "Duck/vendor/freetype/include"
 
 include "Duck/vendor/GLFW"
 include "Duck/vendor/Glad"
@@ -87,14 +88,16 @@ project "Duck"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.FMODcore}",
-		"%{IncludeDir.FMODstudio}"
+		"%{IncludeDir.FMODstudio}",
+		"%{IncludeDir.FreeType}"
     }
 
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
 		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
+		"Duck/vendor/FMOD/api/studio/lib",
+		"Duck/vendor/freetype/release_static/vs2015-2022/win64/"
     }
 
 	-- Link Input .dll
@@ -102,7 +105,8 @@ project "Duck"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"freetype.lib"
         --"glfw3"
     }
 
@@ -165,7 +169,8 @@ project "Sandbox"
 		"Duck/vendor/spdlog/include",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.FMODcore}",
-		"%{IncludeDir.FMODstudio}"
+		"%{IncludeDir.FMODstudio}",
+		"%{IncludeDir.FreeType}"
 		
 		--"{prj.name}/src",
 		--"lib/glfw-3.3.8.bin.WIN64/include"
@@ -175,7 +180,8 @@ project "Sandbox"
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
 		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib"
+		"Duck/vendor/FMOD/api/studio/lib",
+		"Duck/vendor/freetype/release_static/vs2015-2022/win64"
     }
 
 	links {

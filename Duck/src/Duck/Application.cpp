@@ -60,7 +60,7 @@ namespace Duck {
 		s_Instance = this;
 
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::shared_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		m_map = std::shared_ptr<MapDataHandler>(new MapDataHandler);
 
@@ -81,13 +81,17 @@ namespace Duck {
 		m_ImGuiLayer = new ImGuiLayer(m_map);
 		PushOverlay(m_ImGuiLayer);
 
-		m_Graphics = std::unique_ptr<Graphics>(new Graphics);
+		m_Graphics = std::unique_ptr<Graphics>(new Graphics(m_Window));
 		m_CharacterTexture = Shader::LoadTexture("../images/Character1.png");
 		m_BackgroundTexture = Shader::LoadTexture("../images/FloorTile1.png");
 		m_BackgroundTexture2 = Shader::LoadTexture("../images/FloorTile2.png");
+		m_InventorySlot = Shader::LoadTexture("../images/InventorySlot.png");
+		m_AnimatedTexture = Shader::LoadTexture("../images/Character1Sprite.png");
 
 		//setting number of squares
 		m_Graphics->SetGridSize(static_cast<int>(m_map->GetHeight()));
+		// set Camera zoom scale
+		CamZoom = 1.f;
 
 
 		//create a list of game objects
@@ -239,10 +243,10 @@ namespace Duck {
 		//create entities
 		Entity audio1 = ecs.CreateEntity();
 
-		ecs.AddComponent<AudioComponent>(
-			audio1,
-			{ "oof", "../Duck/src/Duck/Audio/assets/oof.wav" }
-		);
+		//ecs.AddComponent<AudioComponent>(
+		//	audio1,
+		//	{ "oof", "../Duck/src/Duck/Audio/assets/oof.wav" }
+		//);
 
 		try {
 			while (m_Running) {
@@ -292,6 +296,8 @@ namespace Duck {
 				p_player->SetPositionX(newX);
 				p_player->SetPositionY(newY);
 
+				m_Graphics->UpdateCameraPos((m_map->SnapToCellX(1, p_player->getX())), (m_map->SnapToCellY(1, p_player->getY())));
+
 				RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 				RenderCommand::Clear();
 
@@ -302,6 +308,22 @@ namespace Duck {
 				// Would be used for cameras
 				Renderer::BeginScene();
 
+
+				//graphic input
+				if (WindowsInput::IsKeyPressed(Key::Up)) {
+					
+					CamZoom += 10.f * dt;
+					CamZoom = (CamZoom > 2.f) ? 2.f : CamZoom;
+					m_Graphics->UpdateCameraZoom(CamZoom);
+
+				}
+				else if (WindowsInput::IsKeyPressed(Key::Down)) {
+
+					CamZoom -= 10.f * dt;
+					CamZoom = (CamZoom < 0.5f) ? 0.5f : CamZoom;
+					m_Graphics->UpdateCameraZoom(CamZoom);
+
+				}
 
 
 
@@ -359,8 +381,18 @@ namespace Duck {
 					//m_Graphics->DrawSquareObject(m_example.getX(), m_example.getY(), 1.0f, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 					//m_Graphics->DrawSquareObject(p_object->getX(), p_object->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 
+				//std::cout << "DT: " <<  << "\n";
+
+				m_Graphics->DrawAnimation(0.f, 0.f, 1.f, 0.f, m_AnimatedTexture, 1, 4, dt, showBB);
 				m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_map->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 				m_Graphics->DrawSquareObject(5.0f, 5.0f, 1.0f, 0.0f, m_BackgroundTexture2, showBB);
+				m_Graphics->DrawUISquareObject(0.f,370.f, 1.0f, 0.f, 60.f,60.f, m_InventorySlot);
+				m_Graphics->DrawUISquareObject(60.f, 370.f, 1.0f, 0.f, 60.f, 60.f, m_InventorySlot);
+				m_Graphics->DrawUISquareObject(-60.f, 370.f, 1.0f, 0.f, 60.f, 60.f, m_InventorySlot);
+
+				
+				m_Graphics->RenderText("Hello World", 0.f, 0.0f, 0.2f, glm::vec3( 0.f, 1.f, 0.f));
+
 
 				Debug::GetInstance()->EndSystemProfile("Graphics");
 
