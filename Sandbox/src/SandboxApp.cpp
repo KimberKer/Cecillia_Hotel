@@ -42,7 +42,7 @@ public:
 		Duck::Entity ghost = Duck::ecs.CreateEntity();
 		Duck::ecs.AddComponent<Duck::JiangShi>(
 			ghost,
-			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
+			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f), State::Idle }
 		);
 		Duck::ecs.AddComponent<Duck::GameObject>(
 			ghost,

@@ -26,7 +26,8 @@ namespace Duck {
             float roamSpd,
             float chaseSpd,
             float maxChaseSpd,
-            Duck::AABB p_boundingBox
+            Duck::AABB p_boundingBox,
+            State currentState
         );
         
         std::vector<MathLib::Vector2D> ReadWaypointsFromFile(const std::string& filename);
@@ -58,12 +59,12 @@ namespace Duck {
         void setChaseSpeed(float speed) { chaseSpeed = speed; }
         void setTimeElapsed(float timeEl) { timeElapsed = timeEl; }
 
-        void setState(State setState) { state = setState; }
+        void setState(State newState) { state = newState; }
 
         void setCurrentGridX(int gridX) { currentGridX = gridX; }
-        void setCurrentGridY(int gridY) { currentGridX = gridY; }
+        void setCurrentGridY(int gridY) { currentGridY = gridY; }
         void setTargetGridX(int gridX) { targetGridX = gridX; }
-        void setTargetGridY(int gridY) { targetGridX = gridY; }
+        void setTargetGridY(int gridY) { targetGridY = gridY; }
 
         void setChaseSpeed(int speed) { chaseSpeed = speed; }
 
@@ -99,12 +100,8 @@ namespace Duck {
         void Update(double deltaTime);
         void Idle();
         void Roam(double deltaTime, GameObject ghost, JiangShi jiangshi);
-        void Chase(double deltaTime, GameObject player, GameObject ghost, JiangShi jiangshi);
-        bool IsPlayerNearby(GameObject player);
-
-        //loat getRoamDuration(JiangShi ghost) { return roamDuration; }
-        //float getIdleDuration() { return idleDuration; }
-        //float getTimeInCurrentState(JiangShi ghost) { return ghost.timeInCurrentState; }
-    };
+        void Chase(double deltaTime, GameObject obj, JiangShi jiangshi);
+        bool IsPlayerNearby(GameObject obj);
+    };  
 }
 #endif

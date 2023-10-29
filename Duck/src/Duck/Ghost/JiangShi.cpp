@@ -18,7 +18,7 @@ namespace Duck {
         srand(static_cast<unsigned int>(time(nullptr)));
     }
 
-    JiangShi::JiangShi(float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingBox) :
+    JiangShi::JiangShi(float roamDur, float idleDur, float roamSpd, float chaseSpd, float maxChaseSpd, Duck::AABB p_boundingBox, State currentState) :
         roamDuration(roamDur),
         idleDuration(idleDur),
         roamSpeed(roamSpd),
@@ -27,7 +27,7 @@ namespace Duck {
         boundingBox(p_boundingBox),
         isMovingToWaypoint(false),
         randomIndex(0),
-        state(State::Roaming),
+        state(currentState),
         timeElapsed(0.0f),
         timeInCurrentState(0),
         waypoints(ReadWaypointsFromFile("../txtfiles/waypoints.txt"))
