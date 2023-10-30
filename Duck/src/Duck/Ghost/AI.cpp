@@ -70,48 +70,59 @@ namespace Duck {
 
     // Update function for the Ghost class
     void Ghost::Jiangshi(float deltaTime, std::shared_ptr<GameObject> gameObject) {
-        //for (auto const& entity : m_Entities) {
-            timeInCurrentState += deltaTime;
+        timeInCurrentState += deltaTime;
 
-            switch (state) {
-            case State::Idle:
-                Idle();
-                if (timeInCurrentState >= idleDuration) {
-                    DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
-                    state = State::Roaming;
-                    DUCK_CORE_INFO("Switched to Roaming state!");
-                    timeInCurrentState = 0;
-                }
-                break;
+        // Switch statement to handle different ghost states
+        switch (state) {
+        case State::Idle:
+            // Handle the Idle state
+            Idle();
 
-            case State::Roaming:
-                Roam(deltaTime);
-                if (timeInCurrentState >= roamDuration) {
-                    DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
-                    state = State::Idle;
-                    DUCK_CORE_INFO("Switched to Idle state!");
-                    timeInCurrentState = 0;
-                    chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
-                }
-                if (IsPlayerNearby(gameObject)) {
-                    state = State::Chasing;
-                    DUCK_CORE_INFO("Switched to Chasing state!");
-                    timeInCurrentState = 0;
-                    chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
-                }
-                break;
-
-            case State::Chasing:
-                Chase(deltaTime, gameObject);
-                if (!IsPlayerNearby(gameObject)) {
-                    state = State::Idle;
-                    DUCK_CORE_INFO("Switched to Idle state!");
-                    timeInCurrentState = 0;
-                }
-                break;
+            // Check if the Idle duration has been exceeded
+            if (timeInCurrentState >= idleDuration) {
+                DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
+                state = State::Roaming;
+                DUCK_CORE_INFO("Switched to Roaming state!");
+                timeInCurrentState = 0;
             }
-       //}
+            break;
+
+        case State::Roaming:
+            // Handle the Roaming state
+            Roam(deltaTime);
+
+            // Check if the Roam duration has been exceeded
+            if (timeInCurrentState >= roamDuration) {
+                DUCK_CORE_INFO("Ghost roamed for: {0}", timeInCurrentState);
+                state = State::Idle;
+                DUCK_CORE_INFO("Switched to Idle state!");
+                timeInCurrentState = 0;
+                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Idle"
+            }
+
+            // Check if the player is nearby to transition to Chasing state
+            if (IsPlayerNearby(gameObject)) {
+                state = State::Chasing;
+                DUCK_CORE_INFO("Switched to Chasing state!");
+                timeInCurrentState = 0;
+                chaseSpeed = 0.0f; // Reset chasing speed when transitioning to "Chasing"
+            }
+            break;
+
+        case State::Chasing:
+            // Handle the Chasing state
+            Chase(deltaTime, gameObject);
+
+            // Check if the player is no longer nearby to transition back to Idle state
+            if (!IsPlayerNearby(gameObject)) {
+                state = State::Idle;
+                DUCK_CORE_INFO("Switched to Idle state!");
+                timeInCurrentState = 0;
+            }
+            break;
+        }
     }
+
 
     // Idle behavior for the Ghost class
     void Ghost::Idle() {
@@ -120,8 +131,10 @@ namespace Duck {
 
     // Roam behavior for the Ghost class
     void Ghost::Roam(float deltaTime) {
-        // Check if there are waypoints to roam
+        // Reset time elapsed
         timeElapsed = 0.0;
+
+        // Check if there are waypoints to roam
         if (waypoints.empty()) {
             DUCK_CORE_ERROR("No waypoints available for roaming.");
             return;
@@ -149,9 +162,9 @@ namespace Duck {
                 }
             }
             else {
-                // Check if the ghost has reached the center of the target grid cell
-                currentGridX = std::ceil(ghostPositionX);
-                currentGridY = std::ceil(ghostPositionY);
+                // Calculate the current grid cell
+                currentGridX = static_cast<int>(std::ceil(ghostPositionX));
+                currentGridY = static_cast<int>(std::ceil(ghostPositionY));
 
                 // Calculate direction vector towards the selected waypoint
                 velocityX = static_cast<float>(targetGridX - currentGridX);
@@ -168,12 +181,12 @@ namespace Duck {
         else {
             // Select a random waypoint
             randomIndex = rand() % waypoints.size();
-            const Vector2& targetWaypoint = waypoints[randomIndex];
+            const MathLib::Vector2D& targetWaypoint = waypoints[randomIndex];
 
             // Calculate the target grid cell based on the waypoint
             targetGridX = static_cast<int>(targetWaypoint.x);
             targetGridY = static_cast<int>(targetWaypoint.y);
-            
+
             // Set the flag to indicate movement
             isMovingToWaypoint = true;
         }
@@ -237,8 +250,8 @@ namespace Duck {
     }
 
     // Load waypoints from a file
-    std::vector<Vector2> Ghost::ReadWaypointsFromFile(const std::string& filename) {
-        std::vector<Vector2> waypoints;
+    std::vector<MathLib::Vector2D> Ghost::ReadWaypointsFromFile(const std::string& filename) {
+        std::vector<MathLib::Vector2D> waypoints;
         std::ifstream file(filename);
 
         if (!file.is_open()) {
@@ -246,7 +259,7 @@ namespace Duck {
                 return waypoints;
         }
 
-        Vector2 waypoint;
+        MathLib::Vector2D waypoint;
         std::string line;
 
         while (std::getline(file, line)) {
@@ -259,40 +272,4 @@ namespace Duck {
         file.close();
         return waypoints;
     }
-
-   /* bool Ghost::loadFromFile(const std::string& filename) {
-        std::string pos_x, pos_y, vel_x, vel_y, roamDur, idleDur, roamSpd, chaseSpd, maxChaseSpd, gridFlag, bounding, curr_state, getstate, type, getType;
-        const std::string path = "../txtfiles/" + filename;
-
-        std::ifstream file(path);
-        if (!file.is_open()) {
-            std::cerr << "Error: Unable to open file " << path << std::endl;
-            return false;
-        }
-
-        float minx, miny, maxx, maxy;
-        file >> pos_x >> ghostPositionX
-            >> pos_y >> ghostPositionY
-            >> vel_x >> velocityX
-            >> vel_y >> velocityX
-            >> roamDur >> roamDuration
-            >> idleDur >> idleDuration
-            >> roamSpd >> roamSpeed
-            >> chaseSpd >> chaseSpeed
-            >> maxChaseSpd >> maxChaseSpeed
-            >> gridFlag >> gridCollisionFlag
-            >> bounding >> minx >> miny >> maxx >> maxy
-            >> curr_state >> getstate
-            >> type >> getType;
-
-        ReadState(getstate);
-        ReadObj(getType);
-
-        MathLib::Vector2D minVec(minx, miny);
-        MathLib::Vector2D maxVec(maxx, maxy);
-        boundingBox = { minVec, maxVec };
-
-        file.close();
-        return true;
-    }*/
 }

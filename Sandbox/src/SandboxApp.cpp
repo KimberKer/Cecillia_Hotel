@@ -220,7 +220,6 @@ public:
 			}
 			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 		}
-
 	}
 	
 	//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
@@ -335,9 +334,6 @@ void InitializeMap() {
 void playerMovement(double dt) {
 	// Check if the player is not currently moving
 	if (!isMoving) {
-		// Reset the movement percentage
-		percentMove = 0.0f;
-
 		// Check if the player's velocity is not zero (indicating movement)
 		if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
 			// Store the initial position for reference
@@ -407,11 +403,8 @@ private:
 
 	int					PlayerOrientation = 0;
 	bool				isMoving = false;
-	float				percentMove{};
 	float				acceleration{};
 	MathLib::Vector2D	initialPosition{};
-
-	double accelerationTime;
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	//std::shared_ptr<Duck::JiangShi> JiangShi;

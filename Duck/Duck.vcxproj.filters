@@ -120,9 +120,6 @@
     <ClInclude Include="src\Duck\Ghost\AI.h">
       <Filter>src\Duck\Ghost</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Ghost\JiangShi.h">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -1475,12 +1472,6 @@
       <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Ghost\AI.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp">
       <Filter>src\Duck\Ghost</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
