@@ -126,9 +126,7 @@ public:
 		Duck::Application::Get().PushOverlay(m_ImGuiLayer);
 	}
 
-	void OnUpdate() override
-	{
-		
+	void OnUpdate() override {
 		runtime.update();
 		static auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -145,8 +143,8 @@ public:
 		//audioSystem->update();
 		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
+
 		if (isGamePlaying) {
-			
 			showGrid = GridChecker;
 			// Calculate the target grid position based on the character's speed
 			for (int i{}; i < objectlist.size(); i++) {
@@ -170,40 +168,8 @@ public:
 				}
 			}
 
-
-			// Character's Movement
-			if (!isMoving) {
-				percentMove = 0.0f;
-				if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
-					initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
-					isMoving = true;
-				}
-			}
-			else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
-				percentMove += PLAYER_VELOCITY * dt;
-				if (percentMove >= 1.0f) {
-					p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX()));
-					percentMove = 0.0f;
-					isMoving = false;
-				}
-				else {
-					p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * percentMove));
-					isMoving = false;
-				}
-			}
-			else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
-				percentMove += PLAYER_VELOCITY * dt;
-				if (percentMove >= 1.0f) {
-					p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY()));
-					percentMove = 0.0f;
-					isMoving = false;
-				}
-				else {
-					p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * percentMove));
-					isMoving = false;
-				}
-			}
-
+			playerMovement(dt);
+			
 			if (m_ImGuiLayer->GetUpdated() == true)
 			{
 				m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
@@ -214,8 +180,6 @@ public:
 			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
 			showGrid = true;
 		}
-
-	DUCK_TRACE("{0}", percentMove);
 
 	Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 	Duck::RenderCommand::Clear();
@@ -236,11 +200,9 @@ public:
 		p_player->SetVelocityX(0);
 		p_player->SetVelocityY(0);
 	}
-
-
+	
 	//draw objects
 	m_Graphics->DrawBackground(m_BackgroundTexture);
-
 
 	for (int i{}; i < objectlist.size(); i++) {
 		Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
@@ -260,8 +222,8 @@ public:
 		}
 
 	}
+	
 	//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
-
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 
 	if (showGrid) {
@@ -274,16 +236,13 @@ public:
 	// Testing of variable watch
 	//std::string deltatime = std::to_string(runtime.getDeltaTime());
 	//Debug::GetInstance()->WatchVariable("DT", deltatime);
-
 }
 
 void OnEvent(Duck::Event& event) override {
-
 	if (event.GetEventType() == Duck::EventType::KeyPressed) {
 		Duck::KeyPressedEvent& keyEvent = dynamic_cast<Duck::KeyPressedEvent&>(event);
 		if (keyEvent.GetKeyCode() == Duck::Key::I) {
 			showImGuiWindow = !showImGuiWindow; // Toggle the window's visibility
-
 		}
 		else if (keyEvent.GetKeyCode() == Duck::Key::G) {
 			GridChecker = !GridChecker;
@@ -335,11 +294,9 @@ void OnEvent(Duck::Event& event) override {
 			break;
 		}
 	}
-
-
 }
-void InitializeMap() {
 
+void InitializeMap() {
 	// Reset any game-related variables to their initial values
 
 	// Clear the object list and re-create objects based on the map
@@ -358,17 +315,14 @@ void InitializeMap() {
 				break;
 			case 2:
 				objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
-
 				break;
 			case 3:
 				objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
-
 				break;
 
 			default:
 				break;
 			}
-
 		}
 	}
 	for (int i{}; i < objectlist.size(); i++) {
@@ -377,6 +331,46 @@ void InitializeMap() {
 		}
 	}
 }
+
+void playerMovement(double dt) {
+	// Check if the player is not currently moving
+	if (!isMoving) {
+		// Reset the movement percentage
+		percentMove = 0.0f;
+
+		// Check if the player's velocity is not zero (indicating movement)
+		if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
+			// Store the initial position for reference
+			initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
+
+			// Set the player as currently moving
+			isMoving = true;
+		}
+	}
+	// If the player is currently moving horizontally
+	else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
+		// Calculate acceleration for smooth movement
+		acceleration = PLAYER_VELOCITY * dt;
+		
+		// Update the player's position based on acceleration and velocity
+		p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * acceleration));
+		
+		// The player is no longer moving
+		isMoving = false;
+	}
+	// If the player is currently moving vertically
+	else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
+		// Calculate acceleration for smooth movement
+		acceleration = PLAYER_VELOCITY * dt;
+
+		// Update the player's position based on acceleration and velocity
+		p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * acceleration));
+
+		// The player is no longer moving
+		isMoving = false;
+	}
+}
+
 private:
 	Duck::Coordinator ecs;
 
@@ -404,7 +398,7 @@ private:
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 20.f;
+	const float         PLAYER_VELOCITY = 15.f;
 
 	bool                loadFiles = false;
 	bool				showGrid = false;
@@ -414,7 +408,10 @@ private:
 	int					PlayerOrientation = 0;
 	bool				isMoving = false;
 	float				percentMove{};
+	float				acceleration{};
 	MathLib::Vector2D	initialPosition{};
+
+	double accelerationTime;
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	//std::shared_ptr<Duck::JiangShi> JiangShi;
@@ -434,3 +431,4 @@ public:
 Duck::Application* Duck::CreateApplication() {
 	return new Sandbox();
 }
+
