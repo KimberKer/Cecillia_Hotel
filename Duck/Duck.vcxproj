@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DUCK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;vendor\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -70,8 +70,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;vendor\freetype\release_static\vs2015-2022\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmod.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)
@@ -84,7 +84,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /
       <PrecompiledHeaderFile>duckpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DUCK_PLATFORM_WINDOWS;DUCK_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DUCK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\imgui;vendor\FMOD\api\core\inc;vendor\FMOD\api\studio\inc;vendor\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -100,8 +100,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudio.dll\ (xcopy /
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;fmodL.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;fmodL.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\FMOD\api\core\lib;vendor\FMOD\api\studio\lib;vendor\freetype\release_static\vs2015-2022\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Duck\vendor\FMOD\api\core\lib\fmodL.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)
@@ -125,6 +125,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
     <ClInclude Include="src\Duck\Ghost\AI.h" />
     <ClInclude Include="src\Duck\Graphics\Buffer.h" />
+    <ClInclude Include="src\Duck\Graphics\Camera.h" />
     <ClInclude Include="src\Duck\Graphics\Graphics.h" />
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
@@ -574,6 +575,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Debug.cpp" />
     <ClCompile Include="src\Duck\Ghost\AI.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
+    <ClCompile Include="src\Duck\Graphics\Camera.cpp" />
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />

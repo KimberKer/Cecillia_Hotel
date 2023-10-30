@@ -123,6 +123,9 @@
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Camera.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Graphics.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -1475,6 +1478,9 @@
       <Filter>src\Duck\Ghost</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Camera.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp">

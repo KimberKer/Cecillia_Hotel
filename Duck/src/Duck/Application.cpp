@@ -75,7 +75,7 @@ namespace Duck {
 
 		try {
 			while (m_Running) {
-				
+
 				for (Layer* layer : m_LayerStack)
 				{
 					layer->OnUpdate();

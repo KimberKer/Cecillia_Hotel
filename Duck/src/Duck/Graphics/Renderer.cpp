@@ -60,8 +60,7 @@ namespace Duck{
 	}
 
 	// Submit an object for rendering with a given transform.
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader,
-		const glm::mat4& transform) {
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform) {
 
 		shader->Bind();
 		shader->UploadUniformMat4("u_Transform", transform);
@@ -70,16 +69,43 @@ namespace Duck{
 
 	}
 
+
+
 	// Submit an object for rendering with a given transform and texture.
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t texture) {
 
 		shader->Bind();
 		shader->UploadUniformMat4("u_Transform", transform);
-		
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		shader->UploadUniformInt("u_Tex", 0);
+
+
+		vertexArray->Bind();
+
+
+		RenderCommand::DrawIndex(vertexArray);
+
+
+	}
+
+
+
+
+
+
+	// Submit an object for rendering with a given transform and sprite. (Animated)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t sprite, const int cols, const int rows, const int currentFrame) {
+
+		shader->Bind();
+		shader->UploadUniformMat4("u_Transform", transform);
+		
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, sprite);
+
+		shader->UploadUniformInt("u_Spr", 0);
 
 		vertexArray->Bind();
 

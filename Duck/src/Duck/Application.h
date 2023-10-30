@@ -4,6 +4,9 @@
 //#include <GLFW/glfw3.h>
 #include "Duck/Audio/Audio.h"
 
+#include "Duck/Platform/Windows/WindowsInput.h"
+#include "KeyCodes.h"
+
 #include "Duck/De-serialize/GameObject.h"
 
 #include "Duck/ECS/Entity.h"
@@ -73,9 +76,10 @@ namespace Duck {
 		std::shared_ptr<MapDataHandler> m_map;
 		
 		std::unique_ptr<Graphics> m_Graphics;
+		float CamZoom;
 
 		uint32_t m_CharacterTexture;
-		uint32_t m_BackgroundTexture, m_BackgroundTexture2;
+		uint32_t m_BackgroundTexture, m_BackgroundTexture2, m_InventorySlot, m_AnimatedTexture;
 
 
 	private:

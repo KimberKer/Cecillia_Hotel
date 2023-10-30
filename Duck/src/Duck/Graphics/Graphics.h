@@ -16,42 +16,75 @@
 
 #pragma once
 #include <memory>
+#include "Duck/Window.h"
 #include "Duck/Application.h"
-
+#include "Camera.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H  
 
 namespace Duck {
 
-    class DUCK_API Graphics {
+    class Graphics {
 
     public:
 
         // Constructor for the Graphics class.
-        Graphics();
+        Graphics(Window& window);
 
         // Destructor for the Graphics class.
-        virtual ~Graphics();
+         ~Graphics();
 
-        // Factory method to create an instance of the Graphics class.
-        static Graphics* Create();
-
-
-		virtual void SetGridSize(int GridSize);
+		 void SetGridSize(int GridSize);
 
         // Renders the background with a repeated image using the provided texture.
-        virtual void DrawBackground(const uint32_t texture);
+         void DrawBackground(const uint32_t texture);
 
         // Renders a grid overlay on the screen based on the current grid size.
-        virtual void ShowGrid();
+         void ShowGrid();
 
         // Draws a square object at the specified position with optional rotation and texture.
-        virtual void DrawSquareObject(const float PosX, const float PosY, const float scale, const float angle, const uint32_t texture, const bool ShowBoundingBox);
+         void DrawSquareObject(const float PosX, const float PosY, const float scale, const float angle, const uint32_t texture, const bool ShowBoundingBox);
+         void DrawAnimatedSquareObject(const float PosX, const float PosY, const float scale, const float angle, const uint32_t texture, const bool ShowBoundingBox, float dt);
+
+         void DrawUISquareObject(const float PosX, const float PosY, const float Scale, const float angle, const float ObjHeight, const float ObjWidth, const uint32_t texture);
+
+         void UpdateCameraPos(float x, float y);
+         void UpdateCameraZoom( float zoom);
+
+         void DrawAnimation(float x, float y, float scale, float angle, uint32_t texture, int numRows, int numCols, float dt, const bool ShowBoundingBox);
+
+         int LoadFont(std::string filepath);
+         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
+
+        // FONTS
+        struct Character {
+            unsigned int TextureID;  // ID handle of the glyph texture
+            glm::ivec2   Size;       // Size of glyph
+            glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
+            unsigned int Advance;    // Offset to advance to next glyph
+        };
+
+
 
     private:
 
 		int cols;
 		int rows;
+        float TileWidth;
+        float TileHeight;
+        float TotalWidth;
+        float TotalHeight;
+        float uv_x;
+        float uv_y;
+
+        glm::mat4 mProj;
 
         uint32_t m_RendererID{};
+
+
+
+        //std::map<const std::string, GLuint> Shaders;
+        //std::map<const std::string, GLuint> Textures;
 
         std::shared_ptr<VertexArray> m_TriangleVA;
         std::shared_ptr<Shader> m_TriangleShader;
@@ -72,7 +105,26 @@ namespace Duck {
 
         std::shared_ptr<VertexArray> m_SquareSprVA;
         std::shared_ptr<Shader> m_SquareSprShader;
+        float timeOld, timeNow, timeDelta, SPframe;
+
+        unsigned int m_TextVA;
+        unsigned int m_TextVB;
+        std::shared_ptr<Shader> m_TextShader;
+
+        std::map<char, Character> Characters;
+
+        std::shared_ptr<Camera> m_camera;
+        std::shared_ptr<Camera> m_UIcamera;
+
+
+
     };
+
+    
+
 	
+
+    
+
 
 }
