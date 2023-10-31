@@ -211,7 +211,6 @@ public:
 				p_player->SetPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, p_player->getY())));
 				p_player->SetVelocityX(0);
 				p_player->SetVelocityY(0);
-				isMoving = false;
 			}
 			else if (p_player->getState() != STATE_NONE) {
 				//DUCK_CORE_INFO("Player: No Collision Detected!");
@@ -220,7 +219,6 @@ public:
 		}
 	}
 	
-	//m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 	m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 
@@ -331,38 +329,17 @@ void InitializeMap() {
 }
 
 void playerMovement(double dt) {
-	// Check if the player is not currently moving
-	if (!isMoving) {
-		// Check if the player's velocity is not zero (indicating movement)
-		if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
-			// Store the initial position for reference
-			initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
+	acceleration = PLAYER_VELOCITY * dt;
 
-			// Set the player as currently moving
-			isMoving = true;
-		}
-	}
 	// If the player is currently moving horizontally
-	else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
-		// Calculate acceleration for smooth movement
-		acceleration = PLAYER_VELOCITY * dt;
-		
+	 if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f) {
 		// Update the player's position based on acceleration and velocity
-		p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * acceleration));
-		
-		// The player is no longer moving
-		isMoving = false;
+		p_player->SetPositionX(p_player->getX() + (CELL_SIZE * p_player->getVelocityX() * acceleration));
 	}
 	// If the player is currently moving vertically
-	else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
-		// Calculate acceleration for smooth movement
-		acceleration = PLAYER_VELOCITY * dt;
-
+	else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
 		// Update the player's position based on acceleration and velocity
-		p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * acceleration));
-
-		// The player is no longer moving
-		isMoving = false;
+		p_player->SetPositionY(p_player->getY() + (CELL_SIZE * p_player->getVelocityY() * acceleration));
 	}
 }
 
@@ -393,7 +370,7 @@ private:
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 15.f;
+	const float         PLAYER_VELOCITY = 10.f;
 
 	bool                loadFiles = false;
 	bool				showGrid = false;
@@ -401,9 +378,7 @@ private:
 	bool				showBB = false;
 
 	int					PlayerOrientation = 0;
-	bool				isMoving = false;
-	float				acceleration{};
-	MathLib::Vector2D	initialPosition{};
+	float				acceleration = 0;
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	//std::shared_ptr<Duck::JiangShi> JiangShi;
