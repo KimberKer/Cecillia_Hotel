@@ -126,7 +126,7 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		links { "fmod_vc.lib", "fmodstudio_vc.lib" }
+		links { "fmod_vc", "fmodstudio_vc" }
 		postbuildcommands {
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
@@ -136,7 +136,7 @@ project "Duck"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
-		links { "fmodL.lib", "fmodstudioL_vc.lib" }
+		links { "fmodL_vc", "fmodstudioL_vc" }
 		postbuildcommands {
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")

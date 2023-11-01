@@ -17,6 +17,8 @@ public:
 
 		///* ---------- Register Components ---------- */
 		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
+		Duck::ecs.RegisterComponent<Duck::GameObject>();
+		Duck::ecs.RegisterComponent<Duck::PlayerComponent>();
 		//Duck::ecs.RegisterComponent<Duck::JiangShi>();
 		/* ---------- ---------- ---------- */
 
@@ -24,10 +26,27 @@ public:
 		audioSystem = Duck::ecs.RegisterSystem<Duck::AudioSystem>();
 		{
 			Duck::Signature signature;
+
+			//set signature
 			signature.set(Duck::ecs.GetComponentType<Duck::AudioComponent>());
+
+			//set signature to system
 			Duck::ecs.SetSystemSignature<Duck::AudioSystem>(signature);
 		}
 		audioSystem->init();
+
+		physicsSystem = Duck::ecs.RegisterSystem<Duck::PhysicsSystem>();
+		{
+			Duck::Signature signature;
+
+			//set signature
+			signature.set(Duck::ecs.GetComponentType<Duck::GameObject>());
+			signature.set(Duck::ecs.GetComponentType<Duck::PlayerComponent>());
+
+			//set signautre to system
+			Duck::ecs.SetSystemSignature<Duck::PhysicsSystem>(signature);
+		}
+		physicsSystem->Init();
 
 		/*JiangShi = Duck::ecs.RegisterSystem<Duck::JiangShi>();
 		{
@@ -39,7 +58,16 @@ public:
 
 		///* ---------- Create Entities ---------- */
 
-		//player 
+		//player
+		Duck::Entity player = Duck::ecs.CreateEntity();
+		Duck::ecs.AddComponent<Duck::GameObject>(
+			player,
+			{ 0, 0, 0, 0, 0, STATE_NONE, OBJ_PLAYER }
+		);
+		Duck::ecs.AddComponent<Duck::PlayerComponent>(
+			player,
+			{}
+		);
 
 		//ghost
 		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
@@ -73,6 +101,8 @@ public:
 			sfx3,
 			{ "pew", "../assets/audio/pew.wav" }
 		);
+
+
 		/* ---------- ---------- ---------- */
 		/* ---------- Map Functions ---------- */
 		std::shared_ptr<Duck::MapDataHandler> map1 = std::make_shared<Duck::MapDataHandler>("../txtfiles/map1.txt");
@@ -96,12 +126,6 @@ public:
 		m_Graphics->SetGridSize(static_cast<int>(m_maplist[Duck::GetMapIndex()]->GetHeight()));
 		/* ---------- ---------- ---------- */
 
-		/* ---------- Audio ---------- */
-		/*m_Audio = std::shared_ptr<Duck::Audio>(new Duck::Audio);
-		m_SoundInfo = std::shared_ptr<Duck::SoundInfo>(new Duck::SoundInfo("test", "../Duck/src/Duck/Audio/Sfx/SCI-FI.wav"));
-		m_Audio->init();
-		m_Audio->loadSound(m_SoundInfo);*/
-		/* ---------- ---------- ---------- */
 
 		/* ---------- Ghost Functions ---------- */
 		// Load waypoint coordinates for Ghost
@@ -141,6 +165,7 @@ public:
 
 		///* ---------- Updating Systems ---------- */
 		//audioSystem->update();
+		physicsSystem->Update(dt, CELL_SIZE);
 		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
 
@@ -346,7 +371,6 @@ void playerMovement(double dt) {
 private:
 	Duck::Coordinator ecs;
 
-	std::shared_ptr<Duck::SoundInfo> m_SoundInfo;
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
 	Duck::ImGuiLayer* m_ImGuiLayer;
@@ -381,6 +405,7 @@ private:
 	float				acceleration = 0;
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
+	std::shared_ptr<Duck::PhysicsSystem> physicsSystem;
 	//std::shared_ptr<Duck::JiangShi> JiangShi;
 };
 
