@@ -5,7 +5,6 @@
 #include "Duck/Log.h"
 #include "Time.h"
 #include "Physics/collision.h"
-#include "Physics/PhysicsManager.h"
 #include "Duck/Graphics/Graphics.h"
 #include "Duck/stb_image.h"
 #include <glad/glad.h>
@@ -76,7 +75,7 @@ namespace Duck {
 
 		try {
 			while (m_Running) {
-				
+
 				for (Layer* layer : m_LayerStack)
 				{
 					layer->OnUpdate();
@@ -94,6 +93,8 @@ namespace Duck {
 				m_ImGuiLayer->End();
 
 				m_Window->OnUpdate();
+
+				//glfwSwapBuffers();
 
 
 				//coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));

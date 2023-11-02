@@ -211,7 +211,7 @@ namespace Duck {
 
 		MathLib::Vector2D minVec(minx, miny);
 		MathLib::Vector2D maxVec(maxx, maxy);
-		boundingBox = { minVec, maxVec };
+		//boundingBox = { minVec, maxVec };
 
 		file.close();
 		return true;

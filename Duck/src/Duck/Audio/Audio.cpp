@@ -184,27 +184,11 @@ namespace Duck {
 		Function to update FMOD. This function should be called
 		at the beginning of every frame.
 	-----------------------------------------------------------*/
-	void AudioSystem::update()
+	void AudioSystem::audioInputHandler()
 	{
-		ERRCHECK(studioSys->update());
-
-		for (auto const& entity : m_Entities)
+		for (auto &entity : m_Entities)
 		{
-			auto& sound = ecs.getComponent<AudioComponent>(entity);
-			std::shared_ptr<AudioComponent> sharedSound = std::make_shared<AudioComponent>(sound.getFileName(), sound.getFilePath());
-			sound.setSound(sharedSound);
-
-			//load sounds
-			if (!sound.isLoaded())
-			{
-				loadSound(sharedSound);
-			}
-
-			//play sounds
-			if (sound.isPlaying())
-			{
-				playSound(sharedSound);
-			}
+			auto sound = ecs.getComponent<AudioComponent>(entity);
 
 			/*
 			input handling
@@ -241,6 +225,73 @@ namespace Duck {
 			{
 				sound.setPlaying(false);
 			}
+		}
+	}
+
+	/*-----------------------------------------------------------
+	\Brief
+		Function to update FMOD. This function should be called
+		at the beginning of every frame.
+	-----------------------------------------------------------*/
+	void AudioSystem::update()
+	{
+		ERRCHECK(studioSys->update());
+
+
+		for (auto const& entity : m_Entities)
+		{
+			auto& sound = ecs.getComponent<AudioComponent>(entity);
+			std::shared_ptr<AudioComponent> sharedSound = std::make_shared<AudioComponent>(sound.getFileName(), sound.getFilePath());
+			sound.setSound(sharedSound);
+
+			//load sounds
+			if (!sharedSound->isLoaded())
+			{
+				loadSound(sharedSound);
+			}
+
+			//play sounds
+			if (sharedSound->isPlaying())
+			{
+				playSound(sharedSound);
+			}
+
+			/*
+			input handling
+
+			key z -> oof
+			key x -> ooz
+			key c -> pew
+			*/
+			if (WindowsInput::IsKeyPressed(Key::Z))
+			{
+				if (sharedSound->getFileName() == "oof" && !sharedSound->isPlaying())
+				{
+					sharedSound->setPlaying(true);
+				}
+			}
+
+			else if (WindowsInput::IsKeyPressed(Key::X))
+			{
+				if (sharedSound->getFileName() == "ooz" && !sharedSound->isPlaying())
+				{
+					sharedSound->setPlaying(true);
+				}
+			}
+
+			else if (WindowsInput::IsKeyPressed(Key::C))
+			{
+				if (sharedSound->getFileName() == "pew" && !sharedSound->isPlaying())
+				{
+					sharedSound->setPlaying(true);
+				}
+			}
+
+			else
+			{
+				sharedSound->setPlaying(false);
+			}
+
 		}
 	}
 

@@ -27,7 +27,7 @@ namespace Duck {
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 
         // Allocate memory and upload data to the GPU
-        glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
 
     }
 
@@ -63,7 +63,7 @@ namespace Duck {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 
         // Allocate memory and upload index data to the GPU
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_DYNAMIC_DRAW);
 
         // Store the count of indices
         m_Count = count;

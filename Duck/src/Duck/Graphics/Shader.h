@@ -16,8 +16,12 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <glm/glm.hpp>
+
+
+
 
 namespace Duck {
 
@@ -47,6 +51,8 @@ namespace Duck {
 
         // Upload a 4x4 matrix uniform to the shader by its name.
         void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+
+        void UploadUniform3f(const std::string& name, const glm::vec3& matrix);
 
         // Upload an integer uniform to the shader by its name.
         void UploadUniformInt(const std::string& name, int value);

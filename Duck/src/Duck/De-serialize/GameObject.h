@@ -90,10 +90,6 @@ namespace Duck {
 
 		void ReadState(std::string state);
 		void ReadObj(std::string obj);
-		std::shared_ptr<GameObject> CreateObj(float x,
-			float y,
-			STATE state,
-			OBJ_TYPE obj_type);
 
 		// Load object properties from a .txt file
 		bool loadFromFile(const std::string& filename);

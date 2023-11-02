@@ -13,7 +13,7 @@
 #define AI_H
 
 #include "duckpch.h"
-#include "Duck/Math/Vector2D.h"
+#include "Duck/De-serialize/GameObject.h"
 
 namespace Duck {
     class Ghost {
@@ -79,7 +79,7 @@ namespace Duck {
 
     private:
         std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
-       float ghostPositionX;           // X-coordinate of the ghost's position
+        float ghostPositionX;           // X-coordinate of the ghost's position
         float ghostPositionY;           // Y-coordinate of the ghost's position
         float velocityX;
         float velocityY;
