@@ -210,4 +210,3 @@ project "Sandbox"
 		defines "DUCK_DIST"
 		runtime "Release"
 		optimize "on"
-

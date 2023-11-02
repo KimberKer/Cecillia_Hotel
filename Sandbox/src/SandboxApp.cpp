@@ -90,7 +90,14 @@ public:
 		m_GhostTexture = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
 		m_BackgroundTexture = Duck::Shader::LoadTexture("../assets/images/FloorTile1.png");
 		m_BackgroundTexture2 = Duck::Shader::LoadTexture("../assets/images/FloorTile2.png");
+		m_InventorySlot = Duck::Shader::LoadTexture("../assets/images/InventorySlot.jpeg");
 		/* ---------- ---------- ---------- */
+
+		/* ---------- Load Texture ---------- */
+		m_Graphics->LoadFont("../assets/fonts/arial.ttf", "Arial");
+		m_Graphics->LoadFont("../assets/fonts/times.ttf", "Times");
+		m_Graphics->LoadFont("../assets/fonts/Minecraft.ttf", "Mine");
+		/* ---------- ------------ ---------- */
 
 		/* ---------- Set Gridsize of Game ---------- */
 		m_Graphics->SetGridSize(static_cast<int>(m_maplist[Duck::GetMapIndex()]->GetHeight()));
@@ -181,13 +188,15 @@ public:
 			showGrid = true;
 		}
 
+	//DUCK_TRACE("{0}", percentMove);
+
 	Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
 	Duck::RenderCommand::Clear();
 
 
+
 	//Debug::GetInstance()->BeginSystemProfile("Graphics");
-	// Would be used for cameras
-	Duck::Renderer::BeginScene();
+
 
 	Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_maplist[Duck::GetMapIndex()]->GetHeight(), m_maplist[Duck::GetMapIndex()]->GetWidth());
 	Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
@@ -200,6 +209,12 @@ public:
 	}
 	
 	//draw objects
+
+	m_Graphics->StartScene();
+
+	Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
+	Duck::RenderCommand::Clear();
+
 	m_Graphics->DrawBackground(m_BackgroundTexture);
 
 	for (int i{}; i < objectlist.size(); i++) {
@@ -222,9 +237,22 @@ public:
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 	m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 
+
 	if (showGrid) {
 		m_Graphics->ShowGrid();
 	}
+
+	m_Graphics->DrawUISquareObject(40.f, 357.5, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->DrawUISquareObject(-40.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->DrawUISquareObject(120.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->DrawUISquareObject(-120.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->DrawUISquareObject(200.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->DrawUISquareObject(-200.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
+	m_Graphics->RenderText("Inventory", 340.f, 90.f, 0.3f, glm::vec3(1.f, 1.f, 1.f), "Mine");
+
+
+
+	m_Graphics->EndScene();
 	//m_Graphics->DrawSquareObject(static_cast<float>((m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_maplist[Duck::GetMapIndex()]->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 
 	//Debug::GetInstance()->EndSystemProfile("Graphics");
@@ -362,6 +390,7 @@ private:
 	uint32_t m_CharacterTexture;
 	uint32_t m_GhostTexture;
 	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
+	uint32_t m_InventorySlot;
 
 	Duck::Time runtime;
 	int mapindex = 0;
