@@ -174,36 +174,13 @@ public:
 		}
 
 		// Character's Movement
-		if (!isMoving) {
-			percentMove = 0.0f;
-			if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
-				initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
-				isMoving = true;
-			}
+		if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f) {
+			percentMove = PLAYER_VELOCITY * dt;
+			p_player->SetPositionX(p_player->getX() + (CELL_SIZE * p_player->getVelocityX() * percentMove));
 		}
-		else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
-			percentMove += PLAYER_VELOCITY * dt;
-			if (percentMove >= 1.0f) {
-				p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX()));
-				percentMove = 0.0f;
-				isMoving = false;
-			}
-			else{
-				p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * percentMove));
-				isMoving = false;
-			}
-		}
-		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
-			percentMove += PLAYER_VELOCITY * dt;
-			if (percentMove >= 1.0f) {
-				p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY()));
-				percentMove = 0.0f;
-				isMoving = false;
-			}
-			else {
-				p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * percentMove));
-				isMoving = false;
-			}
+		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
+			percentMove = PLAYER_VELOCITY * dt;
+			p_player->SetPositionY(p_player->getY() + (CELL_SIZE * p_player->getVelocityY() * percentMove));
 		}
 		
 		Duck::RenderCommand::SetClearColor({ 0.2, 0.2, 0.2, 1 });
@@ -346,7 +323,7 @@ private:
 	unsigned const int MAX_NUMBER_OF_OBJ = 30;
 	unsigned const int CELL_SIZE = 1;
 
-	const float         PLAYER_VELOCITY = 20.f;
+	const float         PLAYER_VELOCITY = 15.f;
 
 	bool                loadFiles = false;
 	bool                showImGuiWindow = false;

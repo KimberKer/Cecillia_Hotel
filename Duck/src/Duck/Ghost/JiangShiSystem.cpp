@@ -5,27 +5,26 @@ namespace Duck {
     void JiangShiSystem::Update(double deltaTime) {
         for (auto const& entity : m_Entities) {
             auto gameObjectEntity = ecs.getComponent<GameObject>(entity);
-            auto ghostCompEntity = ecs.getComponent<JiangShi>(entity);
+            
+            if (ecs.HasComponent<JiangShi>(entity)) {
+                auto &ghostCompEntity = ecs.getComponent<JiangShi>(entity);
+                float currentStateTime = ghostCompEntity.getTimeInCurrentState();
+                currentStateTime += deltaTime;
+                ghostCompEntity.setTimeInCurrentState(currentStateTime);
 
-            float currentStateTime = ghostCompEntity.getTimeInCurrentState();
-            currentStateTime += deltaTime;
-            ghostCompEntity.setTimeInCurrentState(currentStateTime);
-
-            switch (ghostCompEntity.getState()) {
-            case State::Idle:
-                Idle();
-                if (gameObjectEntity.getObj() == OBJ_GHOST) {
+                switch (ghostCompEntity.getState()) {
+                case State::Idle:
+                    Idle();
                     if (ghostCompEntity.getTimeInCurrentState() >= ghostCompEntity.getIdleDuration()) {
                         DUCK_CORE_INFO("Ghost idled for: {0}", ghostCompEntity.getTimeInCurrentState());
                         ghostCompEntity.setTimeInCurrentState(0.0f);
                         DUCK_CORE_INFO("Switched to Roaming state!");
                         ghostCompEntity.setState(State::Roaming);
                     }
-                }
-                break;
-            case State::Roaming:
-                Roam(deltaTime, gameObjectEntity, ghostCompEntity);
-                if (gameObjectEntity.getObj() == OBJ_GHOST) {
+                    break;
+                case State::Roaming:
+                    DUCK_CORE_INFO("is Roaming");
+                    Roam(deltaTime, gameObjectEntity, ghostCompEntity);
                     if (ghostCompEntity.getTimeInCurrentState() >= ghostCompEntity.getRoamDuration()) {
                         DUCK_CORE_INFO("Ghost roamed for: {0}", ghostCompEntity.getTimeInCurrentState());
                         ghostCompEntity.setState(State::Idle);
@@ -33,26 +32,26 @@ namespace Duck {
                         ghostCompEntity.setTimeInCurrentState(0.0f);
                         ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Idle"
                     }
-                }
-                if (gameObjectEntity.getObj() == OBJ_PLAYER) {
-                    if (IsPlayerNearby(gameObjectEntity)) {
-                        ghostCompEntity.setState(State::Chasing);
-                        DUCK_CORE_INFO("Switched to Chasing state!");
-                        ghostCompEntity.setTimeInCurrentState(0.0f);
-                        ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Chasing"
+                    if (gameObjectEntity.getObj() == OBJ_PLAYER) {
+                        if (IsPlayerNearby(gameObjectEntity)) {
+                            ghostCompEntity.setState(State::Chasing);
+                            DUCK_CORE_INFO("Switched to Chasing state!");
+                            ghostCompEntity.setTimeInCurrentState(0.0f);
+                            ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Chasing"
+                        }
                     }
-                }
-                break;
-            case State::Chasing:
-                Chase(deltaTime, gameObjectEntity, ghostCompEntity);
-                if (gameObjectEntity.getObj() == OBJ_PLAYER) {
-                    if (!IsPlayerNearby(gameObjectEntity)) {
-                        ghostCompEntity.setState(State::Idle);
-                        DUCK_CORE_INFO("Switched to Idle state!");
-                        ghostCompEntity.setTimeInCurrentState(0.0f);
+                    break;
+                case State::Chasing:
+                    Chase(deltaTime, gameObjectEntity, ghostCompEntity);
+                    if (gameObjectEntity.getObj() == OBJ_PLAYER) {
+                        if (!IsPlayerNearby(gameObjectEntity)) {
+                            ghostCompEntity.setState(State::Idle);
+                            DUCK_CORE_INFO("Switched to Idle state!");
+                            ghostCompEntity.setTimeInCurrentState(0.0f);
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
     }

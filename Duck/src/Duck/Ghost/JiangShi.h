@@ -33,7 +33,7 @@ namespace Duck {
         std::vector<MathLib::Vector2D> ReadWaypointsFromFile(const std::string& filename);
 
         // Get Function
-        float getTimeInCurrentState() { return timeInCurrentState; }
+        float &getTimeInCurrentState() { return timeInCurrentState; }
         float getIdleDuration() { return idleDuration; }
         float getRoamDuration() { return roamDuration; }
         float getTimeElapsed() { return timeElapsed; }
@@ -56,22 +56,19 @@ namespace Duck {
 
         // Set Function
         void setTimeInCurrentState(float setTime) { timeInCurrentState = setTime; }
-        void setChaseSpeed(float speed) { chaseSpeed = speed; }
         void setTimeElapsed(float timeEl) { timeElapsed = timeEl; }
-
-        void setState(State newState) { state = newState; }
 
         void setCurrentGridX(int gridX) { currentGridX = gridX; }
         void setCurrentGridY(int gridY) { currentGridY = gridY; }
         void setTargetGridX(int gridX) { targetGridX = gridX; }
         void setTargetGridY(int gridY) { targetGridY = gridY; }
 
-        void setChaseSpeed(int speed) { chaseSpeed = speed; }
+        void setChaseSpeed(float newChaseSpeed) { chaseSpeed = newChaseSpeed; }
 
         void setRandomIndex(int index) { randomIndex = index; }
 
         void setIsMovingToWaypoint(bool setWaypoint) { isMovingToWaypoint = setWaypoint; }
-
+        void setState(State newState) { state = newState; }
 
     private:
         std::vector<MathLib::Vector2D> waypoints; // Waypoints for roaming
