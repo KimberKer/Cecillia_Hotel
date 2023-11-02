@@ -62,10 +62,6 @@ namespace Duck {
 		OBJ_TYPE getObj() const;
 		std::shared_ptr<GameObject> CreateObj(float p_x,
 			float p_y,
-			float p_velocityX,
-			float p_velocityY,
-			int p_gridCollisionFlag,
-			Duck::AABB p_boundingbox,
 			STATE p_state,
 			OBJ_TYPE p_obj_type);
 
@@ -80,10 +76,6 @@ namespace Duck {
 
 		void ReadState(std::string state);
 		void ReadObj(std::string obj);
-		std::shared_ptr<GameObject> CreateObj(float x,
-			float y,
-			STATE state,
-			OBJ_TYPE obj_type);
 
 		// Load object properties from a .txt file
 		bool loadFromFile(const std::string& filename);
@@ -97,7 +89,7 @@ namespace Duck {
 		float velocityX;
 		float velocityY;
 		int gridCollisionFlag;
-		Duck::AABB boundingBox;
+		//Duck::AABB boundingBox;
 		STATE state;
 		OBJ_TYPE obj_type;
 	};
