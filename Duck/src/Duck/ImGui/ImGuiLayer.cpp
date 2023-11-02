@@ -514,6 +514,7 @@ namespace Duck {
 				if (entry.is_directory()) {
 					ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), "[Dir] %s", entry.path().filename().string().c_str());
 					// Handle directory selection
+			std::cout << selected_item << std::endl;
 				}
 				else {
 					ImGui::Text("[File] %s", entry.path().filename().string().c_str());

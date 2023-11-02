@@ -48,6 +48,20 @@ public:
 			{ 6.f, 3.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
 		);*/
 
+		for (std::vector<std::shared_ptr<Duck::GameObject>>::iterator i{ objectlist.begin() }; i != objectlist.end(); ++i)
+		{
+			Duck::GameObject* gameObj = i->get();
+			if (gameObj) {
+				Duck::Entity object = Duck::ecs.CreateEntity();
+				Duck::ecs.AddComponent<Duck::GameObject>(
+					object,
+					{ gameObj->getX(), gameObj->getY(), gameObj->getVelocityX(),
+					gameObj->getVelocityY(), gameObj->getgridCollisionFlag(),
+					gameObj->GetImage(), gameObj->getState(), gameObj->getObj() }
+				);
+			}
+		}
+
 		//audio entities
 		Duck::Entity bgm = Duck::ecs.CreateEntity();
 		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
