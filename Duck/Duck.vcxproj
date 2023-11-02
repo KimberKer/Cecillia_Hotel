@@ -123,7 +123,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Events\Event.h" />
     <ClInclude Include="src\Duck\Events\KeyEvent.h" />
     <ClInclude Include="src\Duck\Events\MouseEvent.h" />
-    <ClInclude Include="src\Duck\Ghost\AI.h" />
+    <ClInclude Include="src\Duck\Ghost\JiangShi.h" />
     <ClInclude Include="src\Duck\Graphics\Buffer.h" />
     <ClInclude Include="src\Duck\Graphics\Camera.h" />
     <ClInclude Include="src\Duck\Graphics\Graphics.h" />
@@ -573,7 +573,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\CoreManager.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
     <ClCompile Include="src\Duck\Debug.cpp" />
-    <ClCompile Include="src\Duck\Ghost\AI.cpp" />
+    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp" />
+    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp" />
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Camera.cpp" />
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />

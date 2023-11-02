@@ -96,7 +96,7 @@ namespace Duck {
     public:
         void Update(double deltaTime);
         void Idle();
-        void Roam(double deltaTime, GameObject ghost, JiangShi jiangshi);
+        void Roam(double deltaTime, GameObject &ghost, JiangShi &jiangshi);
         void Chase(double deltaTime, GameObject obj, JiangShi jiangshi);
         bool IsPlayerNearby(GameObject obj);
     };  

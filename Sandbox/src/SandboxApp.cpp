@@ -41,48 +41,6 @@ public:
 		}
 		/* ---------- ---------- ---------- */
 
-		///* ---------- Create Entities ---------- */
-
-		//player 
-
-		//ghost
-		Duck::Entity ghost = Duck::ecs.CreateEntity();
-		Duck::ecs.AddComponent<Duck::JiangShi>(
-			ghost,
-			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f), State::Idle }
-		);
-		Duck::ecs.AddComponent<Duck::GameObject>(
-			ghost,
-			{ 7.f, 7.f, 0.0f, 0.0f, 0, STATE_NONE, OBJ_GHOST }
-		);
-
-		//audio entities
-		Duck::Entity bgm = Duck::ecs.CreateEntity();
-		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			bgm,
-			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx1,
-			{ "oof", "../assets/audio/oof.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx2,
-			{ "ooz", "../assets/audio/ooz.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx3,
-			{ "pew", "../assets/audio/pew.wav" }
-		);
-		/* ---------- ---------- ---------- */
-
 		/* ---------- Map Functions ---------- */
 		std::shared_ptr<Duck::MapDataHandler> map1 = std::make_shared<Duck::MapDataHandler>("../txtfiles/map1.txt");
 		m_maplist.push_back(map1);
@@ -133,6 +91,53 @@ public:
 
 		m_ImGuiLayer = new Duck::ImGuiLayer(m_maplist, objectlist);
 		Duck::Application::Get().PushOverlay(m_ImGuiLayer);
+
+		///* ---------- Create Entities ---------- */
+
+		//player 
+
+		//ghost
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_GHOST) {
+				Duck::Entity ghost = Duck::ecs.CreateEntity();
+				Duck::ecs.AddComponent<Duck::GameObject>(
+					ghost,
+					{ objectlist[i]->getX(), objectlist[i]->getY(), 0.0f, 0.0f, 0, STATE_NONE, OBJ_GHOST }
+				);
+				Duck::ecs.AddComponent<Duck::JiangShi>(
+					ghost,
+					{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), 1.f, 1.f), State::Idle }
+				);
+				
+			}
+		}
+
+		//audio entities
+		Duck::Entity bgm = Duck::ecs.CreateEntity();
+		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			bgm,
+			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx1,
+			{ "oof", "../assets/audio/oof.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx2,
+			{ "ooz", "../assets/audio/ooz.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx3,
+			{ "pew", "../assets/audio/pew.wav" }
+		);
+		/* ---------- ---------- ---------- */
 	}
 
 	void OnUpdate() override {
@@ -228,6 +233,10 @@ public:
 			}
 			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 		}
+		if (objectlist[i]->getObj() == OBJ_GHOST) {
+			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
+		}
+		
 	}
 	
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
@@ -324,9 +333,8 @@ void InitializeMap() {
 				objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_OBJ));
 				break;
 			case 3:
-				objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
+				objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));		
 				break;
-
 			default:
 				break;
 			}
