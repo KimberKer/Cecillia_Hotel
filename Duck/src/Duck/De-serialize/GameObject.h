@@ -15,6 +15,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include <unordered_map>
 #include <string>
 #include "../Physics/collision.h"
 
@@ -39,7 +40,7 @@ enum OBJ_TYPE
 	OBJ_COUNT
 };
 
-const  std::unordered_map<int, OBJ_TYPE> cellToObject = {
+const std::unordered_map<int, OBJ_TYPE> cellToObject = {
 	  {0, OBJ_EMPTY},
 	  {1, OBJ_PLAYER},
 	  {2, OBJ_WALL},

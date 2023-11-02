@@ -69,7 +69,7 @@ namespace Duck {
 	}
 
 
-	void ImGuiLayer::SetGhostChanged() { GhostChanged = !GhostChanged;  }
+	void ImGuiLayer::SetGhostChanged() { GhostChanged = !GhostChanged; }
 
 	bool ImGuiLayer::GetGhostChanged() { return GhostChanged; }
 
@@ -169,11 +169,11 @@ namespace Duck {
 			static int selectedOption = 3; //1= false, 0 = true
 			bool Ghostselected = false;
 			ImGui::RadioButton("Wall", &selectedOption, 0); ImGui::SameLine();
-			
-			ImGui::RadioButton("Empty", &selectedOption, 2); 
+
+			ImGui::RadioButton("Empty", &selectedOption, 2);
 			if (m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST) < 1) {
 				ImGui::SameLine();
-				ImGui::RadioButton("Ghost", &selectedOption, 1); 
+				ImGui::RadioButton("Ghost", &selectedOption, 1);
 				Ghostselected = true;
 
 			}
@@ -240,10 +240,10 @@ namespace Duck {
 				else {
 					m_maplist[GetMapIndex()]->UpdateCellData(x_value - 1, y_value - 1, obj);
 					isUpdated = true;
-			
-					GhostChanged = (Ghostselected)? false: true;
 
-			
+					GhostChanged = (Ghostselected) ? false : true;
+
+
 
 
 				}
@@ -387,7 +387,7 @@ namespace Duck {
 			ImGui::Separator();
 			int itemCount = 0;
 			std::string name;
-		
+
 			// Display the selected asset name
 			if (selectedAsset != -1) {
 				auto found = assetNames.find(selectedAsset);
@@ -435,7 +435,7 @@ namespace Duck {
 				}
 				else {
 					std::cout << name.c_str() << std::endl;
-					m_objList[(y_pvalue-1) * m_maplist[GetMapIndex()]->GetWidth() + (x_pvalue-1)]->SetImage(Shader::LoadTexture(name.c_str()));
+					m_objList[(y_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (x_pvalue - 1)]->SetImage(Shader::LoadTexture(name.c_str()));
 					//m_objList[0]->SetImage(Shader::LoadTexture(name.c_str()));
 				}
 
@@ -459,7 +459,7 @@ namespace Duck {
 					}
 
 					// Store the asset name in the map
-					assetNames[i+1] = assetName;
+					assetNames[i + 1] = assetName;
 
 
 					itemCount++;
@@ -497,7 +497,7 @@ namespace Duck {
 						SetMapIndex(i);
 						isUpdated = true;
 						mapChanged = true;
-					
+
 					}
 
 					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
@@ -514,7 +514,7 @@ namespace Duck {
 				if (entry.is_directory()) {
 					ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), "[Dir] %s", entry.path().filename().string().c_str());
 					// Handle directory selection
-			std::cout << selected_item << std::endl;
+					std::cout << selected_item << std::endl;
 				}
 				else {
 					ImGui::Text("[File] %s", entry.path().filename().string().c_str());

@@ -59,7 +59,7 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
-        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player);
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]);
      
     };
 

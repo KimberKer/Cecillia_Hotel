@@ -92,6 +92,7 @@ namespace Duck {
 				}
 				m_ImGuiLayer->End();
 
+
 				m_Window->OnUpdate();
 
 				//glfwSwapBuffers();

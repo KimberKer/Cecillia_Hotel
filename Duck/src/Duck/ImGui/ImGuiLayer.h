@@ -18,6 +18,7 @@
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Map/Map.h"
 #include "Duck/time.h"
+#include "Duck/ECS/Entity.h"
 #include <filesystem>
 
 extern DUCK_API bool isGamePlaying;

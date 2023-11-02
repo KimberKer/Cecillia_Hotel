@@ -15,7 +15,7 @@
 
 namespace Duck {
 
-	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, Ghost ghost, uint32_t image[]) {
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]) {
 		// Reset any game-related variables to their initial values
 
 		// Clear the object list and re-create objects based on the map
@@ -45,10 +45,8 @@ namespace Duck {
 
 		}
 	}
-	float MapDataHandler::GetGhostPositionX() { return ghost_x; }
-	float MapDataHandler::GetGhostPositionY() { return ghost_y; }
 
-	MapDataHandler::MapDataHandler(const std::string& filepath){
+	MapDataHandler::MapDataHandler(const std::string& filepath) {
 		filePath = filepath;
 		GetMapData();
 	}
@@ -105,7 +103,7 @@ namespace Duck {
 				for (int j = 0; j < MapWidth; j++) {
 					file >> MapData[j][i];
 					//checks if there is more than 1 main character
-					
+
 				}
 			}
 
@@ -133,7 +131,7 @@ namespace Duck {
 		This function gets the width
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::GetWidth() const{
+	int MapDataHandler::GetWidth() const {
 		return MapWidth;
 	}
 
