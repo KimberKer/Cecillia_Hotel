@@ -4,6 +4,9 @@
 //#include <GLFW/glfw3.h>
 #include "Duck/Audio/Audio.h"
 
+#include "Duck/Platform/Windows/WindowsInput.h"
+#include "KeyCodes.h"
+
 #include "Duck/De-serialize/GameObject.h"
 
 #include "Duck/ECS/Entity.h"
@@ -47,11 +50,16 @@ namespace Duck {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		void ReadMapData(std::string filename);
+
+		LayerStack GetLayerStack() const { return m_LayerStack; }
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline Window& GetWindow() { return *m_Window; }
-		
+
 		inline static Application& Get() { return *s_Instance; }
+
+		void SetRunning(bool running) { m_Running = running; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -66,12 +74,12 @@ namespace Duck {
 		std::shared_ptr<SoundInfo> m_SoundInfo;
 		//std::shared_ptr<Audio> m_Audio;
 		std::shared_ptr<MapDataHandler> m_map;
-
-
+		
 		std::unique_ptr<Graphics> m_Graphics;
+		float CamZoom;
 
 		uint32_t m_CharacterTexture;
-		uint32_t m_BackgroundTexture, m_BackgroundTexture2;
+		uint32_t m_BackgroundTexture, m_BackgroundTexture2, m_InventorySlot, m_AnimatedTexture;
 
 
 	private:
@@ -83,5 +91,4 @@ namespace Duck {
 }
 
 
- //GLFWwindow* window;
- 
+//GLFWwindow* window;

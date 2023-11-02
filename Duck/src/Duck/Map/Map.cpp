@@ -8,54 +8,88 @@
 //				generates binary collision data, and can print 
 //				the map data.
 //
-// Copyright © 2023 DigiPen, All rights reserved.
+// Copyright   2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #include "duckpch.h"
 #include "Map.h"
 
 namespace Duck {
 
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>> &objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player) {
+		// Reset any game-related variables to their initial values
 
-	/*MapDataHandler::MapDataHandler() {
-		MapWidth = 0;
-		MapHeight = 0;
-		MapData = nullptr;
-		CollisionData = nullptr;
-	}*/
+		// Clear the object list and re-create objects based on the map
+		objectlist.clear();
+
+		for (int i = 0; i < MapHeight; i++) {
+			for (int j = 0; j < MapWidth; j++) {
+				int cellValue = MapData[j][i];
+		
+				switch (cellValue) {
+				case 0:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_EMPTY));
+					break;
+				case 1:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_PLAYER));
+					break;
+				case 2:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_OBJ));
+					break;
+				case 3:
+					objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_PLAYER) {
+				p_player = objectlist[i];
+			}
+		}
+	}
+
+
+	MapDataHandler::MapDataHandler(const std::string& filepath){
+		filePath = filepath;
+		GetMapData();
+	}
+
 
 	/******************************************************************************/
 	/*!
 		This function reads the map from txt file.
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::GetMapData(const std::string& filename)
+	int MapDataHandler::GetMapData()
 	{
-		file = filename;
+		//file = filename;
 		//const std::string path = "../txtfiles/" + filename;
-		std::ifstream file(filename);
+		std::ifstream file(filePath);
 
 		if (!file.is_open()) {
-			perror(filename.c_str());
+			DUCK_CORE_ERROR("Error: Can't open file");
 			return 0;
 		}
 		else {
-			std::string width , w;
-			std::string height , h;
+			std::string width, w;
+			std::string height, h;
 			file >> width >> w;
 			file >> height >> h;
 
 			try {
 				SetWidth(std::stoi(w));
 				SetHeight(std::stoi(h));
-				std::cout << MapWidth << std::endl;
 			}
 			catch (const std::invalid_argument& e) {
-				std::cerr << "Error: Failed to convert width or height to integer." << std::endl;
+				DUCK_CORE_ERROR("Error: Failed to convert width or height to integer.");
 				file.close(); // Close the file
 				return 0;
 			}
-	
-		
+
+
 			//allocate map
 			MapData = new int* [MapHeight];
 			for (int i{}; i < MapHeight; i++) {
@@ -69,26 +103,28 @@ namespace Duck {
 
 				CollisionData[i] = new int[MapWidth];
 			}
-
+			bool foundFirstOne = false;
 			//read map
 			for (int i = 0; i < MapHeight; i++) {
 				for (int j = 0; j < MapWidth; j++) {
-					file >> MapData[i][j];
+					file >> MapData[j][i];
+					//checks if there is more than 1 main character
+					
 				}
 			}
 
 			//apply binary collision
-			for (int i = 0; i < MapHeight; i++) {
-				for (int j = 0; j < MapWidth; j++) {
-					if (MapData[i][j] == 1) { //wall
-						CollisionData[i][j] = 1;
-					}
-					else {
-						CollisionData[i][j] = 0;
-					}
+			//for (int i = 0; i < MapHeight; i++) {
+			//	for (int j = 0; j < MapWidth; j++) {
+			//		if (MapData[j][i] == 1) { //wall
+			//			CollisionData[j][i] = 1;
+			//		}
+			//		else {
+			//			CollisionData[j][i] = 0;
+			//		}
 
-				}
-			}
+			//	}
+			//}
 		}
 
 		file.close(); //close file
@@ -111,7 +147,7 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 	std::string MapDataHandler::GetFile() const {
-		return file;
+		return filePath;
 	}
 
 	/******************************************************************************/
@@ -119,7 +155,7 @@ namespace Duck {
 		This function gets the height
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::GetHeight() const{
+	int MapDataHandler::GetHeight() const {
 		return MapHeight;
 	}
 
@@ -132,10 +168,10 @@ namespace Duck {
 
 		std::cout << "-----------------MAP--------------" << std::endl;
 		std::cout << "Width : " << MapWidth << std::endl;
-		std::cout <<  "Height : " << MapHeight << std::endl;
+		std::cout << "Height : " << MapHeight << std::endl;
 		for (int i{}; i < MapHeight; i++) {
 			for (int j{}; j < MapWidth; j++) {
-				std::cout << MapData[i][j] << " ";
+				std::cout << MapData[j][i] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -149,35 +185,48 @@ namespace Duck {
 		This function updates the map data
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::UpdateCellData(const std::string& filename, int row, int column, int value) {
-		std::ofstream file(filename);
+	int MapDataHandler::UpdateCellData(int row, int column, int value) {
+		std::ifstream inputFile(filePath);
+		std::ofstream file("../txtfiles/temp.txt");
 
-		if (!file.is_open()) {
-			std::cerr << "Failed to open file: " << strerror(errno) << std::endl;
+		if (!inputFile.is_open() || !file.is_open()) {
+			DUCK_CORE_ERROR("Failed to open file: 1 ");;
 			return 0;
 		}
 
-		if (row > MapHeight - 1 && row < MapHeight - 1) {
-			std::cerr << "height out of range" << std::endl;
-			return 0;
-		}
-		else if (column > MapWidth - 1 && column < MapWidth - 1) {
-			std::cerr << "width out of range" << std::endl;
+		if (row >= MapHeight || column >= MapWidth) {
+			DUCK_CORE_ERROR("Row or column out of range");
+			file.close();
+			inputFile.close();
 			return 0;
 		}
 
+		// Update the specific cell and write it to the file
+
+		file << "Width: " << MapWidth << std::endl;
+		file << "Height: " << MapHeight << std::endl;
+		file << std::endl;
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				MapData[row][column] = value;
-				file << MapData[i][j] << ' ';
+				if (j == row && i == column) {
+					MapData[j][i] = value;
+				}
+				file << MapData[j][i] << ' ';
 			}
 			file << std::endl;
 		}
 
+		inputFile.close();
 		file.close();
+		if (std::remove(filePath.c_str()) != 0) {
+			std::cerr << "Error removing original file" << std::endl;
+			return 0;
+		}
+		if (std::rename("../txtfiles/temp.txt", filePath.c_str()) != 0) {
+			DUCK_CORE_ERROR("Error renaming file");
+			return 0;
+		}
 		return 1;
-
-
 	}
 
 
@@ -213,8 +262,17 @@ namespace Duck {
 			return MapData[Y][X];
 		}
 	}
-
-
+	int MapDataHandler::GetNumberOfObjects(int objType) {
+		int count{};
+		for (int i = 0; i < MapHeight; i++) {
+			for (int j = 0; j < MapHeight; j++) {
+				if (MapData[j][i] == objType) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 	/******************************************************************************/
 	/*!
 		These functions snap to Cell
@@ -232,6 +290,7 @@ namespace Duck {
 		y = std::round((y / cellSize));
 		return y;
 	}
+
 
 	/******************************************************************************/
 	/*!
@@ -298,9 +357,15 @@ namespace Duck {
 	void MapDataHandler::SetWidth(int value)
 	{
 		MapWidth = value;
-	}	
+	}
 	void MapDataHandler::SetHeight(int value)
 	{
 		MapHeight = value;
 	}
+
+	int MapIndex = 0;
+
+	const int& GetMapIndex() { return MapIndex; }
+	void SetMapIndex(int i) { MapIndex = i; }
+
 }

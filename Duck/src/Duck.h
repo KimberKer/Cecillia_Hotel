@@ -17,6 +17,8 @@
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Ghost/JiangShi.h"
 
+#include "Duck/ImGui/ImGuiLayer.h"
+
 // -- ECS --
 #include "Duck/ECS/Entity.h"
 

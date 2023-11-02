@@ -8,7 +8,7 @@
 //
 // Brief:     Contains the declarations related to GameObject class
 //
-// Copyright � 2023 DigiPen, All rights reserved.
+// Copyright   2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #pragma once
 
@@ -17,7 +17,7 @@
 
 #include <string>
 #include "../Physics/collision.h"
-#include "../Map/map.h"
+
 
 enum STATE
 {
@@ -35,7 +35,8 @@ enum OBJ_TYPE
 	OBJ_GHOST,
 	OBJ_NPC,
 	OBJ_WALL,
-	OBJ_ERROR
+	OBJ_ERROR,
+	OBJ_COUNT
 };
 namespace Duck {
 	class GameObject {
@@ -59,12 +60,22 @@ namespace Duck {
 		STATE getState() const;
 		int getgridCollisionFlag() const;
 		OBJ_TYPE getObj() const;
+		std::shared_ptr<GameObject> CreateObj(float p_x,
+			float p_y,
+			float p_velocityX,
+			float p_velocityY,
+			int p_gridCollisionFlag,
+			Duck::AABB p_boundingbox,
+			STATE p_state,
+			OBJ_TYPE p_obj_type);
 
-		void SetState(STATE state);
-		void SetVelocityX(float velx);
-		void SetVelocityY(float vely);
-		void SetPositionX(float posX);
-		void SetPositionY(float posY);
+
+		void  SetState(STATE state);
+		void  SetType(OBJ_TYPE getType);
+		void  SetVelocityX(float velx);
+		void  SetVelocityY(float vely);
+		void  SetPositionX(float posX);
+		void  SetPositionY(float posY);
 		void SetgridCollisionFlag(float posY);
 
 		void ReadState(std::string state);
@@ -107,7 +118,6 @@ namespace Duck {
 		float velocityY;
 		int gridCollisionFlag;
 		Duck::AABB boundingBox;
-		MapDataHandler m_map;
 		STATE state;
 		OBJ_TYPE obj_type;
 	};

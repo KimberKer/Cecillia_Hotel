@@ -41,7 +41,7 @@ project "ImGui"
     }
 
     links {
-		    "GLFW"
+		"GLFW"
     }
 
     filter "system:windows"

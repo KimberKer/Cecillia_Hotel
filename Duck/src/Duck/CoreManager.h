@@ -11,7 +11,6 @@
 #pragma once
 
 #include "Debug.h"
-#include "Physics/PhysicsManager.h"
 
 namespace Duck {
     class CoreManager {
@@ -30,7 +29,6 @@ namespace Duck {
 
     private:
         Debug* debugger;
-        PhysicsManager* physicsManager;
 
         // Singleton mechanics
         static CoreManager* instance;

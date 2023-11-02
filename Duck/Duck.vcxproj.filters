@@ -120,10 +120,10 @@
     <ClInclude Include="src\Duck\Ghost\AI.h">
       <Filter>src\Duck\Ghost</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Ghost\JiangShi.h">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\Camera.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Graphics.h">
@@ -170,12 +170,6 @@
     </ClInclude>
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Physics\Physics.h">
-      <Filter>src\Duck\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Physics\PhysicsManager.h">
-      <Filter>src\Duck\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Physics\collision.h">
       <Filter>src\Duck\Physics</Filter>
@@ -1452,6 +1446,17 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Ghost\AI.h" />
+    <ClInclude Include="src\Duck\Player\Player.h" />
+    <ClInclude Include="src\Duck\ECS\Entity.h">
+      <Filter>src\Duck\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\Audio.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Audio\AudioComponent.h">
+      <Filter>src\Duck\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1472,13 +1477,10 @@
     <ClCompile Include="src\Duck\Ghost\AI.cpp">
       <Filter>src\Duck\Ghost</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
+      <Filter>src\Duck\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\Camera.cpp">
       <Filter>src\Duck\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp">
@@ -1526,12 +1528,6 @@
     <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Physics\Physics.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Physics\PhysicsManager.cpp">
-      <Filter>src\Duck\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Duck\Physics\collision.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
@@ -1552,6 +1548,11 @@
     </ClCompile>
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\Ghost\AI.cpp" />
+    <ClCompile Include="src\Duck\Player\Player.cpp" />
+    <ClCompile Include="src\Duck\Audio\Audio.cpp">
+      <Filter>src\Duck\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

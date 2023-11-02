@@ -7,11 +7,13 @@
 // Brief:       This file declare the mapDataHandler class
 //              and functions
 //
-// Copyright © 2023 DigiPen, All rights reserved.
+// Copyright   2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #pragma once
 #include <string>
 #include <iostream>
+#include "../De-serialize/GameObject.h"
+#include "Duck/Log.h"
 
 namespace Duck {
 
@@ -19,8 +21,7 @@ namespace Duck {
     private:
         int MapWidth{};
         int MapHeight{};
-        std::string file = "";
-
+        std::string filePath;
         //temporary var
         std::string width, w;
         std::string height, h;
@@ -33,11 +34,13 @@ namespace Duck {
         const int COLLISION_TOP = 0x00000004;
         const int COLLISION_BOTTOM = 0x00000008;
 
+
+
     public:
 
-        MapDataHandler() : MapWidth(0), MapHeight(0), MapData{}, CollisionData{}, file{} {};
-        int GetMapData(const std::string& filename);
-        int UpdateCellData(const std::string& filename, int row, int column, int value);
+        MapDataHandler(const std::string& filePath);
+        int GetMapData();
+        int UpdateCellData( int row, int column, int value);
         void FreeMapData();
         int GetCellValue(int X, int Y);
         std::string GetFile() const;
@@ -45,10 +48,17 @@ namespace Duck {
             float scaleX, float scaleY);
         int SnapToCellX(float cellSize, float x);
         int GetWidth() const;
+        int GetNumberOfObjects(int getType);
         int GetHeight() const;
         float SnapToCellY(float cellSize, float y);
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player);
+     
     };
+
+    const int& GetMapIndex();
+    void SetMapIndex(int i);
+
 }

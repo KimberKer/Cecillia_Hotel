@@ -16,7 +16,6 @@
 
 #include "duckpch.h"
 #include "Shader.h"
-
 #include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
@@ -174,7 +173,7 @@ namespace Duck {
 
 
 	// Function to load shader source code from a file
-	std::string Shader::LoadShaderSource(const char* filePath) {
+ 	std::string Shader::LoadShaderSource(const char* filePath) {
 
 		std::string shaderCode;
 		std::ifstream shaderFile;
@@ -292,11 +291,23 @@ namespace Duck {
 
 	}
 
+
+
+
+	
 	// Upload a 4x4 matrix uniform to the shader by its name.
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) {
 
 		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+
+	}
+
+	// Upload a 4x4 matrix uniform to the shader by its name.
+	void Shader::UploadUniform3f(const std::string& name, const glm::vec3& vec) {
+
+		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		glUniform3f(location, vec.x, vec.y, vec.z);
 
 	}
 

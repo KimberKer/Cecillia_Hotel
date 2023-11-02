@@ -50,6 +50,8 @@ namespace Duck {
 		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform);
 		// Submit an object for rendering with a given transform and texture.
 		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t texture);
+		// Submit an object for rendering with a given transform and Sprite. (Animated)
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t sprite, const int cols, const int rows, const int currentFrame);
 		// Submit a background for rendering with a given transform, texture, and grid size.
 		static void BackgroundSubmit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform, const uint32_t texture, const int cols, const int rows);
 		// Submit an animation for rendering with a given transform, texture, and grid size.

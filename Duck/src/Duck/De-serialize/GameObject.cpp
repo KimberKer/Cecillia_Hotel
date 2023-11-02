@@ -8,7 +8,7 @@
 //
 // Brief:     Contains the implementation of the GameObject class
 //
-// Copyright � 2023 DigiPen, All rights reserved.
+// Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 
 #pragma once
@@ -28,25 +28,18 @@ namespace Duck {
 		obj_type(OBJ_EMPTY)
 	{}
 
-	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type) :
-		x(x),
-		y(y),
-		velocityX(velocityX),
-		velocityY(velocityY),
-		gridCollisionFlag(gridCollisionFlag),
-		state(getstate),
-		obj_type(obj_type)
-		{}
-
+	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type)
+		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), state(getstate), obj_type(obj_type) {}
+	 
 	std::shared_ptr<GameObject> GameObject::CreateObj(
 		float p_x,
 		float p_y,
 		STATE p_state,
 		OBJ_TYPE p_obj_type)
 	{
+
 		return std::make_shared<GameObject>(p_x, p_y, 0, 0, 0, p_state, p_obj_type);
 	}
-
 	/******************************************************************************/
 	/*!
 		This function returns the current state of the GameObject.
@@ -66,6 +59,15 @@ namespace Duck {
 	 /******************************************************************************/
 	void GameObject::SetState(STATE getstate) {
 		state = getstate;
+	}
+
+	/******************************************************************************/
+	/*!
+		This function sets the state of the GameObject.
+	 */
+	 /******************************************************************************/
+	void GameObject::SetType(OBJ_TYPE getType) {
+		obj_type = getType;
 	}
 
 	/******************************************************************************/
@@ -158,8 +160,6 @@ namespace Duck {
 		return velocityY;
 	}
 
-
-
 	/******************************************************************************/
 	/*!
 		This function loads GameObject data from a file.
@@ -230,7 +230,7 @@ namespace Duck {
 		if (obj == "OBJ_EMPTY") {
 			obj_type = OBJ_EMPTY;
 		}
-		else if (obj == "OBJ_PLAYER") {
+		else if (obj == "STATE_GOING_LEFT") {
 			obj_type = OBJ_PLAYER;
 		}
 		else if (obj == "OBJ_GHOST") {
@@ -252,6 +252,7 @@ namespace Duck {
 		//DUCK_CORE_INFO("Object Type: {0}", objType[obj_type]);
 	}
 
+
 	/******************************************************************************/
 	/*!
 		This function loads player data from a file
@@ -265,4 +266,6 @@ namespace Duck {
 			std::cerr << "Failed to load player data from file.\n";
 		}
 	}
+
 }
+
