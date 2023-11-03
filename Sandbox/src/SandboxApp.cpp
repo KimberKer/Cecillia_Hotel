@@ -319,9 +319,9 @@ public:
 
 		//apply collision and textures
 		for (int i{}; i < objectlist.size(); i++) {
-
-			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), static_cast<float>(CELL_SIZE), static_cast<float>(CELL_SIZE));
-			if (objectlist[i]->getObj() != OBJ_EMPTY && objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
+			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
+			Duck::AABB ghostAABB = aabb.ConvertToAABB(m_Jiangshi.GetGhostPositionX(), m_Jiangshi.GetGhostPositionY(), CELL_SIZE, CELL_SIZE);
+			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
 				if (objectlist[i]->getObj() != OBJ_EMPTY && m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
 					DUCK_CORE_INFO("Player: Collision Detected!");
 					p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX())));
@@ -329,6 +329,22 @@ public:
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
 				}
+				//wall collides with ghost
+				if ((objectlist[i]->getObj() != OBJ_EMPTY && m_phy.CollisionIntersection_RectRect(ghostAABB, { m_Jiangshi.getVelocityX(), m_Jiangshi.getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt))) {
+					m_Jiangshi.SetGhostPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, m_Jiangshi.GetGhostPositionX())));
+					m_Jiangshi.SetGhostPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, m_Jiangshi.GetGhostPositionY())));
+					m_Jiangshi.SetVelocityX(0);
+					m_Jiangshi.SetVelocityY(0);
+				}
+		
+				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
+				
+			}
+		}
+		if (!m_ImGuiLayer->GetGhostChanged()) {
+			m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
+		}
+		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, p_player->GetImage(), showBB);
 
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)ObjectOrientation, objectlist[i]->GetImage(), showBB);
 
