@@ -1,3 +1,14 @@
+//---------------------------------------------------------
+// File:		PhysicsSystam.cpp
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This source file defines the functions in the Physics System class.
+//
+// Copyright ? 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
+
 #include "duckpch.h"
 
 #include "PhysicsSystem.h"
@@ -12,12 +23,9 @@
 namespace Duck
 {
 
-    void PhysicsSystem::Init() 
+    void PhysicsSystem::Init()
     {
-        for (auto& entity : m_Entities)
-        {
-            
-        }
+
     }
 
     // Update the physics object based on the given time delta.
@@ -52,7 +60,7 @@ namespace Duck
                 {
                     obj.SetState(STATE_GOING_DOWN);
                 }
-                
+
                 else
                 {
                     obj.SetState(STATE_NONE);
@@ -80,74 +88,28 @@ namespace Duck
                 }
 
                 //player movement
-                if (!player.IsMoving()) {
-                    player.SetPercentMove(0.0f);
+                float acceleration = player.GetPlayerVelocity() * dt;
 
-                    if (obj.getVelocityX() != 0.0f || obj.getVelocityY() != 0.0f)
-                    {
-                        player.SetInitialPosition(MathLib::Vector2D(obj.getX(), obj.getY()));
-                        player.SetMoving(true);
-                    }
+                // If the player is currently moving horizontally
+                if (obj.getVelocityX() != 0.f && obj.getVelocityY() == 0.0f) {
+                    // Update the player's position based on acceleration and velocity
+                    obj.SetPositionX(obj.getX() + (cellSize * obj.getVelocityX() * acceleration));
                 }
-
-                else if (obj.getVelocityX() != 0.f && obj.getVelocityY() == 0.0f && player.IsMoving())
-                {
-                    float percentMove = player.GetPercentMove();
-                    percentMove += player.GetPlayerVelocity() * dt;
-
-                    if (percentMove >= 1.0f)
-                    {
-                        obj.SetPositionX(player.GetInitialPos().x + (cellSize * obj.getVelocityX()));
-                        player.SetPercentMove(0.0f);
-                        player.SetMoving(false);
-                    }
-
-                    else
-                    {
-                        obj.SetPositionX(player.GetInitialPos().x + (cellSize * obj.getVelocityX() * percentMove));
-                        player.SetPercentMove(0.0f);
-                        player.SetMoving(false);
-                    }
-                }
-
-                else if (obj.getVelocityY() != 0.0f && obj.getVelocityX() == 0.0f && player.IsMoving())
-                {
-                    float percentMove = player.GetPercentMove();
-                    percentMove += static_cast<float>(player.GetPlayerVelocity() * dt);
-
-                    if (percentMove >= 1.0f)
-                    {
-                        obj.SetPositionY(player.GetInitialPos().y + (cellSize * obj.getVelocityY()));
-                        player.SetPercentMove(0.0f);
-                        player.SetMoving(false);
-                    }
-
-                    else
-                    {
-                        obj.SetPositionY(player.GetInitialPos().y + (cellSize * obj.getVelocityY() * percentMove));
-                        player.SetPercentMove(0.0f);
-                        player.SetMoving(false);
-                    }
+                // If the player is currently moving vertically
+                else if (obj.getVelocityY() != 0.f && obj.getVelocityX() == 0.0f) {
+                    // Update the player's position based on acceleration and velocity
+                    obj.SetPositionY(obj.getY() + (cellSize * obj.getVelocityY() * acceleration));
                 }
             }
 
-            std::cout << "TESTING PHYSICS--------------------\n";
-            std::cout << "X: " << obj.getX() << ", velocity X: " << obj.getVelocityX() << std::endl;
-            std::cout << "Y: " << obj.getY() << ", velocity Y: " << obj.getVelocityY() << std::endl;
-            std::cout << "-----------------------------------\n";
+            //uncomment when testing
+            // std::cout << "TESTING PHYSICS--------------------\n";
+            // std::cout << "X: " << obj.getX() << ", velocity X: " << obj.getVelocityX() << std::endl;
+            // std::cout << "Y: " << obj.getY() << ", velocity Y: " << obj.getVelocityY() << std::endl;
+            // std::cout << "-----------------------------------\n";
 
         }
-        
-        
-        // Using the kinematic equation: v = u + a * t
-        // Update velocity based on acceleration
-        //xVelocity += xAcceleration * static_cast<float>(deltaTime);
-        //yVelocity += yAcceleration * static_cast<float>(deltaTime);
 
-        // Using the kinematic equation: s = u * t + 0.5 * a * t * t
-        // Update position based on velocity
-        //x += xVelocity * static_cast<float>(deltaTime);
-        //y += yVelocity * static_cast<float>(deltaTime);
     }
 
 }

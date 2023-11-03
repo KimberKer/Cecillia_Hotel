@@ -19,6 +19,8 @@
 #include "Duck/Ghost/JiangShi.h"
 #include "Duck/Player/PlayerComponent.h"
 #include "Duck/Physics/PhysicsSystem.h"
+#include "Duck/Graphics/GraphicsSystem.h"
+#include "Duck/Graphics/GraphicsComponent.h"
 
 #include "Duck/AssetManager.h"
 

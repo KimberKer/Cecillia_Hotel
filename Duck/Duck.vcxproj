@@ -129,6 +129,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Graphics\Buffer.h" />
     <ClInclude Include="src\Duck\Graphics\Camera.h" />
     <ClInclude Include="src\Duck\Graphics\Graphics.h" />
+    <ClInclude Include="src\Duck\Graphics\GraphicsComponent.h" />
+    <ClInclude Include="src\Duck\Graphics\GraphicsSystem.h" />
     <ClInclude Include="src\Duck\Graphics\Renderer.h" />
     <ClInclude Include="src\Duck\Graphics\Shader.h" />
     <ClInclude Include="src\Duck\Graphics\Vertex.h" />
@@ -584,6 +586,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Camera.cpp" />
     <ClCompile Include="src\Duck\Graphics\Graphics.cpp" />
+    <ClCompile Include="src\Duck\Graphics\GraphicsSystem.cpp" />
     <ClCompile Include="src\Duck\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Duck\Graphics\Shader.cpp" />
     <ClCompile Include="src\Duck\Graphics\Vertex.cpp" />

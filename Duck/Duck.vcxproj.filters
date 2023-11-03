@@ -1458,6 +1458,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Graphics\GraphicsComponent.h" />
+    <ClInclude Include="src\Duck\Graphics\GraphicsSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1562,5 +1564,6 @@
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Graphics\GraphicsSystem.cpp" />
   </ItemGroup>
 </Project>

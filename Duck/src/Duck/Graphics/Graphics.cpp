@@ -546,9 +546,9 @@ namespace Duck {
             glLineWidth(3.f);
 
             float LineAngle{ 90.0f };
-            float halfWidth = TileWidth * scale / 2.f;
+            float halfWidth = TileWidth * scale;
             //(2.f / (float)cols);
-            float halfHeight = TileHeight * scale / 2.f;
+            float halfHeight = TileHeight * scale;
             //2.f / (float)rows;
 
 

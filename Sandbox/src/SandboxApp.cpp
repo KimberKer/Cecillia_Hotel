@@ -19,6 +19,7 @@ public:
 		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
 		Duck::ecs.RegisterComponent<Duck::GameObject>();
 		Duck::ecs.RegisterComponent<Duck::PlayerComponent>();
+		Duck::ecs.RegisterComponent<Duck::GraphicsComponent>();
 		//Duck::ecs.RegisterComponent<Duck::JiangShi>();
 		/* ---------- ---------- ---------- */
 
@@ -48,6 +49,17 @@ public:
 		}
 		physicsSystem->Init();
 
+		graphicsSystem = Duck::ecs.RegisterSystem<Duck::GraphicsSystem>();
+		{
+			Duck::Signature signature;
+
+			//set signature
+			signature.set(Duck::ecs.GetComponentType<Duck::GraphicsComponent>());
+
+			//set signature to system
+			Duck::ecs.SetSystemSignature<Duck::GraphicsSystem>(signature);
+		}
+		graphicsSystem->Init();
 
 		/*JiangShi = Duck::ecs.RegisterSystem<Duck::JiangShi>();
 		{
@@ -57,18 +69,35 @@ public:
 		}*/
 		/* ---------- ---------- ---------- */
 
-		///* ---------- Create Entities ---------- */
-
-
-
 
 		///* ---------- Load Assets ---------- */
 		m_AssetManager = std::unique_ptr<Duck::AssetManager>(new Duck::AssetManager);
 
 		m_AssetManager->LoadAssets();
 
+		///* ---------- Create Entities ---------- */
 
+		//fonts
+		Duck::Entity mineFont = Duck::ecs.CreateEntity();
+		{
+			Duck::ecs.AddComponent<Duck::GraphicsComponent>(
+				mineFont,
+				{ GRAPHICS_FONT, "Mine", "../assets/fonts/Minecraft.ttf" }
+			);
+		}
 
+		//player
+		Duck::Entity player = Duck::ecs.CreateEntity();
+
+		Duck::ecs.AddComponent<Duck::GameObject>(
+			player,
+			{ 0, 0, 0, 0, 0, 0, STATE_NONE, OBJ_PLAYER }
+		);
+
+		Duck::ecs.AddComponent<Duck::PlayerComponent>(
+			player,
+			{}
+		);
 
 		//ghost
 		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
@@ -86,7 +115,7 @@ public:
 
 		Duck::ecs.AddComponent<Duck::AudioComponent>(
 			bgm,
-			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
+			{ "bgm", "../assets/audio/bgm.wav", true, 0.3f }
 		);
 
 		Duck::ecs.AddComponent<Duck::AudioComponent>(
@@ -121,35 +150,20 @@ public:
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics(Duck::Application::Get().GetWindow()));
 
 
-		//static std::vector<std::filesystem::directory_entry> assetEntries;
-		//static std::filesystem::path currentAssetDirectory("../assets/images/");
-		////std::vector<uint32_t> assets;
-		//for (const auto& entry : std::filesystem::directory_iterator(currentAssetDirectory)) {
-		//	assetEntries.push_back(entry);
-		//}
-		//for (int i = 0; i < assetEntries.size(); i++) {
-		//	std::filesystem::path entryPath = assetEntries[i].path();
-		//	std::string assetName = entryPath.filename().string();
-
-		//	std::string image = "../assets/images/" + assetName;
-
-		//	Duck::Shader::LoadTexture(image.c_str());
-		//}
-		//m_InventorySlot = m_AssetManager->GetTexture("InventorySlot.jpeg");
 		m_InventorySlot = m_AssetManager->GetTexture("InventorySlot.jpeg");
+		m_Animation = m_AssetManager->GetTexture("Character1Sprite.png");
 		Image[OBJ_EMPTY] = m_AssetManager->GetTexture("FloorTile5.jpg");
 		Image[OBJ_PLAYER] = m_AssetManager->GetTexture("Character1.png");
 		Image[OBJ_WALL] = m_AssetManager->GetTexture("WallTile1.png");
 		Image[OBJ_GHOST] = m_AssetManager->GetTexture("Ghost.png");
 		Image[OBJ_NPC] = m_AssetManager->GetTexture("empty.png"); //not yet created
 		Image[OBJ_OBJ] = m_AssetManager->GetTexture("empty.png"); //not yet created
-		//Duck::Shader::LoadTexture("../assets/images/FloorTile2.png"); //not yet crea
 		
 		/* ---------- ---------- ---------- */
 
 		/* ---------- Load Font ---------- */
-		m_Graphics->LoadFont("../assets/fonts/Roboto-Bold.ttf", "Roboto");
-		m_Graphics->LoadFont("../assets/fonts/Minecraft.ttf", "Mine");
+		//m_Graphics->LoadFont("../assets/fonts/Roboto-Bold.ttf", "Roboto");
+		//m_Graphics->LoadFont("../assets/fonts/Minecraft.ttf", "Mine");
 		/* ---------- ------------ ---------- */
 
 		/* ---------- Set Gridsize of Game ---------- */
@@ -195,7 +209,7 @@ public:
 
 
 		///* ---------- Updating Systems ---------- */
-		//audioSystem->update();
+		audioSystem->update();
 		physicsSystem->Update(dt, CELL_SIZE);
 		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
@@ -269,8 +283,8 @@ public:
 		if (m_ImGuiLayer->GetUpdated())
 		{
 			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
-m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
-m_ImGuiLayer->SetUpdated();
+			m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
+			m_ImGuiLayer->SetUpdated();
 
 
 		}
@@ -326,6 +340,7 @@ m_ImGuiLayer->SetUpdated();
 		}
 
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), PlayerScale * static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
+		m_Graphics->DrawAnimation(0.f, 0.f, 1.f, 0.f,m_Animation, 1, 4, dt, showBB);
 		m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 		m_Graphics->UpdateCameraZoom(CameraZoom);
 
@@ -340,9 +355,9 @@ m_ImGuiLayer->SetUpdated();
 		m_Graphics->DrawUISquareObject(-120.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
 		m_Graphics->DrawUISquareObject(200.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
 		m_Graphics->DrawUISquareObject(-200.f, 357.5f, 1.f, 0.f, 75.f, 75.f, m_InventorySlot);
-		m_Graphics->RenderText("Inventory", 340.f, 90.f, 0.3f, glm::vec3(1.f, 1.f, 1.f), "Mine");
+		//m_Graphics->RenderText("Inventory", 340.f, 90.f, 0.3f, glm::vec3(1.f, 1.f, 1.f), "Mine");
 
-
+		graphicsSystem->Update();
 
 		m_Graphics->EndScene();
 		//m_Graphics->DrawSquareObject(static_cast<float>((m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX()))), static_cast<float>((m_maplist[Duck::GetMapIndex()]->SnapToCellY(1.f, p_player->getY()))), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
@@ -422,22 +437,6 @@ m_ImGuiLayer->SetUpdated();
 		}
 	}
 
-
-	void playerMovement(double dt) {
-		acceleration = PLAYER_VELOCITY * dt;
-
-		// If the player is currently moving horizontally
-		if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f) {
-			// Update the player's position based on acceleration and velocity
-			p_player->SetPositionX(p_player->getX() + (CELL_SIZE * p_player->getVelocityX() * acceleration));
-		}
-		// If the player is currently moving vertically
-		else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f) {
-			// Update the player's position based on acceleration and velocity
-			p_player->SetPositionY(p_player->getY() + (CELL_SIZE * p_player->getVelocityY() * acceleration));
-		}
-	}
-
 private:
 	Duck::Coordinator ecs;
 
@@ -454,6 +453,7 @@ private:
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	std::shared_ptr<Duck::PhysicsSystem> physicsSystem;
+	std::shared_ptr<Duck::GraphicsSystem> graphicsSystem;
 
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
@@ -462,6 +462,7 @@ private:
 	uint32_t m_GhostTexture;
 	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
 	uint32_t m_InventorySlot;
+	uint32_t m_Animation;
 
 	Duck::Time runtime;
 	int mapindex = 0;
