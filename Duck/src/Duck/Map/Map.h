@@ -47,6 +47,8 @@ namespace Duck {
         int GetMapData();
         int UpdateCellData(int row, int column, int value);
         void FreeMapData();
+        float GetGhostPositionX();
+        float GetGhostPositionY();
         int GetCellValue(int X, int Y);
         std::string GetFile() const;
         int CheckInstanceBinaryMapCollision(float PosX, float PosY,
@@ -59,7 +61,7 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
-        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]);
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, Ghost ghost, uint32_t image[]);
      
     };
 

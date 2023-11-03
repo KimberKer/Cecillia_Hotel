@@ -51,6 +51,7 @@ namespace Duck {
 
 
 		void SetGhostChanged();
+		bool GetGhostChanged();
 
 		std::string GetName();
 

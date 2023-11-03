@@ -15,7 +15,7 @@
 
 namespace Duck {
 
-	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]) {
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, Ghost ghost, uint32_t image[]) {
 		// Reset any game-related variables to their initial values
 
 		// Clear the object list and re-create objects based on the map
@@ -45,7 +45,8 @@ namespace Duck {
 
 		}
 	}
-
+	float MapDataHandler::GetGhostPositionX() { return ghost_x; }
+	float MapDataHandler::GetGhostPositionY() { return ghost_y; }
 	MapDataHandler::MapDataHandler(const std::string& filepath) {
 		filePath = filepath;
 		GetMapData();
