@@ -38,6 +38,7 @@ Hachishakusama:
 
 namespace Duck {
     // Constructor for the Ghost class
+
     Ghost::Ghost() :
         state(State::Idle),
         ghostPositionX(0.0f),
@@ -196,8 +197,9 @@ namespace Duck {
         timeElapsed += deltaTime;
 
         if (chaseSpeed < maxChaseSpeed) {
-            // Increase chaseSpeed to maxChaseSpeed over 5 seconds
-            chaseSpeed += (maxChaseSpeed / 5.0f) * timeElapsed;
+            chaseSpeed += (maxChaseSpeed - chaseSpeed) * (timeElapsed / 10.0f);
+            //DUCK_CORE_INFO("Chase Speed: {0}", chaseSpeed);
+            //DUCK_CORE_INFO("Time: {0}", timeElapsed);
         }
         else {
             // Cap the speed at the maximum limit
@@ -245,7 +247,7 @@ namespace Duck {
     }
 
     void Ghost::SetGhostPositionY(float y) {
-        ghostPositionX = y;
+        ghostPositionY = y;
     }
 
     // Load waypoints from a file

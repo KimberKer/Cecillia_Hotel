@@ -14,6 +14,7 @@
 #include "JiangShi.h"
 
 namespace Duck {
+
 	JiangShi::JiangShi() :
         state(State::Idle),
         roamDuration(0), 

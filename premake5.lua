@@ -1,29 +1,29 @@
 -- Function to check if a command runs successfully
-function commandExists(cmd)
-    local handle = io.popen(cmd)
-    local result = handle:read("*a")
-    handle:close()
-    return result ~= ""
-end
+--function commandExists(cmd)
+ --   local handle = io.popen(cmd)
+  --  local result = handle:read("*a")
+  --  handle:close()
+  --  return result ~= ""
+--end
 
 -- Automatically initialize and update submodules if they aren't already.
-if not os.isdir("Duck/vendor/GLFW/README.md") or 
-   not os.isfile("Duck/vendor/spdlog/README.md") or
-   not os.isfile("Duck/vendor/rapidjson/readme.md") or
-   not os.isfile("Duck/vendor/imgui/premake5.lua") or
-   not os.isfile("Duck/vendor/glm/readme.md") then
+--if not os.isdir("Duck/vendor/GLFW/README.md") or 
+  -- not os.isfile("Duck/vendor/spdlog/README.md") or
+   --not os.isfile("Duck/vendor/rapidjson/readme.md") or
+   --not os.isfile("Duck/vendor/imgui/premake5.lua") or
+   --not os.isfile("Duck/vendor/glm/readme.md") then
     -- Re-initialize and update submodules
     -- Try using WSL's git first
-	if commandExists("wsl git --version") then
-	os.execute("wsl git submodule update --init --recursive")
+	--if commandExists("wsl git --version") then
+	--os.execute("wsl git submodule update --init --recursive")
 	-- Fallback to Windows' git
-	elseif commandExists("git --version") then
-	os.execute("git submodule update --init --recursive")
-	else
+	--elseif commandExists("git --version") then
+	--os.execute("git submodule update --init --recursive")
+	--else
 	-- Handle error: neither WSL's git nor Windows' git is available
-	print("Error: Git is not available in either WSL or Windows.")
-	end
-end
+	--print("Error: Git is not available in either WSL or Windows.")
+	--end
+--end
 
 -- Solution File
 workspace "Duck"
@@ -126,7 +126,7 @@ project "Duck"
 		defines "DUCK_DEBUG"
 		runtime "Debug"
 		symbols "On"
-		links { "fmod_vc.lib", "fmodstudio_vc.lib" }
+		links { "fmod_vc", "fmodstudio_vc" }
 		postbuildcommands {
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmod.dll \"../bin/" ..outputdir.. "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudio.dll \"../bin/" ..outputdir.. "/Sandbox/\"")
@@ -136,7 +136,7 @@ project "Duck"
 		defines "DUCK_RELEASE"
 		runtime "Release"
 		optimize "On"
-		links { "fmodL.lib", "fmodstudioL_vc.lib" }
+		links { "fmodL_vc.lib", "fmodstudioL_vc.lib" }
 		postbuildcommands {
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/core/lib/fmodL.dll \"../bin/" ..outputdir..  "/Sandbox/\""),
 			("{COPY} %{wks.location}/Duck/vendor/FMOD/api/studio/lib/fmodstudioL.dll \"../bin/" ..outputdir..  "/Sandbox/\"")
@@ -179,8 +179,8 @@ project "Sandbox"
 	-- Libs to Include, ".lib" files
 	libdirs {
         --"lib/glfw-3.3.8.bin.WIN64/lib-vc2022"
-		"Duck/vendor/FMOD/api/core/lib",
-		"Duck/vendor/FMOD/api/studio/lib",
+		--"Duck/vendor/FMOD/api/core/lib",
+		--"Duck/vendor/FMOD/api/studio/lib",
 		"Duck/vendor/freetype/release_static/vs2015-2022/win64"
     }
 
@@ -210,4 +210,3 @@ project "Sandbox"
 		defines "DUCK_DIST"
 		runtime "Release"
 		optimize "on"
-

@@ -43,6 +43,8 @@ namespace Duck
         void deactivate();
         void update();
 
+        void audioInputHandler();
+
         void loadSound(std::shared_ptr<AudioComponent> soundInfo);
         void playSound(std::shared_ptr<AudioComponent> soundInfo);
         void stopSound(std::shared_ptr<AudioComponent> soundInfo);

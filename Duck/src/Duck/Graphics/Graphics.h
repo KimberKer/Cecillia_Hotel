@@ -53,8 +53,13 @@ namespace Duck {
 
          void DrawAnimation(float x, float y, float scale, float angle, uint32_t texture, int numRows, int numCols, float dt, const bool ShowBoundingBox);
 
-         int LoadFont(std::string filepath);
-         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
+         void LoadFont(std::string filepath, std::string fontKey);
+         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color, std::string fontKey);
+
+         void StartScene();
+         void EndScene();
+
+         unsigned int GetFramebuffer();
 
         // FONTS
         struct Character {
@@ -68,12 +73,16 @@ namespace Duck {
 
     private:
 
+        Window* m_Window;
+
 		int cols;
 		int rows;
         float TileWidth;
         float TileHeight;
         float TotalWidth;
         float TotalHeight;
+        float WindowWidth;
+        float WindowHeight;
         float uv_x;
         float uv_y;
 
@@ -81,6 +90,9 @@ namespace Duck {
 
         uint32_t m_RendererID{};
 
+        unsigned int FBO;
+        unsigned int FramebufferTexture;
+        unsigned int RBO;
 
 
         //std::map<const std::string, GLuint> Shaders;
@@ -111,10 +123,13 @@ namespace Duck {
         unsigned int m_TextVB;
         std::shared_ptr<Shader> m_TextShader;
 
-        std::map<char, Character> Characters;
+        //std::map<char, Character> Characters;
+        std::map<std::string, std::map<char, Character>> Fonts;
 
         std::shared_ptr<Camera> m_camera;
         std::shared_ptr<Camera> m_UIcamera;
+
+        
 
 
 
