@@ -102,6 +102,8 @@ public:
 
 		//m_CharacterTexture  = Duck::Shader::LoadTexture("../assets/images/Character1.png");
 
+		/* ---------- ---------- ---------- */
+
 		/* ---------- Load Texture ---------- */
 
 		m_Graphics->LoadFont("../assets/fonts/Minecraft.ttf", "Mine");
@@ -117,7 +119,7 @@ public:
 
 		// Creating the objects based on the map 
 		//InitializeMap();
-		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi,Image);
+		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
 
 		//prints map
 		m_maplist[Duck::GetMapIndex()]->printMapData();
@@ -138,9 +140,7 @@ public:
 				Duck::ecs.AddComponent<Duck::GameObject>(
 					ghost,
 					{ objectlist[i]->getX(), objectlist[i]->getY(), 0.0f, 0.0f, 0, Image[OBJ_GHOST], STATE_NONE, OBJ_GHOST}
-
 				);
-				p_ghost = objectlist[i];
 				Duck::ecs.AddComponent<Duck::JiangShi>(
 					ghost,
 					{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), 1.f, 1.f), State::Idle }
@@ -232,14 +232,14 @@ public:
 		}
 
 		else {
-			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi, Image);
+			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
 			showGrid = true;
 		}
 
 		//DUCK_TRACE("{0}", percentMove);
 		if (m_ImGuiLayer->GetUpdated())
 		{
-			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, m_Jiangshi, Image);
+			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
 			m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
 			m_ImGuiLayer->SetUpdated();
 
@@ -256,10 +256,6 @@ public:
 
 		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, static_cast<float>(m_maplist[Duck::GetMapIndex()]->GetHeight()), static_cast<float>(m_maplist[Duck::GetMapIndex()]->GetWidth()));
 		Duck::AABB playerAABB = aabb.ConvertToAABB(static_cast<float>(p_player->getX()), static_cast<float>(p_player->getY()), static_cast<float>(CELL_SIZE), static_cast<float>(CELL_SIZE));
-		if (!m_ImGuiLayer->GetGhostChanged()) {
-			m_Graphics->DrawSquareObject(static_cast<float>((m_map->SnapToCellX(1, m_Jiangshi.GetGhostPositionX()))), static_cast<float>((m_map->SnapToCellY(1.f, m_Jiangshi.GetGhostPositionY()))), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
-			//SET player background image as a floor tile
-		}
 
 		if (m_phy.IsOutOfBounds(windowAABB, playerAABB)) {
 			p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(static_cast<float>(CELL_SIZE), p_player->getX()))); // Adjust as needed
@@ -275,9 +271,10 @@ public:
 
 		m_Graphics->StartScene();
 
-		//draw objects
 		m_Graphics->DrawBackground(Image[OBJ_EMPTY]);
 
+
+		//apply collision and textures
 		for (int i{}; i < objectlist.size(); i++) {
 
 			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), static_cast<float>(CELL_SIZE), static_cast<float>(CELL_SIZE));
@@ -296,7 +293,6 @@ public:
 			//SET player background image as a floor tile
 
 		}
-		m_Graphics->DrawSquareObject(p_ghost->getX(), p_ghost->getY(), static_cast<float>(CELL_SIZE), (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
 		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
 
 		m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
@@ -409,12 +405,11 @@ private:
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
 	Duck::ImGuiLayer* m_ImGuiLayer;
-	Duck::Ghost m_Jiangshi;
+
 	std::vector<std::shared_ptr<Duck::GameObject>> objectlist;
 	std::vector<std::shared_ptr<Duck::MapDataHandler>> m_maplist;
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
-	std::shared_ptr<Duck::GameObject> p_ghost;
 
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	std::shared_ptr<Duck::PhysicsSystem> physicsSystem;

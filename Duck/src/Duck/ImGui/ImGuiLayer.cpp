@@ -75,8 +75,6 @@ namespace Duck {
 
 	void ImGuiLayer::SetGhostChanged() { GhostChanged = !GhostChanged; }
 
-	bool ImGuiLayer::GetGhostChanged() { return GhostChanged; }
-
 
 
 	/******************************************************************************/
