@@ -134,21 +134,20 @@ public:
 		//player 
 
 		////ghost
-		//for (int i{}; i < objectlist.size(); i++) {
-		//	if (objectlist[i]->getObj() == OBJ_GHOST) {
-		//		p_ghost = objectlist[i];
-		//		Duck::Entity ghost = Duck::ecs.CreateEntity();
-		//		Duck::ecs.AddComponent<Duck::GameObject>(
-		//			ghost,
-		//			{ objectlist[i]->getX(), objectlist[i]->getY(), 0.0f, 0.0f, 0, STATE_NONE, OBJ_GHOST }
-		//		);
-		//		Duck::ecs.AddComponent<Duck::JiangShi>(
-		//			ghost,
-		//			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), 1.f, 1.f), State::Idle }
-		//		);
+		for (int i{}; i < objectlist.size(); i++) {
+			if (objectlist[i]->getObj() == OBJ_GHOST) {
+				Duck::Entity ghost = Duck::ecs.CreateEntity();
+				Duck::ecs.AddComponent<Duck::GameObject>(
+					ghost,
+					{ objectlist[i]->getX(), objectlist[i]->getY(), 0.0f, 0.0f, 0, Image[OBJ_GHOST], STATE_NONE, OBJ_GHOST}
+				);
+				Duck::ecs.AddComponent<Duck::JiangShi>(
+					ghost,
+					{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), 1.f, 1.f), State::Idle }
+				);
 
-		//	}
-		//}
+			}
+		}
 
 		//audio entities
 		Duck::Entity bgm = Duck::ecs.CreateEntity();
@@ -412,9 +411,9 @@ private:
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
 
-
 	std::shared_ptr<Duck::AudioSystem> audioSystem;
 	std::shared_ptr<Duck::PhysicsSystem> physicsSystem;
+	std::shared_ptr<Duck::JiangShiSystem> JiangShiSystem;
 
 	Duck::AABB aabb;
 	Duck::PhysicsLib m_phy;
@@ -423,8 +422,6 @@ private:
 	uint32_t m_GhostTexture;
 	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
 	uint32_t m_InventorySlot;
-
-	std::shared_ptr<Duck::JiangShiSystem> JiangShiSystem;
 
 	Duck::Time runtime;
 	int mapindex = 0;
@@ -447,7 +444,6 @@ private:
 	MathLib::Vector2D	initialPosition{};
 	uint32_t			Image[20];
 	float				acceleration = 0;
-	//std::shared_ptr<Duck::JiangShi> JiangShi;
 };
 
 
