@@ -65,18 +65,6 @@ namespace Duck
 			return m_Signatures[entity];
 		}
 
-		bool HasSignature(Entity entity, Signature signature)
-		{
-			if ((m_Signatures[entity] & signature) != 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
 	private:
 		std::queue<Entity> m_AvailableEntities{};
 		std::array<Signature, MAX_ENTITIES> m_Signatures{};
@@ -347,14 +335,6 @@ namespace Duck
 			return m_ComponentManager->GetComponentType<T>();
 		}
 
-		template<typename T>
-		bool HasComponent(Entity entity) const
-		{
-			auto getsignature = m_ComponentManager->GetComponentType<T>();
-			auto bit = pow(2, getsignature);
-
-			return m_EntityManager->HasSignature(entity, Signature((size_t)bit));
-		}
 
 		// System methods
 		template<typename T>

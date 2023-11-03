@@ -5,7 +5,7 @@
 //
 // Brief:   
 //
-// Copyright ï¿½ 2023 DigiPen, All rights reserved.
+// Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 
 /*---------------------------------------------------------
@@ -78,7 +78,7 @@ namespace Duck {
         case State::Idle:
             // Handle the Idle state
             Idle();
-            
+
             // Check if the Idle duration has been exceeded
             if (timeInCurrentState >= idleDuration) {
                 DUCK_CORE_INFO("Ghost idled for: {0}", timeInCurrentState);
@@ -87,6 +87,7 @@ namespace Duck {
                 timeInCurrentState = 0;
             }
             break;
+
         case State::Roaming:
             // Handle the Roaming state
             Roam(deltaTime);

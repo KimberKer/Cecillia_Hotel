@@ -19,7 +19,7 @@ public:
 		Duck::ecs.RegisterComponent<Duck::AudioComponent>();
 		Duck::ecs.RegisterComponent<Duck::GameObject>();
 		Duck::ecs.RegisterComponent<Duck::PlayerComponent>();
-		Duck::ecs.RegisterComponent<Duck::JiangShi>();
+		//Duck::ecs.RegisterComponent<Duck::JiangShi>();
 		/* ---------- ---------- ---------- */
 
 		///* ---------- Register Systems -> init system ---------- */
@@ -48,17 +48,64 @@ public:
 		}
 		physicsSystem->Init();
 
-		JiangShiSystem = Duck::ecs.RegisterSystem<Duck::JiangShiSystem>();
+
+		/*JiangShi = Duck::ecs.RegisterSystem<Duck::JiangShi>();
 		{
 			Duck::Signature signature;
 			signature.set(Duck::ecs.GetComponentType<Duck::JiangShi>());
 			Duck::ecs.SetSystemSignature<Duck::JiangShi>(signature);
-
-			signature.set(Duck::ecs.GetComponentType<Duck::GameObject>());
-			Duck::ecs.SetSystemSignature<Duck::GameObject>(signature);
-		}
+		}*/
 		/* ---------- ---------- ---------- */
 
+		///* ---------- Create Entities ---------- */
+
+
+
+
+		///* ---------- Load Assets ---------- */
+		m_AssetManager = std::unique_ptr<Duck::AssetManager>(new Duck::AssetManager);
+
+		m_AssetManager->LoadAssets();
+
+
+
+
+		//ghost
+		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
+		Duck::ecs.AddComponent<Duck::JiangShi>(
+			ghost,
+			{ 6.f, 3.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(7.f, 7.f, 1.f, 1.f) }
+		);*/
+
+
+		//audio entities
+		Duck::Entity bgm = Duck::ecs.CreateEntity();
+		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
+		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			bgm,
+			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx1,
+			{ "oof", "../assets/audio/oof.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx2,
+			{ "ooz", "../assets/audio/ooz.wav" }
+		);
+
+		Duck::ecs.AddComponent<Duck::AudioComponent>(
+			sfx3,
+			{ "pew", "../assets/audio/pew.wav" }
+		);
+
+
+		/* ---------- ---------- ---------- */
 		/* ---------- Map Functions ---------- */
 		std::shared_ptr<Duck::MapDataHandler> map1 = std::make_shared<Duck::MapDataHandler>("../txtfiles/Map/map1.txt");
 		m_maplist.push_back(map1);
@@ -109,6 +156,9 @@ public:
 		m_Graphics->SetGridSize(static_cast<int>(m_maplist[Duck::GetMapIndex()]->GetHeight()));
 		/* ---------- ---------- ---------- */
 
+
+
+
 		/* ---------- Game Objects ---------- */
 		//create a list of game objects
 		//m_gameobjList = new Duck::GameObject[MAX_NUMBER_OF_OBJ];
@@ -124,54 +174,6 @@ public:
 		PlayerIniPosition = { p_player->getX(), p_player->getY() };
 		m_ImGuiLayer = new Duck::ImGuiLayer(m_maplist, objectlist);
 		Duck::Application::Get().PushOverlay(m_ImGuiLayer);
-
-		///* ---------- Create Entities ---------- */
-
-		//player 
-
-		////ghost
-		//for (int i{}; i < objectlist.size(); i++) {
-		//	if (objectlist[i]->getObj() == OBJ_GHOST) {
-		//		p_ghost = objectlist[i];
-		//		Duck::Entity ghost = Duck::ecs.CreateEntity();
-		//		Duck::ecs.AddComponent<Duck::GameObject>(
-		//			ghost,
-		//			{ objectlist[i]->getX(), objectlist[i]->getY(), 0.0f, 0.0f, 0, STATE_NONE, OBJ_GHOST }
-		//		);
-		//		Duck::ecs.AddComponent<Duck::JiangShi>(
-		//			ghost,
-		//			{ 6.f, 2.f, 0.2f, 0.0f, 1.0f, aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), 1.f, 1.f), State::Idle }
-		//		);
-
-		//	}
-		//}
-
-		//audio entities
-		Duck::Entity bgm = Duck::ecs.CreateEntity();
-		Duck::Entity sfx1 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx2 = Duck::ecs.CreateEntity();
-		Duck::Entity sfx3 = Duck::ecs.CreateEntity();
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			bgm,
-			{ "bgm", "../assets/audio/bgm.wav", true, 0.1f }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx1,
-			{ "oof", "../assets/audio/oof.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx2,
-			{ "ooz", "../assets/audio/ooz.wav" }
-		);
-
-		Duck::ecs.AddComponent<Duck::AudioComponent>(
-			sfx3,
-			{ "pew", "../assets/audio/pew.wav" }
-		);
-		/* ---------- ---------- ---------- */
 
 	}
 
@@ -195,8 +197,7 @@ public:
 		///* ---------- Updating Systems ---------- */
 		//audioSystem->update();
 		physicsSystem->Update(dt, CELL_SIZE);
-		
-		JiangShiSystem->Update(dt);
+		//JiangShi->Update(dt, p_player);
 		/* ---------- ---------- ---------- */
 
 		if (isGamePlaying) {
@@ -225,7 +226,38 @@ public:
 
 
 			// Character's Movement
-			playerMovement(dt);
+			if (!isMoving) {
+				percentMove = 0.0f;
+				if (p_player->getVelocityX() != 0.f || p_player->getVelocityY() != 0.f) {
+					initialPosition = MathLib::Vector2D(p_player->getX(), p_player->getY());
+					isMoving = true;
+				}
+			}
+			else if (p_player->getVelocityX() != 0.f && p_player->getVelocityY() == 0.0f && isMoving) {
+				percentMove += PLAYER_VELOCITY * dt;
+				if (percentMove >= 1.0f) {
+					p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX()));
+					percentMove = 0.0f;
+					isMoving = false;
+				}
+				else {
+					p_player->SetPositionX(initialPosition.x + (CELL_SIZE * p_player->getVelocityX() * percentMove));
+					isMoving = false;
+				}
+			}
+			else if (p_player->getVelocityY() != 0.f && p_player->getVelocityX() == 0.0f && isMoving) {
+				percentMove += PLAYER_VELOCITY * dt;
+				if (percentMove >= 1.0f) {
+					p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY()));
+					percentMove = 0.0f;
+					isMoving = false;
+				}
+				else {
+					p_player->SetPositionY(initialPosition.y + (CELL_SIZE * p_player->getVelocityY() * percentMove));
+					isMoving = false;
+				}
+			}
+
 		}
 
 		else {
@@ -283,14 +315,6 @@ m_ImGuiLayer->SetUpdated();
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
 				}
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
-
-
-			}
-			//SET player background image as a floor tile
-
-		}
-		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
 
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)ObjectOrientation, objectlist[i]->GetImage(), showBB);
 
@@ -398,6 +422,7 @@ m_ImGuiLayer->SetUpdated();
 		}
 	}
 
+
 	void playerMovement(double dt) {
 		acceleration = PLAYER_VELOCITY * dt;
 
@@ -437,8 +462,6 @@ private:
 	uint32_t m_GhostTexture;
 	uint32_t m_BackgroundTexture, m_BackgroundTexture2;
 	uint32_t m_InventorySlot;
-
-	std::shared_ptr<Duck::JiangShiSystem> JiangShiSystem;
 
 	Duck::Time runtime;
 	int mapindex = 0;
@@ -482,3 +505,5 @@ public:
 Duck::Application* Duck::CreateApplication() {
 	return new Sandbox();
 }
+
+
