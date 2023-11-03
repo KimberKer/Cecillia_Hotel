@@ -1,3 +1,15 @@
+//---------------------------------------------------------
+// File:    JiangShi.cpp
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:   Contain the function for JiangShi component.
+//          Constructor, destructor, and reading waypoint
+//          from txt file.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
 #include "duckpch.h"
 #include "JiangShi.h"
 

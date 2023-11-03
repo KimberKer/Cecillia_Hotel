@@ -1455,6 +1455,8 @@
       <Filter>src\Duck\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Ghost\JiangShi.h" />
+    <ClInclude Include="src\Duck\Asset Manager\AssetManager.h" />
+    <ClInclude Include="src\Duck\Asset Manager\Asset.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1551,5 +1553,7 @@
     </ClCompile>
     <ClCompile Include="src\Duck\Ghost\JiangShi.cpp" />
     <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp" />
+    <ClCompile Include="src\Duck\Asset Manager\Asset.cpp" />
+    <ClCompile Include="src\Duck\Asset Manager\AssetManager.cpp" />
   </ItemGroup>
 </Project>

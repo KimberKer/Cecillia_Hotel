@@ -78,7 +78,7 @@ public:
 		// Creating the objects based on the map 
 		//InitializeMap();
 		m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player);
-
+		 
 		//prints map
 		m_maplist[Duck::GetMapIndex()]->printMapData();
 
@@ -94,6 +94,7 @@ public:
 		//ghost
 		for (int i{}; i < objectlist.size(); i++) {
 			if (objectlist[i]->getObj() == OBJ_GHOST) {
+				p_ghost = objectlist[i];
 				Duck::Entity ghost = Duck::ecs.CreateEntity();
 				Duck::ecs.AddComponent<Duck::GameObject>(
 					ghost,
@@ -229,12 +230,11 @@ public:
 			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_BackgroundTexture2, showBB);
 		}
 		if (objectlist[i]->getObj() == OBJ_GHOST) {
-			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
-			DUCK_CORE_TRACE("{0}, {1}", objectlist[i]->getX(), objectlist[i]->getY());
+			m_Graphics->DrawSquareObject(p_ghost->getX(), p_ghost->getY(), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
 		}
 		
 	}
-	
+
 	m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, m_CharacterTexture, showBB);
 	m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 
@@ -370,6 +370,7 @@ private:
 	std::vector<std::shared_ptr<Duck::MapDataHandler>> m_maplist;
 	std::shared_ptr<Duck::GameObject> m_gameobjList;
 	std::shared_ptr<Duck::GameObject> p_player;
+	std::shared_ptr<Duck::GameObject> p_ghost;
 
 
 	Duck::AABB aabb;

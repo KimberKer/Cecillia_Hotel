@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:    JiangShi.h
+//authors:	Kimber Ker Soon Kiat
+// email:	s.ker\@digipen.edu
+// 
+//
+// Brief:   Contain the declaration for JiangShi component.
+//
+// Copyright © 2023 DigiPen, All rights reserved.
+//---------------------------------------------------------
 #pragma once
 
 #ifndef JIANGSHI_H
@@ -96,9 +106,9 @@ namespace Duck {
     public:
         void Update(double deltaTime);
         void Idle();
-        void Roam(double deltaTime, GameObject &ghost, JiangShi &jiangshi);
-        void Chase(double deltaTime, GameObject obj, JiangShi jiangshi);
-        bool IsPlayerNearby(GameObject obj);
+        void Roam(double deltaTime, GameObject& ghost, JiangShi &jiangshi);
+        void Chase(double deltaTime, GameObject& ghost, JiangShi jiangshi);
+        bool IsPlayerNearby(GameObject& ghost);
     };  
 }
 #endif

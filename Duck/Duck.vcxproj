@@ -111,6 +111,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
+    <ClInclude Include="src\Duck\Asset Manager\Asset.h" />
+    <ClInclude Include="src\Duck\Asset Manager\AssetManager.h" />
     <ClInclude Include="src\Duck\Audio\Audio.h" />
     <ClInclude Include="src\Duck\Audio\AudioComponent.h" />
     <ClInclude Include="src\Duck\Core.h" />
@@ -569,6 +571,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\Asset Manager\Asset.cpp" />
+    <ClCompile Include="src\Duck\Asset Manager\AssetManager.cpp" />
     <ClCompile Include="src\Duck\Audio\Audio.cpp" />
     <ClCompile Include="src\Duck\CoreManager.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
