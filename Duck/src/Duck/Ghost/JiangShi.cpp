@@ -45,6 +45,7 @@ namespace Duck {
         timeInCurrentState(0),
         waypoints(ReadWaypointsFromFile("../txtfiles/waypoints.txt"))
     {
+        srand(static_cast<unsigned int>(time(nullptr)));
     }
 
     std::vector<MathLib::Vector2D> JiangShi::ReadWaypointsFromFile(const std::string& filename) {
