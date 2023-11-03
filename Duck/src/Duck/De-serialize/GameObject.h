@@ -98,6 +98,26 @@ namespace Duck {
 		// Function to load player data
 		void loadPlayerData();
 
+		//copy assignment
+		GameObject& operator=(const GameObject& other) {
+			if (this == &other) {
+				return *this;  // Self-assignment, no action needed
+			}
+
+			// Copy member variables from 'other' to 'this'
+			this->x = other.x;
+			this->y = other.y;
+			this->velocityX = other.velocityX;
+			this->velocityY = other.velocityY;
+			this->gridCollisionFlag = other.gridCollisionFlag;
+			this->state = other.state;
+			this->obj_type = other.obj_type;
+
+			// You may need to copy other members as well
+
+			return *this;
+		}
+
 	private:
 		float x;
 		float y;
