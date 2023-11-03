@@ -322,14 +322,14 @@ public:
 
 
 		//draw objects
-		m_Graphics->DrawBackground(objectlist[OBJ_EMPTY]->GetImage());
+		m_Graphics->DrawBackground(Image[OBJ_EMPTY]);
 
 
 		for (int i{}; i < objectlist.size(); i++) {
 			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
 			Duck::AABB ghostAABB = aabb.ConvertToAABB(m_Jiangshi.GetGhostPositionX(), m_Jiangshi.GetGhostPositionY(), CELL_SIZE, CELL_SIZE);
-			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_EMPTY && objectlist[i]->getObj() != OBJ_GHOST) {
-				if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
+			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
+				if (objectlist[i]->getObj() != OBJ_EMPTY && m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
 					DUCK_CORE_INFO("Player: Collision Detected!");
 					p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX())));
 					p_player->SetPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, p_player->getY())));
@@ -338,17 +338,15 @@ public:
 					isMoving = false;
 				}
 				//wall collides with ghost
-				if ((m_phy.CollisionIntersection_RectRect(ghostAABB, { m_Jiangshi.getVelocityX(), m_Jiangshi.getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt))) {
+				if ((objectlist[i]->getObj() != OBJ_EMPTY && m_phy.CollisionIntersection_RectRect(ghostAABB, { m_Jiangshi.getVelocityX(), m_Jiangshi.getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt))) {
 					m_Jiangshi.SetGhostPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, m_Jiangshi.GetGhostPositionX())));
 					m_Jiangshi.SetGhostPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, m_Jiangshi.GetGhostPositionY())));
 					m_Jiangshi.SetVelocityX(0);
 					m_Jiangshi.SetVelocityY(0);
 				}
 		
-				
-			}
-			if (objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
 				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
+				
 			}
 		}
 		if (!m_ImGuiLayer->GetGhostChanged()) {
