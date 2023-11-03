@@ -44,7 +44,6 @@ namespace Duck {
 
         // Draws a square object at the specified position with optional rotation and texture.
          void DrawSquareObject(const float PosX, const float PosY, const float scale, const float angle, const uint32_t texture, const bool ShowBoundingBox);
-         void DrawAnimatedSquareObject(const float PosX, const float PosY, const float scale, const float angle, const uint32_t texture, const bool ShowBoundingBox, float dt);
 
          void DrawUISquareObject(const float PosX, const float PosY, const float Scale, const float angle, const float ObjHeight, const float ObjWidth, const uint32_t texture);
 
@@ -58,8 +57,6 @@ namespace Duck {
 
          void StartScene();
          void EndScene();
-
-         unsigned int GetFramebuffer();
 
         // FONTS
         struct Character {
@@ -90,14 +87,6 @@ namespace Duck {
 
         uint32_t m_RendererID{};
 
-        unsigned int FBO;
-        unsigned int FramebufferTexture;
-        unsigned int RBO;
-
-
-        //std::map<const std::string, GLuint> Shaders;
-        //std::map<const std::string, GLuint> Textures;
-
         std::shared_ptr<VertexArray> m_TriangleVA;
         std::shared_ptr<Shader> m_TriangleShader;
 
@@ -123,7 +112,6 @@ namespace Duck {
         unsigned int m_TextVB;
         std::shared_ptr<Shader> m_TextShader;
 
-        //std::map<char, Character> Characters;
         std::map<std::string, std::map<char, Character>> Fonts;
 
         std::shared_ptr<Camera> m_camera;

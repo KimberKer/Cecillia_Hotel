@@ -441,6 +441,7 @@ namespace Duck {
 				else {
 					std::cout << name.c_str() << std::endl;
 					m_objList[(y_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (x_pvalue - 1)]->SetImage(Shader::LoadTexture(name.c_str()));
+					m_objList[(y_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (x_pvalue - 1)]->SetImage(Shader::LoadTexture(name.c_str()));
 					//m_objList[0]->SetImage(Shader::LoadTexture(name.c_str()));
 				}
 

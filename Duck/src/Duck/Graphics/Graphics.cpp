@@ -4,7 +4,7 @@
 // email:	ahmadmahdi.b@digipen.edu
 // 
 //
-// Brief:     This file contains the definitions of the 
+// Brief:   This file contains the definitions of the 
 //          Graphics class, which handles rendering objects 
 //          in a 2D grid-based environment. It uses OpenGL 
 //          for rendering.
@@ -53,57 +53,27 @@ namespace Duck {
 };
        //glm::ortho(-(window->GetWidth()/2), (window->GetWidth() / 2), (window->GetHeight() / 2), -(window->GetHeight() / 2));
 
-        // Framebuffer
-
-        //glGenFramebuffers(1, &FBO);
-        //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-        //
-        //glGenTextures(1,&FramebufferTexture);
-        //glBindTexture(GL_TEXTURE_2D, FramebufferTexture);
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window.GetWidth(), window.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FramebufferTexture, 0);
-
-
-        //auto FBOstatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        //if (FBOstatus != GL_FRAMEBUFFER_COMPLETE) {
-
-        //    std::cout << "Framebuffer error: " << FBOstatus << std::endl;
-
-        //}
 
 
 
 
 
-        // Animation Variables
-
-        //SPframe = 2.f;
-        //timeNow = timeOld = 0.f;
-        //uv_x = 0.f;
-        //uv_y = 1.f;
 
         uv_x = 0.0f, uv_y = 2.0f;
-        //timeNow, timeOld, time_delta, SPframe;
         SPframe = 4.0f;
         timeNow = timeOld = static_cast<float>(glfwGetTime());
 
 
 
-        // Initialize Camera
+        //////////////////////////////// LOAD CAMERA /////////////////////////////
 
         m_camera.reset(new Camera(0.f,0.f));
         m_UIcamera.reset(new Camera(0.f, 0.f));
 
 
-        /////////////////////////////////// LOAD FONTS ////////////////////////////////
-
-
-        //LoadFont("../fonts/Roboto-Bold.ttf",);
-
+        ///////////////////////////////////////////////////////////////////////
+        ///                    VERTEX ARRAY INIT                           ///
+        ///////////////////////////////////////////////////////////////////////
 
         /////////////////////////////// TRIANGLES /////////////////////////////
 
@@ -309,20 +279,7 @@ namespace Duck {
         m_SquareSprVA->SetPrimitiveType(GL_TRIANGLES);
 
 
-
-
-
-
-        /////////////////////////////// FONTS //////////////////////////////
-
-        //LoadFont( "../assets/fonts/arial.ttf");
-
-
-
         /////////////////////////////// SHADERS /////////////////////////////
-
-        // IMPLEMENT ASSET MANAGER HERE
-
 
         // Load vertex and fragment shader.
 
@@ -377,9 +334,6 @@ namespace Duck {
     Graphics::~Graphics() {
 
 
-
-            
-
     }
 
 
@@ -406,9 +360,7 @@ namespace Duck {
     // Renders a grid overlay on the screen based on the current grid size.
 	void Graphics::ShowGrid() {
 
-        float xOffset = TileWidth;
-            //TileWidth;
-            
+        float xOffset = TileWidth;            
 		float yOffset = TileHeight;
 
         float xMax = (TotalWidth / 2.f);
@@ -444,7 +396,8 @@ namespace Duck {
 
 
     // Draws a square object at the specified position with optional rotation and texture.
-	void Graphics::DrawSquareObject(const float PosX, const float PosY, const float Scale, const float angle, const uint32_t texture, const bool ShowBoundingBox) {
+	void Graphics::DrawSquareObject(const float PosX, const float PosY, const float Scale, const float angle, const uint32_t texture, const bool ShowBoundingBox) 
+    {
 
 
         float scale = Scale / 2.f;
@@ -469,10 +422,10 @@ namespace Duck {
             glLineWidth(3.f);
 
             float LineAngle{ 90.0f };
-            float halfWidth = TileWidth / 2.f;
-                //(2.f / (float)cols);
-            float halfHeight = TileHeight / 2.f;
-                //2.f / (float)rows;
+            float halfWidth = TileWidth * scale;
+                
+            float halfHeight = TileHeight * scale;
+                
 
 
             glm::vec3 Pos1 = glm::vec3(
@@ -529,127 +482,22 @@ namespace Duck {
 	}
 
 
+    // Update the camera position based on provided world coordinates (x, y).
     void Graphics::UpdateCameraPos(float x, float y) {
 
+        // Translate world coordinates to screen coordinates by multiplying with TileWidth and TileHeight.
+        // Call the Camera class's UpdateCamPos function with the translated coordinates.
         m_camera->UpdateCamPos(x * TileWidth, y * TileHeight);
 
     }
 
+    // Update the camera zoom factor.
     void Graphics::UpdateCameraZoom(float zoom) {
 
+        // Call the Camera class's UpdateCamZoom function with the provided zoom factor.
         m_camera->UpdateCamZoom(zoom);
 
     }
-
-
-
-
-    // Draws a square object at the specified position with optional rotation and texture.
-    void Graphics::DrawAnimatedSquareObject(const float PosX, const float PosY, const float Scale, const float angle, const uint32_t texture, const bool ShowBoundingBox, float dt) {
-
-
-        float scale = Scale / 2.f;
-
-
-        float x = (PosX * TileWidth);
-
-        float y = -(PosY * TileHeight);
-
-
-
-        glm::vec3 Pos{ x,y ,0.0f };
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), Pos);
-        transform = glm::rotate(transform, glm::radians(angle), glm::vec3(0, 0, 1));
-        transform = glm::scale(transform, glm::vec3(TileWidth * scale, TileHeight * scale, 1.0f));
-        transform = mProj * m_camera->getViewMatrix() * transform;
-        Renderer::Submit(m_SquareImgVA, m_SquareImgShader, transform, texture);
-
-
-
-        // Draws the square bounding box if required.
-        if (ShowBoundingBox) {
-
-
-            glLineWidth(3.f);
-
-            float LineAngle{ 90.0f };
-            float halfWidth = TileWidth / 2.f;
-            //(2.f / (float)cols);
-            float halfHeight = TileHeight / 2.f;
-            //2.f / (float)rows;
-
-
-            glm::vec3 Pos1 = glm::vec3(
-                x + halfWidth * cos(glm::radians(angle)),
-                y + halfWidth * sin(glm::radians(angle)),
-                0.0f
-            );
-            glm::mat4 transform1 = glm::translate(glm::mat4(1.0f), Pos1);
-            transform1 = glm::rotate(transform1, glm::radians(angle + LineAngle), glm::vec3(0, 0, 1));
-            transform1 = glm::scale(transform1, glm::vec3(TileWidth * scale, TileHeight * scale, 1.0f));
-            transform1 = mProj * m_camera->getViewMatrix() * transform1;
-            Renderer::Submit(m_LineVA, m_BoundingLineShader, transform1);
-
-
-            glm::vec3 Pos2 = glm::vec3(
-                x - halfWidth * cos(glm::radians(angle)),
-                y - halfWidth * sin(glm::radians(angle)),
-                0.0f
-            );
-            glm::mat4 transform2 = glm::translate(glm::mat4(1.0f), Pos2);
-            transform2 = glm::rotate(transform2, glm::radians(angle + LineAngle), glm::vec3(0, 0, 1));
-            transform2 = glm::scale(transform2, glm::vec3(TileWidth * scale, TileHeight * scale, 1.0f));
-            transform2 = mProj * m_camera->getViewMatrix() * transform2;
-            Renderer::Submit(m_LineVA, m_BoundingLineShader, transform2);
-
-
-            glm::vec3 Pos3 = glm::vec3(
-                x + halfWidth * cos(glm::radians(angle + LineAngle)),
-                y + halfWidth * sin(glm::radians(angle + LineAngle)),
-                0.0f
-            );
-            glm::mat4 transform3 = glm::translate(glm::mat4(1.0f), Pos3);
-            transform3 = glm::rotate(transform3, glm::radians(angle), glm::vec3(0, 0, 1));
-            transform3 = glm::scale(transform3, glm::vec3(TileWidth * scale, TileHeight * scale, 1.0f));
-            transform3 = mProj * m_camera->getViewMatrix() * transform3;
-            Renderer::Submit(m_LineVA, m_BoundingLineShader, transform3);
-
-
-            glm::vec3 Pos4 = glm::vec3(
-                x - halfWidth * cos(glm::radians(angle + LineAngle)),
-                y - halfWidth * sin(glm::radians(angle + LineAngle)),
-                0.0f
-            );
-            glm::mat4 transform4 = glm::translate(glm::mat4(1.0f), Pos4);
-            transform4 = glm::rotate(transform4, glm::radians(angle), glm::vec3(0, 0, 1));
-            transform4 = glm::scale(transform4, glm::vec3(TileWidth * scale, TileHeight * scale, 1.0f));
-            transform4 = mProj * m_camera->getViewMatrix() * transform4;
-            Renderer::Submit(m_LineVA, m_BoundingLineShader, transform4);
-
-
-            glLineWidth(1.f);
-        }
-
-    }
-
-
-
-
-
-
-    // Draws a square animation frame at the specified position using the provided vertex array, shader, and texture.
-	void DrawSquareAnimation(float PosX, float PosY, std::shared_ptr<VertexArray> VA, std::shared_ptr<Shader> shader, uint32_t texture) {
-
-		float x = (PosX * 0.2f) - 0.9f;
-		float y = -(PosX * 0.2f) + 0.9f;
-
-
-		glm::vec3 Pos{ x,y ,0.0f };
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), Pos);
-		transform = glm::scale(transform, glm::vec3(0.1f, 0.1f, 1.0f));
-		Renderer::Submit(VA, shader, transform, texture);
-
-	}
 
 
     // Draws a square animation frame at the specified position using the provided vertex array, shader, and texture.
@@ -678,9 +526,6 @@ namespace Duck {
 
 
         m_SquareSprShader->Bind();
-        //glBindTexture(GL_TEXTURE_2D, texture);
-        //m_SquareSprShader->UploadUniformFloat("x_dir", x);
-        //m_SquareSprShader->UploadUniformFloat("y_dir", y);
         m_SquareSprShader->UploadUniformFloat("uv_x", uv_x);
         m_SquareSprShader->UploadUniformFloat("uv_y", uv_y);
         m_SquareSprShader->UploadUniformFloat("nx_frames", numCols);
@@ -691,29 +536,8 @@ namespace Duck {
         glBindTexture(GL_TEXTURE_2D, texture);
 
         m_SquareSprShader->UploadUniformInt("u_Tex", 0);
-
-
         m_SquareSprVA->Bind();
-
-
         RenderCommand::DrawIndex(m_SquareSprVA);
-
-
-
-
-        //Renderer::Submit(m_SquareSprVA, m_SquareSprShader, transform, texture);
-        
-        //
-        //m_SquareSprVA->Bind();
-
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        //m_SquareSprShader->Unbind();
-
-
-
-
-
 
         // Draws the square bounding box if required.
         if (ShowBoundingBox) {
@@ -722,9 +546,9 @@ namespace Duck {
             glLineWidth(3.f);
 
             float LineAngle{ 90.0f };
-            float halfWidth = TileWidth / 2.f;
+            float halfWidth = TileWidth * scale / 2.f;
             //(2.f / (float)cols);
-            float halfHeight = TileHeight / 2.f;
+            float halfHeight = TileHeight * scale / 2.f;
             //2.f / (float)rows;
 
 
@@ -779,10 +603,7 @@ namespace Duck {
             glLineWidth(1.f);
         }
 
-
-
 	}
-
 
 
 
@@ -914,9 +735,6 @@ namespace Duck {
 
     }
 
-
-
-
     void Graphics::RenderText(std::string text, float x, float y, float scale, glm::vec3 color, std::string fontKey)
     {
 
@@ -924,10 +742,8 @@ namespace Duck {
         m_TextShader->Bind();
         m_TextShader->UploadUniform3f("textColor", color);
         m_TextShader->UploadUniformMat4("projection", glm::mat4(glm::ortho(0.f,800.f,0.f,800.f)));
-        //glUniform3f(glGetUniformLocation(s.Program, "textColor"), color.x, color.y, color.z);
         glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(m_TextVA);
-
 
         std::map<char, Character> Characters = Fonts[fontKey];
 
@@ -972,72 +788,15 @@ namespace Duck {
 
     void Graphics::StartScene() {
 
-        //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-        glViewport(0, 0, WindowWidth, static_cast<GLsizei>(WindowHeight));
+        glViewport(0, 0, WindowWidth, WindowHeight);
 
     }
-
-    //void Graphics::StartScene() {
-    //    // Set up framebuffer
-    //    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-    //    // Set up viewport to match framebuffer size
-    //    int framebufferWidth, framebufferHeight;
-    //    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, &framebufferWidth);
-    //    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, &framebufferHeight);
-    //    glViewport(0, 0, framebufferWidth, framebufferHeight);
-
-    //    // Clear the framebuffer
-    //    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear depth buffer if used
-
-    //    // Set up other scene-specific configurations as needed
-    //}
-
-
-
-    //void Graphics::EndScene() {
-    //    // Unbind the framebuffer
-    //    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    //    // Set up the viewport to match the screen size
-    //    int screenWidth, screenHeight;
-    //    glfwGetFramebufferSize(m_Window->GetNativeWindow(), &screenWidth, &screenHeight);
-    //    glViewport(0, 0, screenWidth, screenHeight);
-
-    //    // Clear the screen
-    //    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    //    glClear(GL_COLOR_BUFFER_BIT);
-
-    //    // Use the shader and VAO for rendering the framebuffer texture
-    //    m_SquareImgShader->Bind();
-    //    //glUseProgram(/* Shader Program for rendering texture */);
-    //    m_SquareImgVA->Bind();
-    //    //glBindVertexArray(/* Fullscreen Quad VAO */);
-    //    glBindTexture(GL_TEXTURE_2D, FramebufferTexture);  // Use the texture attached to the framebuffer
-
-    //    // Draw the fullscreen quad
-    //    glDrawArrays(GL_TRIANGLES, 0, 6);  // Assuming you have a fullscreen quad VAO with 6 vertices
-    //}
-
-
 
     void Graphics::EndScene() {
 
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        //glViewport(500, 500, WindowWidth, WindowHeight);
         glfwPollEvents();
 
     }
-
-    unsigned int Graphics::GetFramebuffer() {
-
-        return FBO;
-
-    }
-
-
-
 
 
 }

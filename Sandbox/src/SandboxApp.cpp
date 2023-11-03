@@ -59,6 +59,17 @@ public:
 
 		///* ---------- Create Entities ---------- */
 
+
+
+
+		///* ---------- Load Assets ---------- */
+		m_AssetManager = std::unique_ptr<Duck::AssetManager>(new Duck::AssetManager);
+
+		m_AssetManager->LoadAssets();
+
+
+
+
 		//ghost
 		/*Duck::Entity ghost = Duck::ecs.CreateEntity();
 		Duck::ecs.AddComponent<Duck::JiangShi>(
@@ -110,38 +121,34 @@ public:
 		m_Graphics = std::unique_ptr<Duck::Graphics>(new Duck::Graphics(Duck::Application::Get().GetWindow()));
 
 
-		static std::vector<std::filesystem::directory_entry> assetEntries;
-		static std::filesystem::path currentAssetDirectory("../assets/images/");
-		//std::vector<uint32_t> assets;
-		for (const auto& entry : std::filesystem::directory_iterator(currentAssetDirectory)) {
-			assetEntries.push_back(entry);
-		}
-		for (int i = 0; i < assetEntries.size(); i++) {
-			std::filesystem::path entryPath = assetEntries[i].path();
-			std::string assetName = entryPath.filename().string();
+		//static std::vector<std::filesystem::directory_entry> assetEntries;
+		//static std::filesystem::path currentAssetDirectory("../assets/images/");
+		////std::vector<uint32_t> assets;
+		//for (const auto& entry : std::filesystem::directory_iterator(currentAssetDirectory)) {
+		//	assetEntries.push_back(entry);
+		//}
+		//for (int i = 0; i < assetEntries.size(); i++) {
+		//	std::filesystem::path entryPath = assetEntries[i].path();
+		//	std::string assetName = entryPath.filename().string();
 
-			std::string image = "../assets/images/" + assetName;
+		//	std::string image = "../assets/images/" + assetName;
 
-			Duck::Shader::LoadTexture(image.c_str());
-		}
-		m_InventorySlot = Duck::Shader::LoadTexture("../assets/images/InventorySlot.jpeg");
-		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/FloorTile5.jpg");
-		Image[OBJ_PLAYER] = Duck::Shader::LoadTexture("../assets/images/Character1.png");
-		Image[OBJ_WALL] = Duck::Shader::LoadTexture("../assets/images/WallTile1.png");
-		Image[OBJ_GHOST] = Duck::Shader::LoadTexture("../assets/images/Ghost.png");
-		Image[OBJ_NPC] = Duck::Shader::LoadTexture("../assets/images/empty.png"); //not yet created
-		Image[OBJ_OBJ] = Duck::Shader::LoadTexture("../assets/images/empty.png"); //not yet created
-		Duck::Shader::LoadTexture("../assets/images/FloorTile2.png"); //not yet created
-
-		//uint32_t hello = Duck::Shader::LoadTexture("../assets/images/FloorTile5.jpg");
-
-
-		//m_CharacterTexture  = Duck::Shader::LoadTexture("../assets/images/Character1.png");
-
+		//	Duck::Shader::LoadTexture(image.c_str());
+		//}
+		//m_InventorySlot = m_AssetManager->GetTexture("InventorySlot.jpeg");
+		m_InventorySlot = m_AssetManager->GetTexture("InventorySlot.jpeg");
+		Image[OBJ_EMPTY] = m_AssetManager->GetTexture("FloorTile5.jpg");
+		Image[OBJ_PLAYER] = m_AssetManager->GetTexture("Character1.png");
+		Image[OBJ_WALL] = m_AssetManager->GetTexture("WallTile1.png");
+		Image[OBJ_GHOST] = m_AssetManager->GetTexture("Ghost.png");
+		Image[OBJ_NPC] = m_AssetManager->GetTexture("empty.png"); //not yet created
+		Image[OBJ_OBJ] = m_AssetManager->GetTexture("empty.png"); //not yet created
+		//Duck::Shader::LoadTexture("../assets/images/FloorTile2.png"); //not yet crea
+		
 		/* ---------- ---------- ---------- */
 
-		/* ---------- Load Texture ---------- */
-
+		/* ---------- Load Font ---------- */
+		m_Graphics->LoadFont("../assets/fonts/Roboto-Bold.ttf", "Roboto");
 		m_Graphics->LoadFont("../assets/fonts/Minecraft.ttf", "Mine");
 		/* ---------- ------------ ---------- */
 
@@ -262,8 +269,8 @@ public:
 		if (m_ImGuiLayer->GetUpdated())
 		{
 			m_maplist[Duck::GetMapIndex()]->InitializeMap(objectlist, m_gameobjList, p_player, Image);
-			m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
-			m_ImGuiLayer->SetUpdated();
+m_ImGuiLayer->UpdateObjects(m_maplist, objectlist);
+m_ImGuiLayer->SetUpdated();
 
 
 		}
@@ -298,27 +305,29 @@ public:
 
 		//apply collision and textures
 		for (int i{}; i < objectlist.size(); i++) {
-			
-			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), static_cast<float>(CELL_SIZE), static_cast<float>( CELL_SIZE));
+
+			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), static_cast<float>(CELL_SIZE), static_cast<float>(CELL_SIZE));
 			if (objectlist[i]->getObj() != OBJ_EMPTY && objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
-				if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
+				if (objectlist[i]->getObj() != OBJ_EMPTY && m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
 					DUCK_CORE_INFO("Player: Collision Detected!");
 					p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(1, p_player->getX())));
 					p_player->SetPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(1, p_player->getY())));
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
 				}
-					m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
-				
-				
-			}
-			//SET player background image as a floor tile
-	
-		}
-				m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
 
+				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)ObjectOrientation, objectlist[i]->GetImage(), showBB);
+
+			}
+
+			
+			//SET player background image as a floor tile
+
+		}
+
+		m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), PlayerScale * static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
 		m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
-		//m_Graphics->UpdateCameraPos(5.f,5.f);
+		m_Graphics->UpdateCameraZoom(CameraZoom);
 
 
 		if (showGrid) {
@@ -363,6 +372,13 @@ public:
 			else if (keyEvent.GetKeyCode() == Duck::Key::R) {
 				PlayerOrientation = (PlayerOrientation + 90) % 360;
 			}
+			else if (keyEvent.GetKeyCode() == Duck::Key::T) {
+				PlayerScale = (PlayerScale == 1.f) ? 2.f : (PlayerScale == 2.f) ? 0.5f : 1.f;
+			}
+			else if (keyEvent.GetKeyCode() == Duck::Key::Y) {
+				CameraZoom = (CameraZoom == 1.f) ? 1.2f : (CameraZoom == 1.2f) ? 1.5f : 1.f;
+			}
+
 		}
 
 		if (event.GetEventType() == Duck::EventType::KeyPressed) {
@@ -427,6 +443,7 @@ private:
 
 	std::shared_ptr<Duck::MapDataHandler> m_map;
 	std::unique_ptr<Duck::Graphics> m_Graphics;
+	std::unique_ptr<Duck::AssetManager> m_AssetManager{};
 	Duck::ImGuiLayer* m_ImGuiLayer;
 
 	std::vector<std::shared_ptr<Duck::GameObject>> objectlist;
@@ -462,6 +479,9 @@ private:
 	MathLib::Vector2D	PlayerIniPosition{};
 
 	int					PlayerOrientation = 0;
+	float				PlayerScale = 1.f;
+	float				ObjectOrientation = 0.f;
+	float				CameraZoom = 1.f;
 	bool				isMoving = false;
 	float				percentMove{};
 	MathLib::Vector2D	initialPosition{};

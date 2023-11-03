@@ -20,6 +20,8 @@
 #include "Duck/Player/PlayerComponent.h"
 #include "Duck/Physics/PhysicsSystem.h"
 
+#include "Duck/AssetManager.h"
+
 #include "Duck/ImGui/ImGuiLayer.h"
 
 // -- ECS --

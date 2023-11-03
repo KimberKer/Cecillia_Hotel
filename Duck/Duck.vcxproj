@@ -111,6 +111,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
   <ItemGroup>
     <ClInclude Include="src\Duck.h" />
     <ClInclude Include="src\Duck\Application.h" />
+    <ClInclude Include="src\Duck\AssetManager.h" />
     <ClInclude Include="src\Duck\Audio\Audio.h" />
     <ClInclude Include="src\Duck\Audio\AudioComponent.h" />
     <ClInclude Include="src\Duck\Core.h" />
@@ -142,8 +143,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClInclude Include="src\Duck\Math\Matrix3x3.h" />
     <ClInclude Include="src\Duck\Math\Vector2D.h" />
     <ClInclude Include="src\Duck\MouseCodes.h" />
-    <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Physics\PhysicsSystem.h" />
+    <ClInclude Include="src\Duck\Physics\collision.h" />
     <ClInclude Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Duck\Platform\Windows\WindowsWindows.h" />
@@ -572,6 +573,7 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp" />
+    <ClCompile Include="src\Duck\AssetManager.cpp" />
     <ClCompile Include="src\Duck\Audio\Audio.cpp" />
     <ClCompile Include="src\Duck\CoreManager.cpp" />
     <ClCompile Include="src\Duck\De-serialize\GameObject.cpp" />
@@ -596,8 +598,8 @@ IF EXIST $(SolutionDir)\Duck\vendor\FMOD\api\studio\lib\fmodstudioL.dll\ (xcopy 
     <ClCompile Include="src\Duck\Math\Matrix3x3.cpp" />
     <ClCompile Include="src\Duck\Math\Vector2D.cpp" />
     <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp" />
-    <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Physics\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Duck\Physics\collision.cpp" />
     <ClCompile Include="src\Duck\Platform\OpenGL\ImGuiOpenGL_Renderer.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Duck\Platform\Windows\WindowsWindows.cpp" />

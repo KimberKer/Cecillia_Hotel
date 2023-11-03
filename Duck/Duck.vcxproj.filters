@@ -81,6 +81,9 @@
     <ClInclude Include="src\Duck\Application.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\AssetManager.h">
+      <Filter>src\Duck</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Audio\Audio.h">
       <Filter>src\Duck\Audio</Filter>
     </ClInclude>
@@ -174,6 +177,9 @@
     <ClInclude Include="src\Duck\MouseCodes.h">
       <Filter>src\Duck</Filter>
     </ClInclude>
+    <ClInclude Include="src\Duck\Physics\PhysicsSystem.h">
+      <Filter>src\Duck\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Duck\Physics\collision.h">
       <Filter>src\Duck\Physics</Filter>
     </ClInclude>
@@ -187,6 +193,9 @@
       <Filter>src\Duck\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Player\Player.h">
+      <Filter>src\Duck\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Duck\Player\PlayerComponent.h">
       <Filter>src\Duck\Player</Filter>
     </ClInclude>
     <ClInclude Include="src\Duck\Time.h">
@@ -1449,11 +1458,12 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Player\PlayerComponent.h" />
-    <ClInclude Include="src\Duck\Physics\PhysicsSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
+      <Filter>src\Duck</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Duck\AssetManager.cpp">
       <Filter>src\Duck</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Audio\Audio.cpp">
@@ -1528,6 +1538,9 @@
     <ClCompile Include="src\Duck\Physics\CollisionLayer.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Duck\Physics\PhysicsSystem.cpp">
+      <Filter>src\Duck\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Duck\Physics\collision.cpp">
       <Filter>src\Duck\Physics</Filter>
     </ClCompile>
@@ -1549,6 +1562,5 @@
     <ClCompile Include="src\duckpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Duck\Physics\PhysicsSystem.cpp" />
   </ItemGroup>
 </Project>
