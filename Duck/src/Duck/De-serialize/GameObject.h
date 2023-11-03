@@ -15,7 +15,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <unordered_map>
 #include <string>
 #include "../Physics/collision.h"
 
@@ -32,21 +31,12 @@ enum OBJ_TYPE
 {
 	OBJ_EMPTY,
 	OBJ_PLAYER,
-	OBJ_WALL,
+	OBJ_OBJ,
 	OBJ_GHOST,
 	OBJ_NPC,
-	OBJ_OBJ,
+	OBJ_WALL,
 	OBJ_ERROR,
 	OBJ_COUNT
-};
-
-const std::unordered_map<int, OBJ_TYPE> cellToObject = {
-	  {0, OBJ_EMPTY},
-	  {1, OBJ_PLAYER},
-	  {2, OBJ_WALL},
-	  {3, OBJ_GHOST},
-	  {4, OBJ_NPC},
-	  {5, OBJ_OBJ},
 };
 namespace Duck {
 	class GameObject {
@@ -58,7 +48,6 @@ namespace Duck {
 			float velocityX,
 			float velocityY,
 			int gridCollisionFlag,
-			uint32_t image,
 			STATE state,
 			OBJ_TYPE obj_type
 		);
@@ -70,14 +59,15 @@ namespace Duck {
 		float getVelocityY() const;
 		STATE getState() const;
 		int getgridCollisionFlag() const;
-		uint32_t GetImage();
 		OBJ_TYPE getObj() const;
 		std::shared_ptr<GameObject> CreateObj(float p_x,
 			float p_y,
-			uint32_t image,
+			float p_velocityX,
+			float p_velocityY,
+			int p_gridCollisionFlag,
+			Duck::AABB p_boundingbox,
 			STATE p_state,
 			OBJ_TYPE p_obj_type);
-
 
 
 		void  SetState(STATE state);
@@ -87,10 +77,13 @@ namespace Duck {
 		void  SetPositionX(float posX);
 		void  SetPositionY(float posY);
 		void SetgridCollisionFlag(float posY);
-		void SetImage(uint32_t p_image);
 
 		void ReadState(std::string state);
 		void ReadObj(std::string obj);
+		std::shared_ptr<GameObject> CreateObj(float x,
+			float y,
+			STATE state,
+			OBJ_TYPE obj_type);
 
 		// Load object properties from a .txt file
 		bool loadFromFile(const std::string& filename);
@@ -125,7 +118,6 @@ namespace Duck {
 		float velocityY;
 		int gridCollisionFlag;
 		Duck::AABB boundingBox;
-		uint32_t image;
 		STATE state;
 		OBJ_TYPE obj_type;
 	};

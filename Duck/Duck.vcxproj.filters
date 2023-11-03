@@ -117,12 +117,6 @@
     <ClInclude Include="src\Duck\Events\MouseEvent.h">
       <Filter>src\Duck\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Duck\Ghost\AI.h">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Duck\Ghost\JiangShi.h">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClInclude>
     <ClInclude Include="src\Duck\Graphics\Buffer.h">
       <Filter>src\Duck\Graphics</Filter>
     </ClInclude>
@@ -1463,8 +1457,6 @@
     <ClInclude Include="src\Duck\Ghost\JiangShi.h" />
     <ClInclude Include="src\Duck\Asset Manager\AssetManager.h" />
     <ClInclude Include="src\Duck\Asset Manager\Asset.h" />
-    <ClInclude Include="src\Duck\Player\PlayerComponent.h" />
-    <ClInclude Include="src\Duck\Physics\PhysicsSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Duck\Application.cpp">
@@ -1481,15 +1473,6 @@
     </ClCompile>
     <ClCompile Include="src\Duck\Debug.cpp">
       <Filter>src\Duck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\AI.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShi.cpp">
-      <Filter>src\Duck\Ghost</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp">
-      <Filter>src\Duck\Ghost</Filter>
     </ClCompile>
     <ClCompile Include="src\Duck\Graphics\Buffer.cpp">
       <Filter>src\Duck\Graphics</Filter>
@@ -1572,6 +1555,5 @@
     <ClCompile Include="src\Duck\Ghost\JiangShiSystem.cpp" />
     <ClCompile Include="src\Duck\Asset Manager\Asset.cpp" />
     <ClCompile Include="src\Duck\Asset Manager\AssetManager.cpp" />
-    <ClCompile Include="src\Duck\Physics\PhysicsSystem.cpp" />
   </ItemGroup>
 </Project>

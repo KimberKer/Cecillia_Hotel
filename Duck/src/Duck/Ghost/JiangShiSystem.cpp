@@ -10,7 +10,7 @@
 //          it can be unique to each ghost on how each ghost
 //          should behave while chasing.
 //
-// Copyright ï¿½ 2023 DigiPen, All rights reserved.
+// Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #include "duckpch.h"
 #include "JiangShi.h"

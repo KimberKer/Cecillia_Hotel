@@ -12,7 +12,6 @@
 #define FMOD_STUDIO_COMMON_H
 
 #include "fmod.h"
-#pragma warning(disable: 4006)
 
 /*
     FMOD Studio types.

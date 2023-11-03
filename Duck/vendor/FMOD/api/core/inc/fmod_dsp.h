@@ -11,7 +11,7 @@
 /* =========================================================================================*/
 #ifndef _FMOD_DSP_H
 #define _FMOD_DSP_H
-#pragma warning(disable: 4006)
+
 #include "fmod_dsp_effects.h"
 
 typedef struct FMOD_DSP_STATE        FMOD_DSP_STATE;

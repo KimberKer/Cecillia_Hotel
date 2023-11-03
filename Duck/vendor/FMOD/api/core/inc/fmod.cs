@@ -10,7 +10,6 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-#pragma warning(disable: 4006)
 
 namespace FMOD
 {

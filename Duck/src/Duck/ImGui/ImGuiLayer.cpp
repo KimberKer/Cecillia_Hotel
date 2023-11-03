@@ -6,7 +6,7 @@
 //
 // Brief:      Integration of ImGui for GUI rendering.
 //
-// Copyright   2023 DigiPen, All rights reserved.
+// Copyright © 2023 DigiPen, All rights reserved.
 //---------------------------------------------------------
 #include "duckpch.h"
 #include "imgui.h"
@@ -37,28 +37,6 @@ namespace Duck {
 		m_objList = objectlist;
 
 	}
-	void ImGuiLayer::PicVecPush(uint32_t pics) {
-		picVec.push_back(pics);
-	}
-	/*uint32_t ImGuiLayer::ReturnPicVecPush(std::string pics) {
-		for (int i{}; i < picVec.size(); i++) {
-			if(picVec[i] == )
-		}
-	}*/
-
-	std::string ImGuiLayer::GetName() {
-		return getfilename;
-	}
-	void ImGuiLayer::UpdateObjects(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) {
-		maplist = maplist;
-
-		for (int i{}; i < objectlist.size(); i++) {
-			if (objectlist[i]->getObj() == OBJ_PLAYER) {
-				p_player = objectlist[i];
-			}
-		}
-		m_objList = objectlist;
-	}
 
 	ImGuiLayer::~ImGuiLayer()
 	{
@@ -71,11 +49,6 @@ namespace Duck {
 	bool ImGuiLayer::GetUpdated() {
 		return isUpdated;
 	}
-
-
-	void ImGuiLayer::SetGhostChanged() { GhostChanged = !GhostChanged; }
-
-
 
 	/******************************************************************************/
 	/*!
@@ -148,11 +121,11 @@ namespace Duck {
 
 			ImGui::BulletText("Number of Player: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER));
 			ImGui::BulletText("Number of Ghost: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST));
-			ImGui::BulletText("Number of Walls: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_WALL));
+			ImGui::BulletText("Number of Walls: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ));
 			ImGui::BulletText("Number of NPC: %d", m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC));
 
 			//total
-			int totalCount = m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_WALL) +
+			int totalCount = m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_OBJ) +
 				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST) +
 				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_PLAYER) +
 				m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_NPC);
@@ -171,24 +144,17 @@ namespace Duck {
 
 			//------------Radio Button---------------------------
 			static int selectedOption = 3; //1= false, 0 = true
-			bool Ghostselected = false;
 			ImGui::RadioButton("Wall", &selectedOption, 0); ImGui::SameLine();
-
+			ImGui::RadioButton("Ghost", &selectedOption, 1); ImGui::SameLine();
 			ImGui::RadioButton("Empty", &selectedOption, 2);
-			if (m_maplist[GetMapIndex()]->GetNumberOfObjects(OBJ_GHOST) < 1) {
-				ImGui::SameLine();
-				ImGui::RadioButton("Ghost", &selectedOption, 1);
-				Ghostselected = true;
-
-			}
 			OBJ_TYPE obj = OBJ_EMPTY;
-			if (selectedOption == 0) { //EMPTY
-				obj = OBJ_WALL;
+			if (selectedOption == 0) { //wall
+				obj = OBJ_OBJ;
 			}
 			else if (selectedOption == 1) { //ghost 
 				obj = OBJ_GHOST;
 			}
-			else if (selectedOption == 2) { //EMPTY 
+			else if (selectedOption == 2) { //ghost 
 				obj = OBJ_EMPTY;
 			}
 
@@ -237,21 +203,17 @@ namespace Duck {
 			float buttonX = (tabContentRegion.x - buttonWidth) * 0.5f;
 			ImGui::SetCursorPosX(buttonX);
 
-			if (ImGui::Button("Add/Remove Object", ImVec2(buttonWidth, 20))) {
+			if (ImGui::Button("Add Object", ImVec2(buttonWidth, 20))) {
 				if (p_player->getX() == x_value - 1 && p_player->getY() == y_value - 1) {
 					DUCK_CORE_ERROR("Error: Change the player position first!");
 				}
 				else {
-					m_maplist[GetMapIndex()]->UpdateCellData(x_value - 1, y_value - 1, obj);
+					m_maplist[GetMapIndex()]->UpdateCellData( x_value - 1, y_value - 1, obj);
 					isUpdated = true;
-
-					GhostChanged = (Ghostselected) ? false : true;
-
-
 
 
 				}
-
+				
 				//ExampleLayer::InitializeGame();
 
 			}
@@ -268,7 +230,6 @@ namespace Duck {
 
 		}
 	}
-
 	void ImGuiLayer::TabUpdatePlayer() {
 		if (ImGui::CollapsingHeader("Replace Player Current Position", ImGuiTreeNodeFlags_None))
 		{
@@ -312,27 +273,22 @@ namespace Duck {
 			ImVec2 tabContentRegion = ImGui::GetContentRegionAvail();
 			float buttonWidth = tabContentRegion.x;
 			float buttonX = (tabContentRegion.x - buttonWidth) * 0.5f;
-
 			ImGui::SetCursorPosX(buttonX);
 
 			if (ImGui::Button("Update Player Position", ImVec2(buttonWidth, 20))) {
-
+				
 				//set new player spot
-				m_maplist[GetMapIndex()]->UpdateCellData(x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
+				m_maplist[GetMapIndex()]->UpdateCellData( x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
 
 				//make original position of the player empty
-				m_maplist[GetMapIndex()]->UpdateCellData(static_cast<int>(p_player->getX()), static_cast<int>(p_player->getY()), OBJ_EMPTY);
-
-
+				m_maplist[GetMapIndex()]->UpdateCellData(p_player->getX(), p_player->getY(), OBJ_OBJ);
+			
 				//change to the new position
-				//if(!mapChanged){
 				p_player->SetPositionX(x_pvalue - 1);
 				p_player->SetPositionY(y_pvalue - 1);
-				//}
 
 				isUpdated = true;
 
-				std::cout << "--------------" << GetMapIndex() << ": " << p_player->getX() << " " << p_player->getY() << "--------------" << std::endl;
 			}
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
@@ -355,7 +311,13 @@ namespace Duck {
 		ImGui::End();
 	}
 
+	void ImGuiLayer::MapData()
+	{
 
+		ImGui::Begin("Map");
+		
+		ImGui::End();
+	}
 	void ImGuiLayer::Console()
 	{
 
@@ -371,171 +333,8 @@ namespace Duck {
 		ImGui::End();
 	}
 
-	void ImGuiLayer::ShowAssetBrowser() {
-		static std::vector<std::filesystem::directory_entry> assetEntries;
-		static std::filesystem::path currentAssetDirectory("../assets/images/");
-		static std::map<int, std::string> assetNames; // Map to associate image IDs with their names
-		static int selectedAsset = -1;
 
-		assetEntries.clear();
-		for (const auto& entry : std::filesystem::directory_iterator(currentAssetDirectory)) {
-			assetEntries.push_back(entry);
-		}
-
-		if (ImGui::Begin("Asset Browser")) {
-			float itemWidth = 100.0f;
-			float itemHeight = 100.0f;
-			int itemsPerRow = static_cast<int>(ImGui::GetContentRegionAvail().x / itemWidth);
-
-			ImGui::BeginChild("AssetBrowserScroll", ImVec2(0, 0), true);
-			// Separator
-			ImGui::Separator();
-			int itemCount = 0;
-			std::string name;
-
-			// Display the selected asset name
-			if (selectedAsset != -1) {
-				auto found = assetNames.find(selectedAsset);
-				if (found != assetNames.end()) {
-					ImGui::Text("Selected: %s", found->second.c_str());
-					name = "../assets/images/" + found->second;
-				}
-			}
-			int x_min_pvalue = 0;  // Set your minimum value here
-			int y_min_pvalue = 0;  // Set your minimum value here
-			int max_w_pvalue = m_maplist[GetMapIndex()]->GetWidth();
-			int max_h_pvalue = m_maplist[GetMapIndex()]->GetHeight();
-
-
-			ImGui::Text("X Player value:");
-			ImGui::SameLine();
-			static int x_pvalue{ 1 };
-			ImGui::PushItemWidth(100);
-			ImGui::SameLine();
-			if (ImGui::InputInt("##XPosition", &x_pvalue, 1)) {
-				// Check and enforce the minimum and maximum values
-				if (x_pvalue < x_min_pvalue)
-					x_pvalue = x_min_pvalue;
-				else if (x_pvalue > max_w_pvalue)
-					x_pvalue = max_w_pvalue;
-			}
-			ImGui::SameLine();
-			ImGui::Text("    ");
-			ImGui::SameLine();
-			ImGui::Text("Y Player value:");
-			static int y_pvalue{ 1 };
-			ImGui::PushItemWidth(100);
-			ImGui::SameLine();
-			if (ImGui::InputInt("##YPosition", &y_pvalue, 1)) {
-				// Check and enforce the minimum and maximum values
-				if (y_pvalue < y_min_pvalue)
-					y_pvalue = y_min_pvalue;
-				else if (y_pvalue > max_h_pvalue)
-					y_pvalue = max_h_pvalue;
-			}
-
-			if (ImGui::Button("Add texture", ImVec2(120, 20))) {
-				if (p_player->getX() == x_pvalue - 1 && p_player->getY() == y_pvalue - 1) {
-					DUCK_CORE_ERROR("Error: Can't change Player Texture");
-				}
-				else {
-					std::cout << name.c_str() << std::endl;
-					m_objList[(y_pvalue - 1) * m_maplist[GetMapIndex()]->GetWidth() + (x_pvalue - 1)]->SetImage(Shader::LoadTexture(name.c_str()));
-					//m_objList[0]->SetImage(Shader::LoadTexture(name.c_str()));
-				}
-
-				//ExampleLayer::InitializeGame();
-
-			}
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + additionalSpacing);
-			ImGui::Separator();
-			for (int i = 0; i < assetEntries.size(); ++i) {
-				std::filesystem::path entryPath = assetEntries[i].path();
-				if (entryPath.extension() == ".png" || entryPath.extension() == ".jpg" || entryPath.extension() == ".jpeg") {
-					std::string assetName = entryPath.filename().string();
-
-					if (itemCount > 0 && itemCount % itemsPerRow != 0) {
-						ImGui::SameLine();
-					}
-
-					ImTextureID textureID = (ImTextureID)(intptr_t)i;
-					if (ImGui::ImageButton(textureID, ImVec2(itemWidth, itemHeight), { 0, 1 }, { 1, 0 })) {
-						selectedAsset = i;
-					}
-
-					// Store the asset name in the map
-					assetNames[i + 1] = assetName;
-
-
-					itemCount++;
-				}
-			}
-			ImGui::EndChild();
-
-		}
-		ImGui::End();
-	}
-
-
-
-
-	void ImGuiLayer::ShowFileBrowser() {
-		// Ensure that the directory_entries are loaded once
-		static std::vector<std::filesystem::directory_entry> directory_entries;
-		static std::filesystem::path current_directory_path("../txtfiles/Map/");
-		static int selected_item = -1;
-		// Load directory entries
-		directory_entries.clear();
-		for (const auto& entry : std::filesystem::directory_iterator(current_directory_path)) {
-			directory_entries.push_back(entry);
-		}
-
-		// Display the file browser window
-		if (ImGui::Begin("File Browser")) {
-			// List directories and files in the current directory
-
-			ImGui::Text("Current File: %s", directory_entries[GetMapIndex()].path().filename().string().c_str());
-
-
-			if (ImGui::BeginCombo("Files", selected_item >= 0 ? directory_entries[selected_item].path().filename().string().c_str() : NULL)) {
-				for (int i = 0; i < directory_entries.size(); i++) {
-					bool is_selected = (selected_item == i);
-					if (ImGui::Selectable(directory_entries[i].path().filename().string().c_str(), is_selected)) {
-						SetMapIndex(i);
-						isUpdated = true;
-						mapChanged = true;
-
-					}
-
-					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-					if (is_selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			ImGui::SeparatorText("Files in Dir");
-
-			// Loop through directories and files and display them
-			for (const auto& entry : directory_entries) {
-				if (entry.is_directory()) {
-					ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), "[Dir] %s", entry.path().filename().string().c_str());
-					// Handle directory selection
-					std::cout << selected_item << std::endl;
-				}
-				else {
-					ImGui::Text("[File] %s", entry.path().filename().string().c_str());
-					// Handle file selection
-				}
-			}
-		}
-		ImGui::End();
-	}
-
-
-
-
-	void ImGuiLayer::DisplayFPS(double& fps)
+	void ImGuiLayer::DisplayFPS(double &fps)
 	{
 		ImGui::Begin("FPS");
 		ImGui::Text("FPS: %.2f", fps);
@@ -589,8 +388,9 @@ namespace Duck {
 	 */
 	 /******************************************************************************/
 
-	void ImGuiLayer::OnImGuiRender(double& fps)
+	void ImGuiLayer::OnImGuiRender(double &fps)
 	{
+
 		// Start a new frame
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Game")) {
@@ -617,21 +417,15 @@ namespace Duck {
 		}
 
 		// Add your GUI content here
-
+	
 
 		CreateObjects();
 		DisplayFPS(fps);
-		ShowFileBrowser();
-		ShowAssetBrowser();
 		//ImGui::ShowDemoWindow(&show);
 
 	}
 	//------------FOR DRAG AND DROP---------------------
 
-	bool ImGuiLayer::GetChanged()
-	{
-		return mapChanged;
-	}
 
 
 
@@ -641,5 +435,6 @@ namespace Duck {
 
 
 
+	
 
 }

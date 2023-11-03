@@ -14,22 +14,17 @@
 #include <iostream>
 #include "../De-serialize/GameObject.h"
 #include "Duck/Log.h"
-#include "../Ghost/AI.h"
-#include "../Math/Vector2D.h"
 
 namespace Duck {
 
     class MapDataHandler {
     private:
-        Duck::AABB aabb;
         int MapWidth{};
         int MapHeight{};
         std::string filePath;
         //temporary var
         std::string width, w;
         std::string height, h;
-        float ghost_x, ghost_y;
-
 
         int** MapData;
         int** CollisionData;
@@ -42,10 +37,10 @@ namespace Duck {
 
 
     public:
-        
+
         MapDataHandler(const std::string& filePath);
         int GetMapData();
-        int UpdateCellData(int row, int column, int value);
+        int UpdateCellData( int row, int column, int value);
         void FreeMapData();
         int GetCellValue(int X, int Y);
         std::string GetFile() const;
@@ -59,7 +54,7 @@ namespace Duck {
         void printMapData();
         void SetWidth(int value);
         void SetHeight(int value);
-        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]);
+        void InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player);
      
     };
 

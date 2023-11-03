@@ -13,7 +13,6 @@
 #ifndef _FMOD_OUTPUT_H
 #define _FMOD_OUTPUT_H
 
-#pragma warning(disable: 4006)
 typedef struct FMOD_OUTPUT_STATE        FMOD_OUTPUT_STATE;
 typedef struct FMOD_OUTPUT_OBJECT3DINFO FMOD_OUTPUT_OBJECT3DINFO;
 

@@ -11,7 +11,6 @@
 
 #ifndef _FMOD_DSP_EFFECTS_H
 #define _FMOD_DSP_EFFECTS_H
-#pragma warning(disable: 4006)
 
 typedef enum
 {

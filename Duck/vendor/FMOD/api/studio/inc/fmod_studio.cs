@@ -5,7 +5,7 @@
 /* For more detail visit:                                                                   */
 /* https://fmod.com/docs/2.02/api/studio-api.html                                           */
 /* ======================================================================================== */
-#pragma warning(disable: 4006)
+
 using System;
 using System.Text;
 using System.Runtime.InteropServices;

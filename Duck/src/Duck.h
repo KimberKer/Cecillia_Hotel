@@ -12,13 +12,10 @@
 #include "Duck/Events/MouseEvent.h"
 
 #include "Duck/Audio/Audio.h"
-#include "Duck/Audio/AudioComponent.h"
 #include "Duck/Time.h"
 #include "Duck/Map/Map.h"
 #include "Duck/De-serialize/GameObject.h"
 #include "Duck/Ghost/JiangShi.h"
-#include "Duck/Player/PlayerComponent.h"
-#include "Duck/Physics/PhysicsSystem.h"
 
 #include "Duck/ImGui/ImGuiLayer.h"
 

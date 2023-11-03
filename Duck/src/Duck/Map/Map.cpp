@@ -15,7 +15,7 @@
 
 namespace Duck {
 
-	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>>& objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player, uint32_t image[]) {
+	void MapDataHandler::InitializeMap(std::vector<std::shared_ptr<GameObject>> &objectlist, std::shared_ptr<GameObject> m_gameobjList, std::shared_ptr<Duck::GameObject>& p_player) {
 		// Reset any game-related variables to their initial values
 
 		// Clear the object list and re-create objects based on the map
@@ -24,16 +24,23 @@ namespace Duck {
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
 				int cellValue = MapData[j][i];
-				auto objectType = cellToObject.find(cellValue);
-				if (objectType != cellToObject.end()) {
-					objectlist.push_back(m_gameobjList->CreateObj(j, i, image[objectType->first], STATE_NONE, objectType->second));
-
+		
+				switch (cellValue) {
+				case 0:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_EMPTY));
+					break;
+				case 1:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_PLAYER));
+					break;
+				case 2:
+					objectlist.push_back(m_gameobjList->CreateObj(j, i, STATE_NONE, OBJ_OBJ));
+					break;
+				case 3:
+					objectlist.push_back(m_gameobjList->CreateObj(i, j, STATE_NONE, OBJ_GHOST));
+					break;
+				default:
+					break;
 				}
-				if (cellValue == 3) {
-					ghost_x = j;
-					ghost_y = i;
-				}
-
 			}
 		}
 
@@ -41,12 +48,11 @@ namespace Duck {
 			if (objectlist[i]->getObj() == OBJ_PLAYER) {
 				p_player = objectlist[i];
 			}
-
-
 		}
 	}
 
-	MapDataHandler::MapDataHandler(const std::string& filepath) {
+
+	MapDataHandler::MapDataHandler(const std::string& filepath){
 		filePath = filepath;
 		GetMapData();
 	}
@@ -103,7 +109,7 @@ namespace Duck {
 				for (int j = 0; j < MapWidth; j++) {
 					file >> MapData[j][i];
 					//checks if there is more than 1 main character
-
+					
 				}
 			}
 
@@ -131,7 +137,7 @@ namespace Duck {
 		This function gets the width
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::GetWidth() const {
+	int MapDataHandler::GetWidth() const{
 		return MapWidth;
 	}
 
@@ -179,17 +185,16 @@ namespace Duck {
 		This function updates the map data
 	 */
 	 /******************************************************************************/
-	int MapDataHandler::UpdateCellData(int x, int y, int value) {
+	int MapDataHandler::UpdateCellData(int row, int column, int value) {
 		std::ifstream inputFile(filePath);
-		std::cout << filePath << std::endl;
-		std::ofstream file("../txtfiles/Map/temp.txt");
+		std::ofstream file("../txtfiles/temp.txt");
 
 		if (!inputFile.is_open() || !file.is_open()) {
 			DUCK_CORE_ERROR("Failed to open file: 1 ");;
 			return 0;
 		}
 
-		if (y >= MapHeight || x >= MapWidth) {
+		if (row >= MapHeight || column >= MapWidth) {
 			DUCK_CORE_ERROR("Row or column out of range");
 			file.close();
 			inputFile.close();
@@ -203,8 +208,8 @@ namespace Duck {
 		file << std::endl;
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				if (i == y && j == x) {
-					MapData[i][j] = value;
+				if (j == row && i == column) {
+					MapData[j][i] = value;
 				}
 				file << MapData[j][i] << ' ';
 			}
@@ -217,7 +222,7 @@ namespace Duck {
 			std::cerr << "Error removing original file" << std::endl;
 			return 0;
 		}
-		if (std::rename("../txtfiles/Map/temp.txt", filePath.c_str()) != 0) {
+		if (std::rename("../txtfiles/temp.txt", filePath.c_str()) != 0) {
 			DUCK_CORE_ERROR("Error renaming file");
 			return 0;
 		}

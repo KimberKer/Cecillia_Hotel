@@ -28,18 +28,17 @@ namespace Duck {
 		obj_type(OBJ_EMPTY)
 	{}
 
-	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, uint32_t image, STATE getstate, OBJ_TYPE obj_type)
-		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), image(image), state(getstate), obj_type(obj_type) {}
+	GameObject::GameObject(float x, float y, float velocityX, float velocityY, int gridCollisionFlag, STATE getstate, OBJ_TYPE obj_type)
+		: x(x), y(y), velocityX(velocityX), velocityY(velocityY), gridCollisionFlag(gridCollisionFlag), state(getstate), obj_type(obj_type) {}
 	 
 	std::shared_ptr<GameObject> GameObject::CreateObj(
 		float p_x,
 		float p_y,
-		uint32_t image,
 		STATE p_state,
 		OBJ_TYPE p_obj_type)
 	{
 
-		return std::make_shared<GameObject>(p_x, p_y, 0, 0, 0, image, p_state, p_obj_type);
+		return std::make_shared<GameObject>(p_x, p_y, 0, 0, 0, p_state, p_obj_type);
 	}
 	/******************************************************************************/
 	/*!
@@ -69,24 +68,6 @@ namespace Duck {
 	 /******************************************************************************/
 	void GameObject::SetType(OBJ_TYPE getType) {
 		obj_type = getType;
-	}
-
-	/******************************************************************************/
-/*!
-	This function gets the image of the GameObject.
- */
- /******************************************************************************/
-	uint32_t GameObject::GetImage() {
-		return image;
-	}
-
-	/******************************************************************************/
-	/*!
-		This function sets the state of the GameObject.
-	 */
-	 /******************************************************************************/
-	void GameObject::SetImage(uint32_t p_image) {
-		image = p_image;
 	}
 
 	/******************************************************************************/
@@ -211,7 +192,7 @@ namespace Duck {
 
 		MathLib::Vector2D minVec(minx, miny);
 		MathLib::Vector2D maxVec(maxx, maxy);
-		//boundingBox = { minVec, maxVec };
+		boundingBox = { minVec, maxVec };
 
 		file.close();
 		return true;

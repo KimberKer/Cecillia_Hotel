@@ -92,10 +92,7 @@ namespace Duck {
 				}
 				m_ImGuiLayer->End();
 
-
 				m_Window->OnUpdate();
-
-				//glfwSwapBuffers();
 
 
 				//coreManager->Update(runtime.getDeltaTime(), static_cast<GLFWwindow*>(m_Window->GetNativeWindow()));

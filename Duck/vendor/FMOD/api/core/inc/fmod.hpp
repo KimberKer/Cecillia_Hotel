@@ -10,7 +10,6 @@
 /* ======================================================================================== */
 #ifndef _FMOD_HPP
 #define _FMOD_HPP
-#pragma warning(disable: 4006)
 
 #include "fmod_common.h"
 #include "fmod.h"

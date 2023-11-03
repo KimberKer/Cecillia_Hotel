@@ -64,7 +64,6 @@ namespace Duck {
         STATE getState() const;
         int getgridCollisionFlag() const;
         OBJ_TYPE getObj() const;
-        Duck::AABB getBoundingBox();
        
         void SetGhostPositionX(float x);
         void SetGhostPositionY(float y);

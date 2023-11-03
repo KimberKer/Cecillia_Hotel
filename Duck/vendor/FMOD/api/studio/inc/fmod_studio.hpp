@@ -10,7 +10,6 @@
 /* ======================================================================================== */
 #ifndef FMOD_STUDIO_HPP
 #define FMOD_STUDIO_HPP
-#pragma warning(disable: 4006)
 
 #include "fmod_studio_common.h"
 #include "fmod_studio.h"
