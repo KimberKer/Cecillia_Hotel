@@ -78,8 +78,8 @@ namespace Duck {
             }
             else {
                 // Check if the ghost has reached the center of the target grid cell
-                currentGridX = std::ceil(gameObject->getX());
-                currentGridY = std::ceil(gameObject->getY());
+                currentGridX = static_cast<int>(std::ceil(gameObject->getX()));
+                currentGridY = static_cast<int>(std::ceil(gameObject->getY()));
 
                 // Calculate direction vector towards the selected waypoint
                 float directionX = static_cast<float>(targetGridX - currentGridX);

@@ -70,13 +70,13 @@ namespace Duck {
 		float getVelocityY() const;
 		STATE getState() const;
 		int getgridCollisionFlag() const;
+		uint32_t GetImage();
 		OBJ_TYPE getObj() const;
 		std::shared_ptr<GameObject> CreateObj(float p_x,
 			float p_y,
 			uint32_t image,
 			STATE p_state,
 			OBJ_TYPE p_obj_type);
-		uint32_t GetImage();
 
 
 

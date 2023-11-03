@@ -23,7 +23,7 @@ namespace Duck {
 
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				int cellValue = MapData[i][j];
+				int cellValue = MapData[j][i];
 				auto objectType = cellToObject.find(cellValue);
 				if (objectType != cellToObject.end()) {
 					objectlist.push_back(m_gameobjList->CreateObj(j, i, image[objectType->first], STATE_NONE, objectType->second));

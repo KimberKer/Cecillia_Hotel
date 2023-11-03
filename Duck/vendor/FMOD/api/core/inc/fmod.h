@@ -11,6 +11,7 @@
 
 #ifndef _FMOD_H
 #define _FMOD_H
+#pragma warning(disable: 4006)
 
 #include "fmod_common.h"
 

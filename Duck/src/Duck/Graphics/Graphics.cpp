@@ -37,8 +37,8 @@ namespace Duck {
         TileHeight = 100.f;
         TotalWidth = TileWidth * static_cast<float>(cols);
         TotalHeight = TileHeight * static_cast<float>(rows);
-        WindowWidth = window.GetWidth();
-        WindowHeight = window.GetHeight();
+        WindowWidth = static_cast<float>(window.GetWidth());
+        WindowHeight = static_cast<float>(window.GetHeight());
 
         // Initialize Projection matrix from the Window Size.
 
@@ -89,7 +89,7 @@ namespace Duck {
         uv_x = 0.0f, uv_y = 2.0f;
         //timeNow, timeOld, time_delta, SPframe;
         SPframe = 4.0f;
-        timeNow = timeOld = glfwGetTime();
+        timeNow = timeOld = static_cast<float>(glfwGetTime());
 
 
 
@@ -658,7 +658,7 @@ namespace Duck {
         float scale = Scale / 2.f;
 
 
-        timeNow = glfwGetTime();
+        timeNow = static_cast<float>(glfwGetTime());
         timeDelta = timeNow - timeOld;
         if(timeDelta >= 1.0f / SPframe) {
             timeOld = timeNow;
@@ -973,7 +973,7 @@ namespace Duck {
     void Graphics::StartScene() {
 
         //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-        glViewport(0, 0, WindowWidth, WindowHeight);
+        glViewport(0, 0, WindowWidth, static_cast<GLsizei>(WindowHeight));
 
     }
 

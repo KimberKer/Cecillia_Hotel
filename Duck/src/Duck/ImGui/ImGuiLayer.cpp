@@ -45,6 +45,10 @@ namespace Duck {
 			if(picVec[i] == )
 		}
 	}*/
+
+	std::string ImGuiLayer::GetName() {
+		return getfilename;
+	}
 	void ImGuiLayer::UpdateObjects(std::vector<std::shared_ptr<MapDataHandler>> maplist, std::vector<std::shared_ptr<GameObject>> objectlist) {
 		maplist = maplist;
 
@@ -71,7 +75,7 @@ namespace Duck {
 
 	void ImGuiLayer::SetGhostChanged() { GhostChanged = !GhostChanged; }
 
-	bool ImGuiLayer::GetGhostChanged() { return GhostChanged; }
+
 
 	/******************************************************************************/
 	/*!
@@ -264,6 +268,7 @@ namespace Duck {
 
 		}
 	}
+
 	void ImGuiLayer::TabUpdatePlayer() {
 		if (ImGui::CollapsingHeader("Replace Player Current Position", ImGuiTreeNodeFlags_None))
 		{
@@ -316,7 +321,7 @@ namespace Duck {
 				m_maplist[GetMapIndex()]->UpdateCellData(x_pvalue - 1, y_pvalue - 1, OBJ_PLAYER);
 
 				//make original position of the player empty
-				m_maplist[GetMapIndex()]->UpdateCellData(p_player->getX(), p_player->getY(), OBJ_EMPTY);
+				m_maplist[GetMapIndex()]->UpdateCellData(static_cast<int>(p_player->getX()), static_cast<int>(p_player->getY()), OBJ_EMPTY);
 
 
 				//change to the new position
@@ -470,6 +475,8 @@ namespace Duck {
 		}
 		ImGui::End();
 	}
+
+
 
 
 	void ImGuiLayer::ShowFileBrowser() {

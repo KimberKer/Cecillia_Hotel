@@ -123,7 +123,6 @@ public:
 			std::string image = "../assets/images/" + assetName;
 
 			Duck::Shader::LoadTexture(image.c_str());
-			std::cout << image.c_str() << std::endl;
 		}
 		m_InventorySlot = Duck::Shader::LoadTexture("../assets/images/InventorySlot.jpeg");
 		Image[OBJ_EMPTY] = Duck::Shader::LoadTexture("../assets/images/FloorTile5.jpg");
@@ -277,12 +276,12 @@ public:
 		//Debug::GetInstance()->BeginSystemProfile("Graphics");
 
 
-		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, m_maplist[Duck::GetMapIndex()]->GetHeight(), m_maplist[Duck::GetMapIndex()]->GetWidth());
-		Duck::AABB playerAABB = aabb.ConvertToAABB(p_player->getX(), p_player->getY(), CELL_SIZE, CELL_SIZE);
+		Duck::AABB windowAABB = aabb.ConvertToAABB(0, 0, static_cast<float>(m_maplist[Duck::GetMapIndex()]->GetHeight()), static_cast<float>(m_maplist[Duck::GetMapIndex()]->GetWidth()));
+		Duck::AABB playerAABB = aabb.ConvertToAABB(static_cast<float>(p_player->getX()), static_cast<float>(p_player->getY()), static_cast<float>(CELL_SIZE), static_cast<float>(CELL_SIZE));
 
 		if (m_phy.IsOutOfBounds(windowAABB, playerAABB)) {
-			p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(CELL_SIZE, p_player->getX()))); // Adjust as needed
-			p_player->SetPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(CELL_SIZE, p_player->getY())));
+			p_player->SetPositionX(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellX(static_cast<float>(CELL_SIZE), p_player->getX()))); // Adjust as needed
+			p_player->SetPositionY(static_cast<float>(m_maplist[Duck::GetMapIndex()]->SnapToCellY(static_cast<float>(CELL_SIZE), p_player->getY())));
 			p_player->SetVelocityX(0);
 			p_player->SetVelocityY(0);
 		}
@@ -291,16 +290,16 @@ public:
 		Duck::RenderCommand::Clear();
 
 		//draw objects
-		m_Graphics->DrawBackground(objectlist[OBJ_EMPTY]->GetImage());
 
 		m_Graphics->StartScene();
 
+		m_Graphics->DrawBackground(Image[OBJ_EMPTY]);
 
 
 		//apply collision and textures
 		for (int i{}; i < objectlist.size(); i++) {
 			
-			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, CELL_SIZE);
+			Duck::AABB objectAABB = aabb.ConvertToAABB(objectlist[i]->getX(), objectlist[i]->getY(), static_cast<float>(CELL_SIZE), static_cast<float>( CELL_SIZE));
 			if (objectlist[i]->getObj() != OBJ_EMPTY && objectlist[i]->getObj() != OBJ_PLAYER && objectlist[i]->getObj() != OBJ_GHOST) {
 				if (m_phy.CollisionIntersection_RectRect(playerAABB, { p_player->getVelocityX(), p_player->getVelocityY() }, objectAABB, { objectlist[i]->getVelocityX(), objectlist[i]->getVelocityY() }, dt)) {
 					DUCK_CORE_INFO("Player: Collision Detected!");
@@ -309,27 +308,15 @@ public:
 					p_player->SetVelocityX(0);
 					p_player->SetVelocityY(0);
 				}
+					m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[i]->GetImage(), showBB);
 				
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[objectlist[i]->getObj()]->GetImage(), showBB);
+				
 			}
 			//SET player background image as a floor tile
-			else if (objectlist[i]->getObj() == OBJ_PLAYER ) {
-				m_Graphics->DrawSquareObject(PlayerIniPosition.x, PlayerIniPosition.y, CELL_SIZE, (float)PlayerOrientation, Image[OBJ_EMPTY], showBB);
-
-			}
-			//set ghost bg image as a floor tile
-			else if (objectlist[i]->getObj() == OBJ_GHOST) {
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_EMPTY], showBB);
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, Image[OBJ_GHOST], showBB);
-
-			}
-			//set everything else as a floor tile
-			else {
-				m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, objectlist[objectlist[i]->getObj()]->GetImage(), showBB);
-
-			}
+	
 		}
-				m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), CELL_SIZE, (float)PlayerOrientation, p_player->GetImage(), showBB);
+				m_Graphics->DrawSquareObject(p_player->getX(), p_player->getY(), static_cast<float>(CELL_SIZE), (float)PlayerOrientation, p_player->GetImage(), showBB);
+
 		m_Graphics->UpdateCameraPos(p_player->getX(), p_player->getY());
 		//m_Graphics->UpdateCameraPos(5.f,5.f);
 

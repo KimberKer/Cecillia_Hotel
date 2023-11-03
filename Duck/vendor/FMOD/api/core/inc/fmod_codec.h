@@ -12,6 +12,7 @@
 /* ======================================================================================== */
 #ifndef _FMOD_CODEC_H
 #define _FMOD_CODEC_H
+#pragma warning(disable: 4006)
 
 /*
     Codec types

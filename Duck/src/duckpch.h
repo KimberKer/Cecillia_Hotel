@@ -1,5 +1,6 @@
 #pragma once
-
+#pragma warning(disable: 6031)
+#pragma warning(disable: 6031)
 
 #include <iostream>
 #include "Duck/Core.h"

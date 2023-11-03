@@ -52,7 +52,7 @@ namespace Duck {
 
 		void SetGhostChanged();
 
-		bool GetGhostChanged();
+		std::string GetName();
 
 		void SetUpdated();
 
@@ -80,6 +80,7 @@ namespace Duck {
 		std::vector<std::filesystem::directory_entry> directory_entries;
 		bool mapChanged = false;
 		bool GhostChanged = true;
+		std::string getfilename ="";
 	};
 
 }

@@ -24,8 +24,8 @@ namespace Duck
 	private:
 		bool moving = false;
 
-		unsigned int playerVelocity = 20.0f;
-		unsigned int playerAcceleration = 5.0f;
+		unsigned int playerVelocity = 20;
+		unsigned int playerAcceleration = 5;
 
 		int playerOrientation = 0;
 

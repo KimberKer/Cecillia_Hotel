@@ -113,7 +113,7 @@ namespace Duck
                 else if (obj.getVelocityY() != 0.0f && obj.getVelocityX() == 0.0f && player.IsMoving())
                 {
                     float percentMove = player.GetPercentMove();
-                    percentMove += player.GetPlayerVelocity() * dt;
+                    percentMove += static_cast<float>(player.GetPlayerVelocity() * dt);
 
                     if (percentMove >= 1.0f)
                     {

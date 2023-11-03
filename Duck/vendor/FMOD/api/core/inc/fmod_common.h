@@ -9,7 +9,7 @@
 /* ======================================================================================== */
 #ifndef _FMOD_COMMON_H
 #define _FMOD_COMMON_H
-
+#pragma warning(disable: 4006)
 /*
     Library import helpers
 */

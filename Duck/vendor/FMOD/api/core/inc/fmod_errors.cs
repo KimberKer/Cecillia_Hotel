@@ -8,7 +8,7 @@
 /* For more detail visit:                                                                          */
 /* https://fmod.com/docs/2.02/api/core-api-common.html#fmod_result                                 */
 /* =============================================================================================== */
-
+#pragma warning(disable: 4006)
 namespace FMOD
 {
     public class Error
