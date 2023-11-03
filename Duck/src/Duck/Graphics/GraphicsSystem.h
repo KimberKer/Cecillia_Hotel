@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:		GraphicsSystem.h
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This file decalres the functions in the Graphics System class.
+//
+// Copyright ? 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #pragma once
 
 #include "Duck/ECS/Entity.h"

@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:		GraphicsComponent.cpp
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This file declares the functions in the GraphicsComponent class.
+//
+// Copyright ? 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #pragma once
 
 #include "Graphics.h"

@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:		GraphicsSystem.cpp
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This file defines the functions in the Graphics System class.
+//
+// Copyright ? 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #include "duckpch.h"
 
 #include "Duck/KeyCodes.h"

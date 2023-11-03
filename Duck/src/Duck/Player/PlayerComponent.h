@@ -1,3 +1,13 @@
+//---------------------------------------------------------
+// File:		PlayerComponent.cpp
+// 
+// authors:		Kristy Lee Yu Xuan
+// email:		kristyyuxuan.lee\@digipen.edu
+//
+// Brief:       This  ile defines the functions in the PlayerComponent class.
+//
+// Copyright ? 2023 DigiPen, All rights reserved.
+//-------------------------------------------------------
 #pragma once
 
 #include "Duck/Math/Vector2D.h"
