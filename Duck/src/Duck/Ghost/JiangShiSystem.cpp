@@ -17,13 +17,11 @@ namespace Duck {
         for (auto const& entity : m_Entities) {
             auto& gameObjectEntity = ecs.getComponent<GameObject>(entity);
 
-            if (ecs.HasComponent<JiangShi>(entity) && gameObjectEntity.getObj() == OBJ_GHOST) {
+            if (ecs.HasComponent<JiangShi>(entity)) {
                 auto& ghostCompEntity = ecs.getComponent<JiangShi>(entity);
                 float currentStateTime = ghostCompEntity.getTimeInCurrentState();
                 currentStateTime += deltaTime;
                 ghostCompEntity.setTimeInCurrentState(currentStateTime);
-
-
 
                 switch (ghostCompEntity.getState()) {
                 case State::Idle:
@@ -36,17 +34,19 @@ namespace Duck {
                     }
                     break;
                 case State::Roaming:
-                    Roam(deltaTime, gameObjectEntity, ghostCompEntity); // Execute the Roaming state function
-                    DUCK_CORE_TRACE("x: {0}, y: {1}", gameObjectEntity.getX(), gameObjectEntity.getY());
-                    //DUCK_CORE_INFO("Ghost is Roaming");
-                    if (ghostCompEntity.getTimeInCurrentState() >= ghostCompEntity.getRoamDuration()) {
-                        DUCK_CORE_INFO("Ghost roamed for: {0}", ghostCompEntity.getTimeInCurrentState());
-                        ghostCompEntity.setState(State::Idle);
-                        DUCK_CORE_INFO("Switched to Idle state!");
-                        ghostCompEntity.setTimeInCurrentState(0.0f);
-                        ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Idle"
+                    if (gameObjectEntity.getObj() == OBJ_GHOST) {
+                        Roam(deltaTime, gameObjectEntity, ghostCompEntity); // Execute the Roaming state function
+                        //DUCK_CORE_TRACE("x: {0}, y: {1}", gameObjectEntity.getX(), gameObjectEntity.getY());
+                        //DUCK_CORE_INFO("Ghost is Roaming");
+                        if (ghostCompEntity.getTimeInCurrentState() >= ghostCompEntity.getRoamDuration()) {
+                            DUCK_CORE_INFO("Ghost roamed for: {0}", ghostCompEntity.getTimeInCurrentState());
+                            ghostCompEntity.setState(State::Idle);
+                            DUCK_CORE_INFO("Switched to Idle state!");
+                            ghostCompEntity.setTimeInCurrentState(0.0f);
+                            ghostCompEntity.setChaseSpeed(0.0f); // Reset chasing speed when transitioning to "Idle"
+                        }
                     }
-
+                    
                     if (IsPlayerNearby(gameObjectEntity)) {
                         ghostCompEntity.setState(State::Chasing);
                         DUCK_CORE_INFO("Switched to Chasing state!");
@@ -119,9 +119,11 @@ namespace Duck {
                 // Move Ghost
                 if (jiangshi.getCurrentGridX() < jiangshi.getTargetGridX() || jiangshi.getCurrentGridX() > jiangshi.getTargetGridX()) {
                     ghost.SetPositionX(ghost.getX() + jiangshi.getRoamspeed() * directionX * deltaTime);
+                    DUCK_CORE_TRACE("X Position: {0}", ghost.getX());
                 }
                 else if (jiangshi.getCurrentGridY() < jiangshi.getTargetGridY() || jiangshi.getCurrentGridY() > jiangshi.getTargetGridY()) {
                     ghost.SetPositionY(ghost.getY() + jiangshi.getRoamspeed() * directionY * deltaTime);
+                    DUCK_CORE_TRACE("Y Position: {0}", ghost.getY());
                 }
             }
         }

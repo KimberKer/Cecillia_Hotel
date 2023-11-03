@@ -70,11 +70,6 @@ public:
 		m_Audio->loadSound(m_SoundInfo);*/
 		/* ---------- ---------- ---------- */
 
-		/* ---------- Ghost Functions ---------- */
-		// Load waypoint coordinates for Ghost
-		//m_Jiangshi.ReadWaypointsFromFile("../txtfiles/waypoints.txt");
-		/* ---------- ---------- ---------- */
-
 		/* ---------- Game Objects ---------- */
 		//create a list of game objects
 		numOfObjects = 0;
@@ -235,6 +230,7 @@ public:
 		}
 		if (objectlist[i]->getObj() == OBJ_GHOST) {
 			m_Graphics->DrawSquareObject(objectlist[i]->getX(), objectlist[i]->getY(), CELL_SIZE, (float)PlayerOrientation, m_GhostTexture, showBB);
+			DUCK_CORE_TRACE("{0}, {1}", objectlist[i]->getX(), objectlist[i]->getY());
 		}
 		
 	}
