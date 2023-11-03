@@ -50,7 +50,7 @@ namespace Duck {
                 case State::Roaming:
                     Roam(deltaTime, gameObjectEntity, ghostCompEntity); // Execute the Roaming state function
                     //DUCK_CORE_TRACE("x: {0}, y: {1}", gameObjectEntity.getX(), gameObjectEntity.getY());
-                    DUCK_CORE_INFO("Ghost is Roaming");
+                    //DUCK_CORE_INFO("Ghost is Roaming");
                     if (ghostCompEntity.getTimeInCurrentState() >= ghostCompEntity.getRoamDuration()) {
                         DUCK_CORE_INFO("Ghost roamed for: {0}", ghostCompEntity.getTimeInCurrentState());
                         ghostCompEntity.setState(State::Idle);
